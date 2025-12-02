@@ -1,0 +1,108 @@
+ivs-school-website/
+├── src/
+│   ├── app/                          # Next.js 15+ App Router
+│   │   ├── (public)/                 # Public routes group
+│   │   │   ├── page.tsx              # Home page
+│   │   │   ├── about/
+│   │   │   │   └── page.tsx
+│   │   │   ├── academics/
+│   │   │   │   ├── page.tsx
+│   │   │   │   ├── playgroup/
+│   │   │   │   ├── primary/
+│   │   │   │   └── middle/
+│   │   │   │   └── secondary/
+│   │   │   ├── admissions/
+│   │   │   │   └── page.tsx
+│   │   │   ├── gallery/
+│   │   │   │   └── page.tsx
+│   │   │   ├── events/
+│   │   │   │   └── page.tsx
+│   │   │   ├── contact/
+│   │   │   │   └── page.tsx
+│   │   │   └── layout.tsx            # Public layout
+│   │   │
+│   │   ├── (portal)/                 # Portal routes group
+│   │   │   ├── parent-portal/
+│   │   │   │   ├── layout.tsx
+│   │   │   │   ├── page.tsx          # Dashboard
+│   │   │   │   ├── attendance/
+│   │   │   │   ├── results/
+│   │   │   │   ├── fees/
+│   │   │   │   ├── timetable/
+│   │   │   │   └── announcements/
+│   │   │   │
+│   │   │   └── admission-portal/
+│   │   │       ├── layout.tsx
+│   │   │       ├── page.tsx          # Admission form
+│   │   │       ├── status/
+│   │   │       └── thank-you/
+│   │   │
+│   │   ├── api/                      # API routes
+│   │   │   ├── whatsapp/
+│   │   │   │   └── route.ts          # WhatsApp webhook
+│   │   │   ├── admission/
+│   │   │   │   └── route.ts
+│   │   │   └── contact/
+│   │   │       └── route.ts
+│   │   │
+│   │   ├── layout.tsx                # Root layout
+│   │   ├── globals.css               # Tailwind v4 CSS
+│   │   ├── not-found.tsx
+│   │   └── error.tsx
+│   │
+│   ├── components/
+│   │   ├── layout/
+│   │   │   ├── Header.tsx
+│   │   │   ├── Footer.tsx
+│   │   │   ├── Navbar.tsx
+│   │   │   └── MobileMenu.tsx
+│   │   │
+│   │   ├── home/
+│   │   │   ├── Hero.tsx
+│   │   │   ├── Features.tsx
+│   │   │   ├── Stats.tsx
+│   │   │   ├── Programs.tsx
+│   │   │   └── Testimonials.tsx
+│   │   │
+│   │   ├── portal/
+│   │   │   ├── Sidebar.tsx
+│   │   │   ├── DashboardCard.tsx
+│   │   │   └── PortalHeader.tsx
+│   │   │
+│   │   ├── admission/
+│   │   │   ├── AdmissionForm.tsx
+│   │   │   ├── StepIndicator.tsx
+│   │   │   └── FormSection.tsx
+│   │   │
+│   │   └── ui/
+│   │       ├── Button.tsx
+│   │       ├── Card.tsx
+│   │       ├── Input.tsx
+│   │       ├── Modal.tsx
+│   │       └── WhatsAppButton.tsx
+│   │
+│   ├── lib/
+│   │   ├── utils.ts                  # Helper functions
+│   │   ├── whatsapp.ts               # WhatsApp API integration
+│   │   └── constants.ts              # Constants
+│   │
+│   ├── types/
+│   │   ├── index.ts
+│   │   ├── student.ts
+│   │   └── admission.ts
+│   │
+│   └── data/
+│       ├── programs.ts
+│       ├── faculty.ts
+│       └── testimonials.ts
+│
+├── public/
+│   ├── images/
+│   ├── icons/
+│   └── documents/
+│
+├── next.config.ts                    # Next.js 15+ config
+├── tailwind.config.ts                # Tailwind v4 config (minimal)
+├── tsconfig.json
+├── package.json
+└── .env.local
