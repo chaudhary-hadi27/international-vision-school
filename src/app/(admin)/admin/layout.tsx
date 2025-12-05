@@ -1,4 +1,4 @@
-// src/app/(portal)/parent-portal/layout.tsx
+// src/app/(admin)/admin/layout.tsx
 
 'use client'
 
@@ -6,37 +6,47 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-    GraduationCap,
     LayoutDashboard,
-    Calendar,
+    Users,
     FileText,
     DollarSign,
-    Bell,
-    User,
+    Settings,
     LogOut,
     Menu,
     X,
-    Clock
+    Bell,
+    Shield,
+    GraduationCap,
+    CalendarDays,
+    MessageSquare,
+    BarChart3
 } from 'lucide-react'
 
-export default function ParentPortalLayout({
-                                               children,
-                                           }: {
+export default function AdminLayout({
+                                        children,
+                                    }: {
     children: React.ReactNode
 }) {
     const [sidebarOpen, setSidebarOpen] = useState(false)
     const pathname = usePathname()
 
     const navigation = [
-        { name: 'Dashboard', href: '/parent-portal', icon: LayoutDashboard },
-        { name: 'Attendance', href: '/parent-portal/attendance', icon: Calendar },
-        { name: 'Results', href: '/parent-portal/results', icon: FileText },
-        { name: 'Fee Status', href: '/parent-portal/fees', icon: DollarSign },
-        { name: 'Timetable', href: '/parent-portal/timetable', icon: Clock },
-        { name: 'Announcements', href: '/parent-portal/announcements', icon: Bell },
+        { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+        { name: 'Applications', href: '/admin/applications', icon: FileText },
+        { name: 'Students', href: '/admin/students', icon: Users },
+        { name: 'Attendance', href: '/admin/attendance', icon: CalendarDays },
+        { name: 'Fee Management', href: '/admin/fees', icon: DollarSign },
+        { name: 'Reports', href: '/admin/reports', icon: BarChart3 },
+        { name: 'Announcements', href: '/admin/announcements', icon: MessageSquare },
+        { name: 'Settings', href: '/admin/settings', icon: Settings },
     ]
 
-    const isActive = (href: string) => pathname === href
+    const isActive = (href: string) => {
+        if (href === '/admin') {
+            return pathname === '/admin'
+        }
+        return pathname.startsWith(href)
+    }
 
     return (
         <div className="min-h-screen bg-gray-50">
@@ -54,13 +64,13 @@ export default function ParentPortalLayout({
                     </button>
 
                     {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3">
+                    <Link href="/admin" className="flex items-center gap-3">
                         <div className="w-10 h-10 bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg flex items-center justify-center">
                             <GraduationCap className="w-6 h-6 text-white" />
                         </div>
                         <div className="hidden sm:block">
-                            <div className="text-lg font-bold text-gray-900">IVS Portal</div>
-                            <div className="text-xs text-gray-600 -mt-1">Parent Dashboard</div>
+                            <div className="text-lg font-bold text-gray-900">IVS Admin</div>
+                            <div className="text-xs text-gray-600 -mt-1">Management Portal</div>
                         </div>
                     </Link>
 
@@ -73,11 +83,11 @@ export default function ParentPortalLayout({
 
                         <div className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
                             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <User className="w-4 h-4 text-blue-900" />
+                                <Shield className="w-4 h-4 text-blue-900" />
                             </div>
                             <div className="hidden sm:block">
-                                <div className="text-sm font-semibold text-gray-900">Parent Name</div>
-                                <div className="text-xs text-gray-600">View Profile</div>
+                                <div className="text-sm font-semibold text-gray-900">Admin</div>
+                                <div className="text-xs text-gray-600">Administrator</div>
                             </div>
                         </div>
                     </div>

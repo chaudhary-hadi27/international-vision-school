@@ -36,19 +36,22 @@ export default function Footer() {
                     <div>
                         <h3 className="text-lg font-bold mb-4">Quick Links</h3>
                         <ul className="space-y-2 text-sm">
+                            <li><Link href="/" className="text-gray-400 hover:text-white transition">Home</Link></li>
                             <li><Link href="/about" className="text-gray-400 hover:text-white transition">About Us</Link></li>
                             <li><Link href="/academics" className="text-gray-400 hover:text-white transition">Academics</Link></li>
                             <li><Link href="/admissions" className="text-gray-400 hover:text-white transition">Admissions</Link></li>
+                            <li><Link href="/contact" className="text-gray-400 hover:text-white transition">Contact</Link></li>
                         </ul>
                     </div>
 
                     <div>
                         <h3 className="text-lg font-bold mb-4">Programs</h3>
                         <ul className="space-y-2 text-sm">
-                            <li className="text-gray-400">Playgroup</li>
-                            <li className="text-gray-400">Primary (1-5)</li>
-                            <li className="text-gray-400">Middle (6-8)</li>
-                            <li className="text-gray-400">Secondary (9-10 for girls)</li>
+                            <li> <Link href="/academics/playgroup" className="text-gray-400 hover:text-white"> Playgroup </Link> </li>
+                            <li> <Link href="/academics/nursery-kg" className="text-gray-400 hover:text-white"> Nursery-Kg </Link> </li>
+                            <li> <Link href="/academics/primary" className="text-gray-400 hover:text-white"> Primary </Link> </li>
+                            <li> <Link href="/academics/middle" className="text-gray-400 hover:text-white"> Middle </Link> </li>
+                            <li> <Link href="/academics/secondary" className="text-gray-400 hover:text-white"> Secondary </Link> </li>
                         </ul>
                     </div>
 

@@ -1,6 +1,6 @@
 ivs-school-website/
 ├── src/
-│   ├── app/                          # Next.js 15+ App Router
+│   ├── app/                          # Next.js 16 App Router
 │   │   ├── (public)/                 # Public routes group
 │   │   │   ├── page.tsx              # Home page
 │   │   │   ├── about/
@@ -8,6 +8,7 @@ ivs-school-website/
 │   │   │   ├── academics/
 │   │   │   │   ├── page.tsx
 │   │   │   │   ├── playgroup/
+│   │   │   │   ├── nursery/
 │   │   │   │   ├── primary/
 │   │   │   │   └── middle/
 │   │   │   │   └── secondary/
@@ -22,6 +23,20 @@ ivs-school-website/
 │   │   │   └── layout.tsx            # Public layout
 │   │   │
 │   │   ├── (portal)/                 # Portal routes group
+│   │   │   ├── (admin)/
+│   │   │   │   └── admin/
+│   │   │   │    ├── layout.tsx              ✅ NEW
+│   │   │   │    ├── page.tsx                ✅ NEW (Dashboard)
+│   │   │   │    ├── applications/
+│   │   │   │    │   ├── page.tsx            ✅ NEW
+│   │   │   │    │   └── [id]/page.tsx       (Detail view - todo)
+│   │   │   │    ├── students/
+│   │   │   │    ├── attendance/
+│   │   │   │    ├── fees/
+│   │   │   │    ├── reports/
+│   │   │   │    ├── announcements/
+│   │   │   │    └── settings/
+│   │   │   │
 │   │   │   ├── parent-portal/
 │   │   │   │   ├── layout.tsx
 │   │   │   │   ├── page.tsx          # Dashboard
@@ -55,7 +70,6 @@ ivs-school-website/
 │   │   │   ├── Header.tsx
 │   │   │   ├── Footer.tsx
 │   │   │   ├── Navbar.tsx
-│   │   │   └── MobileMenu.tsx
 │   │   │
 │   │   ├── home/
 │   │   │   ├── Hero.tsx
@@ -82,9 +96,13 @@ ivs-school-website/
 │   │       └── WhatsAppButton.tsx
 │   │
 │   ├── lib/
-│   │   ├── utils.ts                  # Helper functions
-│   │   ├── whatsapp.ts               # WhatsApp API integration
-│   │   └── constants.ts              # Constants
+│   │   ├── utils.ts
+│   │   ├── whatsapp.ts
+│   │   └── constants.ts
+│   │   └── prisma.ts
+│   │   └── admission.ts
+│   │   └── validations.ts
+│   │   └── email.ts
 │   │
 │   ├── types/
 │   │   ├── index.ts
