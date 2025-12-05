@@ -188,3 +188,100 @@ export async function sendConfirmationEmail(
         return false
     }
 }
+
+
+export async function sendStatusUpdateEmail(
+    email: string,
+    studentName: string,
+    applicationId: string,
+    status: string
+) {
+    try {
+        const statusMessages = {
+            approved: {
+                subject: 'Congratulations! Application Approved - IVS',
+                title: '🎉 Application Approved!',
+                message: `We are pleased to inform you that the admission application for ${studentName} has been approved.`,
+                color: '#16a34a'
+            },
+            rejected: {
+                subject: 'Application Status Update - IVS',
+                title: 'Application Status',
+                message: `Thank you for your interest in IVS. Unfortunately, we are unable to process the application for ${studentName} at this time.`,
+                color: '#dc2626'
+            },
+            under_review: {
+                subject: 'Application Under Review - IVS',
+                title: 'Application Under Review',
+                message: `The admission application for ${studentName} is currently under review by our admissions team.`,
+                color: '#2563eb'
+            }
+        }
+
+        const statusInfo = statusMessages[status as keyof typeof statusMessages]
+
+        if (!statusInfo) return
+
+        const { error } = await resend.emails.send({
+            from: 'IVS Admissions <admissions@ivs.edu.pk>',
+            to: email,
+            subject: statusInfo.subject,
+            html: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <style>
+            body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+            .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .header { background: ${statusInfo.color}; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
+            .button { display: inline-block; background: ${statusInfo.color}; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1>${statusInfo.title}</h1>
+            </div>
+            <div class="content">
+              <p>Dear Parent/Guardian,</p>
+              <p>${statusInfo.message}</p>
+              <p><strong>Application ID:</strong> ${applicationId}</p>
+              <p><strong>Student Name:</strong> ${studentName}</p>
+              
+              ${status === 'approved' ? `
+                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+                <h3>Next Steps:</h3>
+                <ol>
+                  <li>Visit the school office within 3 days</li>
+                  <li>Submit original documents</li>
+                  <li>Pay the admission fee</li>
+                  <li>Collect your admission slip</li>
+                </ol>
+              ` : ''}
+              
+              <p style="margin-top: 30px;">For any queries, please contact us:</p>
+              <p>
+                📞 Phone: +92 300 1234567<br>
+                📧 Email: admissions@ivs.edu.pk<br>
+                💬 WhatsApp: +92 300 1234567
+              </p>
+              
+              <p style="margin-top: 30px;">Best Regards,<br><strong>IVS Admissions Team</strong></p>
+            </div>
+          </div>
+        </body>
+        </html>
+      `
+        })
+
+        if (error) {
+            console.error('Status update email error:', error)
+            return false
+        }
+        return true
+    } catch (error) {
+        console.error('Email send error:', error)
+        return false
+    }
+}

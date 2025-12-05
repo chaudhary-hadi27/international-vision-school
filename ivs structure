@@ -2,34 +2,33 @@ ivs-school-website/
 ├── src/
 │   ├── app/                          # Next.js 16 App Router
 │   │   ├── (public)/                 # Public routes group
-│   │   │   ├── page.tsx              # Home page
+│   │   │   ├── route.ts              # Home page
 │   │   │   ├── about/
-│   │   │   │   └── page.tsx
+│   │   │   │   └── route.ts
 │   │   │   ├── academics/
-│   │   │   │   ├── page.tsx
+│   │   │   │   ├── route.ts
 │   │   │   │   ├── playgroup/
 │   │   │   │   ├── nursery/
 │   │   │   │   ├── primary/
 │   │   │   │   └── middle/
 │   │   │   │   └── secondary/
 │   │   │   ├── admissions/
-│   │   │   │   └── page.tsx
+│   │   │   │   └── route.ts
 │   │   │   ├── gallery/
-│   │   │   │   └── page.tsx
+│   │   │   │   └── route.ts
 │   │   │   ├── events/
-│   │   │   │   └── page.tsx
+│   │   │   │   └── route.ts
 │   │   │   ├── contact/
-│   │   │   │   └── page.tsx
+│   │   │   │   └── route.ts
 │   │   │   └── layout.tsx            # Public layout
 │   │   │
 │   │   ├── (portal)/                 # Portal routes group
-│   │   │   ├── (admin)/
 │   │   │   │   └── admin/
 │   │   │   │    ├── layout.tsx              ✅ NEW
-│   │   │   │    ├── page.tsx                ✅ NEW (Dashboard)
+│   │   │   │    ├── route.ts                ✅ NEW (Dashboard)
 │   │   │   │    ├── applications/
-│   │   │   │    │   ├── page.tsx            ✅ NEW
-│   │   │   │    │   └── [id]/page.tsx       (Detail view - todo)
+│   │   │   │    │   ├── route.ts            ✅ NEW
+│   │   │   │    │   └── [id]/route.ts       (Detail view - todo)
 │   │   │   │    ├── students/
 │   │   │   │    ├── attendance/
 │   │   │   │    ├── fees/
@@ -39,7 +38,7 @@ ivs-school-website/
 │   │   │   │
 │   │   │   ├── parent-portal/
 │   │   │   │   ├── layout.tsx
-│   │   │   │   ├── page.tsx          # Dashboard
+│   │   │   │   ├── route.ts          # Dashboard
 │   │   │   │   ├── attendance/
 │   │   │   │   ├── results/
 │   │   │   │   ├── fees/
@@ -48,7 +47,7 @@ ivs-school-website/
 │   │   │   │
 │   │   │   └── admission-portal/
 │   │   │       ├── layout.tsx
-│   │   │       ├── page.tsx          # Admission form
+│   │   │       ├── route.ts          # Admission form
 │   │   │       ├── status/
 │   │   │       └── thank-you/
 │   │   │
