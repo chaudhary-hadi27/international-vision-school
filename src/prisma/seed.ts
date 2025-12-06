@@ -4,9 +4,8 @@ import bcrypt from 'bcryptjs'
 const prisma = new PrismaClient()
 
 async function main() {
-    console.log('🌱 Seeding database...')
+    console.log('🌱 Starting database seed...')
 
-    // Hash passwords
     const adminPassword = await bcrypt.hash('admin123', 10)
     const parentPassword = await bcrypt.hash('parent123', 10)
 
@@ -55,12 +54,13 @@ async function main() {
 
     console.log('✅ Parent user created:', parentUser.email)
 
-    // Create Student for Parent
+    // Get parent
     const parent = await prisma.parent.findUnique({
         where: { userId: parentUser.id }
     })
 
     if (parent) {
+        // Create Student
         const student = await prisma.student.create({
             data: {
                 rollNumber: 'IVS2024001',
@@ -83,7 +83,7 @@ async function main() {
 
         console.log('✅ Student created:', student.name)
 
-        // Create Fee Records
+        // Create Fee Record
         await prisma.feeRecord.create({
             data: {
                 studentId: student.id,
@@ -116,7 +116,7 @@ async function main() {
         console.log('✅ Fee records and attendance created')
     }
 
-    // Create Sample Announcement
+    // Create Announcement
     await prisma.announcement.create({
         data: {
             title: 'Winter Break Notice',
@@ -131,13 +131,12 @@ async function main() {
     })
 
     console.log('✅ Announcement created')
-
-    console.log('✅ Seeding completed!')
+    console.log('🎉 Database seeded successfully!')
 }
 
 main()
     .catch((e) => {
-        console.error('❌ Seeding error:', e)
+        console.error('❌ Error seeding database:', e)
         process.exit(1)
     })
     .finally(async () => {
