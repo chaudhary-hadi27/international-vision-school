@@ -1,31 +1,64 @@
 @import "tailwindcss";
 
-/* 🎨 Default Theme Variables */
+/* 🎨 Custom Theme Configuration */
 @theme {
-    /* Light theme colors (default) */
-    --color-bg-light: 249 250 251;
-    --color-text-light: 31 41 55;
+    /* Primary Colors */
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-300: #93c5fd;
+    --color-primary-400: #60a5fa;
+    --color-primary-500: #3b82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-primary-800: #1e40af;
+    --color-primary-900: #1e3a8a;
 
-    /* Dark theme colors */
-    --color-bg-dark: 17 24 39;
-    --color-text-dark: 243 244 246;
+    /* Custom Fonts */
+    --font-sans: var(--font-geist-sans), system-ui, sans-serif;
+    --font-mono: var(--font-geist-mono), monospace;
+
+    /* Spacing Scale (if needed custom) */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 0.75rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+
+    /* Border Radius */
+    --radius-sm: 0.5rem;
+    --radius-md: 0.75rem;
+    --radius-lg: 1rem;
+    --radius-xl: 1.5rem;
 }
 
 /* 🌐 Base Styles */
 @layer base {
     body {
-        @apply bg-neutral-50 text-neutral-800 transition-colors;
+        @apply bg-white text-gray-900 antialiased;
+        font-family: var(--font-sans);
     }
 
-    /* Dark mode styles */
-    .dark body {
-        @apply bg-neutral-900 text-neutral-100;
+    h1, h2, h3, h4, h5, h6 {
+        @apply font-bold;
+    }
+
+    a {
+        @apply text-blue-900 hover:underline;
     }
 }
 
-/* 🎯 Custom Utilities (Optional) */
+/* 🎯 Custom Utilities */
 @layer utilities {
     .text-balance {
         text-wrap: balance;
+    }
+
+    .gradient-primary {
+        @apply bg-gradient-to-r from-blue-900 to-blue-700;
+    }
+
+    .shadow-glow {
+        box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
     }
 }

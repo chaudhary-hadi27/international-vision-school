@@ -1,125 +1,92 @@
-ivs-school-website/
+ivs/
 ├── src/
-│   ├── app/                          # Next.js 16 App Router
-│   │   ├── (public)/                 # Public routes group
-│   │   │   ├── route.ts              # Home page
-│   │   │   ├── about/
-│   │   │   │   └── route.ts
-│   │   │   ├── academics/
-│   │   │   │   ├── route.ts
-│   │   │   │   ├── playgroup/
-│   │   │   │   ├── nursery/
-│   │   │   │   ├── primary/
-│   │   │   │   └── middle/
-│   │   │   │   └── secondary/
-│   │   │   ├── admissions/
-│   │   │   │   └── route.ts
-│   │   │   ├── gallery/
-│   │   │   │   └── route.ts
-│   │   │   ├── events/
-│   │   │   │   └── route.ts
-│   │   │   ├── contact/
-│   │   │   │   └── route.ts
-│   │   │   └── layout.tsx            # Public layout
+│   ├── app/
+│   │   ├── (auth)/
+│   │   │   └── login/
+│   │   │       └── page.tsx                    ✅ Keep
 │   │   │
-│   │   ├── (portal)/                 # Portal routes group
-│   │   │   │   └── admin/
-│   │   │   │    ├── layout.tsx              ✅ NEW
-│   │   │   │    ├── route.ts                ✅ NEW (Dashboard)
-│   │   │   │    ├── applications/
-│   │   │   │    │   ├── route.ts            ✅ NEW
-│   │   │   │    │   └── [id]/route.ts       (Detail view - todo)
-│   │   │   │    ├── students/
-│   │   │   │    ├── attendance/
-│   │   │   │    ├── fees/
-│   │   │   │    ├── reports/
-│   │   │   │    ├── announcements/
-│   │   │   │    └── settings/
+│   │   ├── (portal)/
+│   │   │   ├── (admin)/admin/
+│   │   │   │   ├── layout.tsx                  ✅ Keep
+│   │   │   │   ├── page.tsx                    ✅ Keep (Dashboard)
+│   │   │   │   ├── applications/
+│   │   │   │   │   ├── page.tsx                ✅ Keep
+│   │   │   │   │   └── [id]/page.tsx           ✅ Keep (needs async fix)
+│   │   │   │   └── students/
+│   │   │   │       └── page.tsx                ✅ Keep
 │   │   │   │
 │   │   │   ├── parent-portal/
-│   │   │   │   ├── layout.tsx
-│   │   │   │   ├── route.ts          # Dashboard
-│   │   │   │   ├── attendance/
-│   │   │   │   ├── results/
-│   │   │   │   ├── fees/
-│   │   │   │   ├── timetable/
-│   │   │   │   └── announcements/
+│   │   │   │   ├── layout.tsx                  ✅ Keep
+│   │   │   │   └── page.tsx                    ✅ Keep
 │   │   │   │
 │   │   │   └── admission-portal/
-│   │   │       ├── layout.tsx
-│   │   │       ├── route.ts          # Admission form
-│   │   │       ├── status/
+│   │   │       ├── layout.tsx                  ✅ Keep
+│   │   │       ├── page.tsx                    ✅ Keep
 │   │   │       └── thank-you/
+│   │   │           └── page.tsx                ✅ Keep (needs async fix)
 │   │   │
-│   │   ├── api/                      # API routes
-│   │   │   ├── whatsapp/
-│   │   │   │   └── route.ts          # WhatsApp webhook
-│   │   │   ├── admission/
-│   │   │   │   └── route.ts
-│   │   │   └── contact/
-│   │   │       └── route.ts
+│   │   ├── (public)/
+│   │   │   ├── layout.tsx                      ✅ Keep
+│   │   │   ├── page.tsx                        ✅ Keep (Home)
+│   │   │   ├── about/page.tsx                  ✅ Keep
+│   │   │   ├── academics/
+│   │   │   │   ├── page.tsx                    ✅ Keep
+│   │   │   │   ├── playgroup/page.tsx          ✅ Keep
+│   │   │   │   ├── nursery-kg/page.tsx         ✅ Keep
+│   │   │   │   ├── primary/page.tsx            ✅ Keep
+│   │   │   │   ├── middle/page.tsx             ✅ Keep
+│   │   │   │   └── secondary/page.tsx          ✅ Keep
+│   │   │   ├── admissions/page.tsx             ✅ Keep
+│   │   │   └── contact/page.tsx                ✅ Keep
 │   │   │
-│   │   ├── layout.tsx                # Root layout
-│   │   ├── globals.css               # Tailwind v4 CSS
-│   │   ├── not-found.tsx
-│   │   └── error.tsx
+│   │   ├── api/
+│   │   │   ├── auth/[...nextauth]/route.ts     ✅ Keep
+│   │   │   ├── admission/route.ts              ✅ Keep (needs fixes)
+│   │   │   └── admin/
+│   │   │       ├── applications/[id]/
+│   │   │       │   ├── route.ts                ✅ Keep
+│   │   │       │   └── status/route.ts         ✅ Keep
+│   │   │       └── students/route.ts           ✅ Keep
+│   │   │
+│   │   ├── layout.tsx                          ✅ Keep (Root)
+│   │   ├── globals.css                         ✅ Keep (needs Tailwind v4 update)
+│   │   ├── error.tsx                           ✅ Keep (needs implementation)
+│   │   └── not-found.tsx                       ✅ Keep (needs implementation)
 │   │
 │   ├── components/
 │   │   ├── layout/
-│   │   │   ├── Header.tsx
-│   │   │   ├── Footer.tsx
-│   │   │   ├── Navbar.tsx
-│   │   │
+│   │   │   ├── Header.tsx                      ✅ Keep
+│   │   │   └── Footer.tsx                      ✅ Keep
 │   │   ├── home/
-│   │   │   ├── Hero.tsx
-│   │   │   ├── Features.tsx
-│   │   │   ├── Stats.tsx
-│   │   │   ├── Programs.tsx
-│   │   │   └── Testimonials.tsx
-│   │   │
-│   │   ├── portal/
-│   │   │   ├── Sidebar.tsx
-│   │   │   ├── DashboardCard.tsx
-│   │   │   └── PortalHeader.tsx
-│   │   │
-│   │   ├── admission/
-│   │   │   ├── AdmissionForm.tsx
-│   │   │   ├── StepIndicator.tsx
-│   │   │   └── FormSection.tsx
-│   │   │
+│   │   │   └── Hero.tsx                        ✅ Keep
 │   │   └── ui/
-│   │       ├── Button.tsx
-│   │       ├── Card.tsx
-│   │       ├── Input.tsx
-│   │       ├── Modal.tsx
-│   │       └── WhatsAppButton.tsx
+│   │       ├── Button.tsx                      ✅ Keep
+│   │       └── WhatsAppButton.tsx              ✅ Keep
 │   │
 │   ├── lib/
-│   │   ├── utils.ts
-│   │   ├── whatsapp.ts
-│   │   └── constants.ts
-│   │   └── prisma.ts
-│   │   └── admission.ts
-│   │   └── validations.ts
-│   │   └── email.ts
+│   │   ├── auth.ts                             ✅ Keep
+│   │   ├── constants.ts                        ✅ Keep
+│   │   ├── email.ts                            ✅ Keep
+│   │   ├── prisma.ts                           ✅ Keep
+│   │   ├── validations.ts                      ✅ Keep
+│   │   └── whatsapp.ts                         ✅ Keep
 │   │
 │   ├── types/
-│   │   ├── index.ts
-│   │   ├── student.ts
-│   │   └── admission.ts
+│   │   └── next-auth.d.ts                      ✅ Keep
 │   │
-│   └── data/
-│       ├── programs.ts
-│       ├── faculty.ts
-│       └── testimonials.ts
+│   ├── prisma/
+│   │   ├── schema.prisma                       ✅ Keep
+│   │   └── seed.ts                             ✅ Keep
+│   │
+│   ├── instrumentation.ts                      ✅ Keep
+│   └── proxy.ts                                ✅ Keep
 │
 ├── public/
-│   ├── images/
-│   ├── icons/
-│   └── documents/
+│   └── images/                                 ✅ Keep (add your images)
 │
-├── next.config.ts                    # Next.js 15+ config
-├── tailwind.config.ts                # Tailwind v4 config (minimal)
-├── tsconfig.json
-├── package.json
-└── .env.local
+├── .env.local                                  ✅ Keep (create from .env.example)
+├── next.config.ts                              ✅ Keep
+├── tailwind.config.ts                          ⚠️ UPDATE (v4 format)
+├── biome.json                                  ⚠️ CREATE NEW
+├── tsconfig.json                               ✅ Keep
+└── package.json                                ⚠️ UPDATE (dependencies)

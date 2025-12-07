@@ -10,6 +10,11 @@ export async function proxy(request: NextRequest) {
         path === '/' ||
         path === '/login' ||
         path === '/register' ||
+        path.startsWith('/') ||
+        path.startsWith('/about') ||
+        path.startsWith('/academics') ||
+        path.startsWith('/admission') ||
+        path.startsWith('/contact') ||
         path.startsWith('/admission-portal') ||
         path.startsWith('/_next') ||
         path.startsWith('/api/auth') ||

@@ -1,7 +1,8 @@
+
 'use client'
 
 import { useParams } from 'next/navigation'
-import Link from "next/link";
+import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import {
     ArrowLeft,
@@ -81,8 +82,6 @@ export default function ApplicationDetailPage() {
 
     return (
         <div className="space-y-6">
-
-            {/* Header */}
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <Link href="/admin/applications" className="p-2 hover:bg-gray-100 rounded-lg">
@@ -94,20 +93,23 @@ export default function ApplicationDetailPage() {
                     </div>
                 </div>
 
-                {/* Status Badge */}
                 <div className="flex items-center gap-3">
-          <span className={`px-4 py-2 rounded-full text-sm font-bold ${
-              application.status === 'approved' ? 'bg-green-100 text-green-700' :
-                  application.status === 'rejected' ? 'bg-red-100 text-red-700' :
-                      application.status === 'under_review' ? 'bg-blue-100 text-blue-700' :
-                          'bg-amber-100 text-amber-700'
-          }`}>
+          <span
+              className={`px-4 py-2 rounded-full text-sm font-bold ${
+                  application.status === 'approved'
+                      ? 'bg-green-100 text-green-700'
+                      : application.status === 'rejected'
+                          ? 'bg-red-100 text-red-700'
+                          : application.status === 'under_review'
+                              ? 'bg-blue-100 text-blue-700'
+                              : 'bg-amber-100 text-amber-700'
+              }`}
+          >
             {application.status.toUpperCase().replace('_', ' ')}
           </span>
                 </div>
             </div>
 
-            {/* Action Buttons */}
             {application.status === 'pending' && (
                 <div className="bg-white rounded-xl shadow-md p-6">
                     <h3 className="font-bold text-gray-900 mb-4">Quick Actions</h3>
@@ -128,22 +130,12 @@ export default function ApplicationDetailPage() {
                             <XCircle className="w-5 h-5" />
                             Reject Application
                         </button>
-                        <button
-                            onClick={() => updateStatus('under_review')}
-                            disabled={updating}
-                            className="px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition disabled:opacity-50"
-                        >
-                            Mark Under Review
-                        </button>
                     </div>
                 </div>
             )}
 
             <div className="grid lg:grid-cols-3 gap-6">
-
-                {/* Student Information */}
                 <div className="lg:col-span-2 space-y-6">
-
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                             <User className="w-5 h-5" />
@@ -168,19 +160,11 @@ export default function ApplicationDetailPage() {
                                 <label className="text-sm text-gray-600">Grade Applied</label>
                                 <p className="font-semibold text-gray-900">{application.grade}</p>
                             </div>
-                            {application.previousSchool && (
-                                <div className="md:col-span-2">
-                                    <label className="text-sm text-gray-600">Previous School</label>
-                                    <p className="font-semibold text-gray-900">{application.previousSchool}</p>
-                                </div>
-                            )}
                         </div>
                     </div>
 
-                    {/* Parent Information */}
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-6">Parent Information</h2>
-
                         <div className="mb-6 pb-6 border-b">
                             <h3 className="font-bold text-gray-900 mb-4">Father Details</h3>
                             <div className="grid md:grid-cols-2 gap-4">
@@ -189,78 +173,15 @@ export default function ApplicationDetailPage() {
                                     <p className="font-semibold text-gray-900">{application.fatherName}</p>
                                 </div>
                                 <div>
-                                    <label className="text-sm text-gray-600">CNIC</label>
-                                    <p className="font-semibold text-gray-900">{application.fatherCNIC}</p>
-                                </div>
-                                <div>
                                     <label className="text-sm text-gray-600">Phone</label>
                                     <p className="font-semibold text-gray-900">{application.fatherPhone}</p>
-                                </div>
-                                {application.fatherOccupation && (
-                                    <div>
-                                        <label className="text-sm text-gray-600">Occupation</label>
-                                        <p className="font-semibold text-gray-900">{application.fatherOccupation}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-
-                        <div>
-                            <h3 className="font-bold text-gray-900 mb-4">Mother Details</h3>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="text-sm text-gray-600">Name</label>
-                                    <p className="font-semibold text-gray-900">{application.motherName}</p>
-                                </div>
-                                {application.motherCNIC && (
-                                    <div>
-                                        <label className="text-sm text-gray-600">CNIC</label>
-                                        <p className="font-semibold text-gray-900">{application.motherCNIC}</p>
-                                    </div>
-                                )}
-                                {application.motherPhone && (
-                                    <div>
-                                        <label className="text-sm text-gray-600">Phone</label>
-                                        <p className="font-semibold text-gray-900">{application.motherPhone}</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contact Information */}
-                    <div className="bg-white rounded-xl shadow-md p-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                            <MapPin className="w-5 h-5" />
-                            Contact Information
-                        </h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="text-sm text-gray-600">Address</label>
-                                <p className="font-semibold text-gray-900">{application.address}, {application.city}</p>
-                            </div>
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="text-sm text-gray-600 flex items-center gap-1">
-                                        <Mail className="w-4 h-4" /> Email
-                                    </label>
-                                    <p className="font-semibold text-gray-900">{application.email}</p>
-                                </div>
-                                <div>
-                                    <label className="text-sm text-gray-600 flex items-center gap-1">
-                                        <Phone className="w-4 h-4" /> WhatsApp
-                                    </label>
-                                    <p className="font-semibold text-gray-900">{application.whatsappNumber}</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Sidebar */}
                 <div className="space-y-6">
-
-                    {/* Timeline */}
                     <div className="bg-white rounded-xl shadow-md p-6">
                         <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                             <Calendar className="w-5 h-5" />
@@ -273,55 +194,10 @@ export default function ApplicationDetailPage() {
                                     {new Date(application.createdAt).toLocaleString()}
                                 </p>
                             </div>
-                            <div>
-                                <label className="text-sm text-gray-600">Last Updated</label>
-                                <p className="font-semibold text-gray-900">
-                                    {new Date(application.updatedAt).toLocaleString()}
-                                </p>
-                            </div>
                         </div>
                     </div>
-
-                    {/* Documents */}
-                    <div className="bg-white rounded-xl shadow-md p-6">
-                        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                            <FileText className="w-5 h-5" />
-                            Uploaded Documents
-                        </h2>
-                        <div className="space-y-3">
-                            {application.studentPhotoUrl && (
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                    <span className="text-sm font-semibold">Student Photo</span>
-                                    <a
-                                        href={application.studentPhotoUrl}
-                                        target="_blank"
-                                        className="text-blue-900 hover:underline text-sm flex items-center gap-1"
-                                    >
-                                        <Download className="w-4 h-4" />
-                                        View
-                                    </a>
-                                </div>
-                            )}
-                            {application.birthCertUrl && (
-                                <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                    <span className="text-sm font-semibold">Birth Certificate</span>
-                                    <a
-                                        href={application.birthCertUrl}
-                                        target="_blank"
-                                        className="text-blue-900 hover:underline text-sm flex items-center gap-1"
-                                    >
-                                        <Download className="w-4 h-4" />
-                                        View
-                                    </a>
-                                </div>
-                            )}
-                        </div>
-                    </div>
-
                 </div>
-
             </div>
-
         </div>
     )
 }

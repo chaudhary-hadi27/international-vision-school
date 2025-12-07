@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { CheckCircle2, Download, Mail, Phone, MessageCircle, Calendar, FileText } from 'lucide-react'
+import { CheckCircle2, Download, Mail, Phone, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
 
 export default function ThankYouPage() {
@@ -12,23 +12,20 @@ export default function ThankYouPage() {
 
     useEffect(() => {
         if (applicationId) {
-            // Fetch application details
             fetch(`/api/admission?id=${applicationId}`)
-                .then(res => res.json())
-                .then(data => {
+                .then((res) => res.json())
+                .then((data) => {
                     if (data.success) {
                         setApplicationData(data.data)
                     }
                 })
-                .catch(error => console.error('Error fetching application:', error))
+                .catch((error) => console.error('Error fetching application:', error))
         }
     }, [applicationId])
 
     return (
         <main className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4">
             <div className="max-w-4xl mx-auto">
-
-                {/* Success Message */}
                 <div className="bg-white rounded-3xl shadow-2xl p-12 text-center mb-8">
                     <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
                         <CheckCircle2 className="w-12 h-12 text-green-600" />
@@ -70,58 +67,15 @@ export default function ThankYouPage() {
                             A confirmation email has been sent to your registered email address.
                         </p>
                         <p className="text-gray-700">
-                            Our admissions team will review your application and contact you within <strong>2-3 business days</strong>.
+                            Our admissions team will review your application and contact you within{' '}
+                            <strong>2-3 business days</strong>.
                         </p>
                     </div>
                 </div>
 
-                {/* What's Next */}
-                <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-6">What Happens Next?</h2>
-
-                    <div className="space-y-6">
-                        <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Mail className="w-6 h-6 text-blue-900" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-gray-900 mb-1">Step 1: Application Review</h3>
-                                <p className="text-gray-600">
-                                    Our team will review your application and verify all submitted documents.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <Calendar className="w-6 h-6 text-green-700" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-gray-900 mb-1">Step 2: Assessment Schedule</h3>
-                                <p className="text-gray-600">
-                                    We will contact you via phone/WhatsApp to schedule an assessment test for the student.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-4">
-                            <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                                <FileText className="w-6 h-6 text-purple-700" />
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-gray-900 mb-1">Step 3: Final Decision</h3>
-                                <p className="text-gray-600">
-                                    After the assessment, you'll receive the admission decision within 24-48 hours.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="grid md:grid-cols-3 gap-4 mb-8">
+                <div className="grid md:grid-cols-3 gap-4">
                     <a
-                        href={`mailto:admissions@ivs.edu.pk?subject=Application ${applicationId}`}
+                        href="mailto:admissions@ivs.edu.pk"
                         className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition text-center group"
                     >
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:scale-110 transition">
@@ -155,64 +109,6 @@ export default function ThankYouPage() {
                         <p className="text-sm text-gray-600">Chat with us</p>
                     </a>
                 </div>
-
-                {/* Download Receipt */}
-                <div className="bg-gradient-to-br from-blue-900 to-blue-700 rounded-2xl p-8 text-white text-center mb-8">
-                    <Download className="w-12 h-12 mx-auto mb-4" />
-                    <h3 className="text-2xl font-bold mb-3">Download Application Receipt</h3>
-                    <p className="text-blue-100 mb-6">
-                        Save a copy of your application for your records
-                    </p>
-                    <button
-                        onClick={() => window.print()}
-                        className="px-8 py-3 bg-white text-blue-900 rounded-lg font-semibold hover:bg-gray-100 transition"
-                    >
-                        Download PDF Receipt
-                    </button>
-                </div>
-
-                {/* Important Notes */}
-                <div className="bg-amber-50 border-2 border-amber-200 rounded-2xl p-6 mb-8">
-                    <h3 className="font-bold text-amber-900 mb-3 flex items-center gap-2">
-                        <FileText className="w-5 h-5" />
-                        Important Notes
-                    </h3>
-                    <ul className="space-y-2 text-sm text-amber-800">
-                        <li className="flex items-start gap-2">
-                            <span className="text-amber-600 font-bold">•</span>
-                            <span>Keep your Application ID safe - you'll need it to track your application status</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-amber-600 font-bold">•</span>
-                            <span>Ensure your phone and WhatsApp numbers are active - we'll contact you soon</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-amber-600 font-bold">•</span>
-                            <span>Check your email (including spam folder) for confirmation and updates</span>
-                        </li>
-                        <li className="flex items-start gap-2">
-                            <span className="text-amber-600 font-bold">•</span>
-                            <span>Admission fee will be required after successful assessment</span>
-                        </li>
-                    </ul>
-                </div>
-
-                {/* Navigation Links */}
-                <div className="flex flex-wrap gap-4 justify-center">
-                    <Link
-                        href="/"
-                        className="px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition"
-                    >
-                        Return to Home
-                    </Link>
-                    <Link
-                        href="/admission-portal/status"
-                        className="px-6 py-3 bg-white text-blue-900 border-2 border-blue-900 rounded-lg font-semibold hover:bg-gray-50 transition"
-                    >
-                        Track Application Status
-                    </Link>
-                </div>
-
             </div>
         </main>
     )
