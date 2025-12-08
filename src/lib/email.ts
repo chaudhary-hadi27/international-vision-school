@@ -1,12 +1,30 @@
+// src/lib/email.ts
+
 import { Resend } from 'resend'
+import type { Admission } from '@prisma/client'
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+// Initialize Resend only if API key exists
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null
 
-export async function sendAdminNotification(data: any) {
+const FROM_EMAIL = process.env.RESEND_FROM_EMAIL || 'IVS Admissions <admissions@ivs.edu.pk>'
+const ADMIN_EMAIL = process.env.RESEND_ADMIN_EMAIL || 'admin@ivs.edu.pk'
+
+// Helper to check if email is configured
+function isEmailConfigured(): boolean {
+    if (!resend) {
+        console.warn('Resend API key not configured. Email notifications disabled.')
+        return false
+    }
+    return true
+}
+
+export async function sendAdminNotification(data: Admission): Promise<boolean> {
+    if (!isEmailConfigured()) return false
+
     try {
-        const { error } = await resend.emails.send({
-            from: 'IVS Admissions <admissions@ivs.edu.pk>',
-            to: process.env.RESEND_ADMIN_EMAIL || 'admin@ivs.edu.pk',
+        const { error } = await resend!.emails.send({
+            from: FROM_EMAIL,
+            to: ADMIN_EMAIL,
             subject: `🎓 New Admission Application - ${data.applicationId}`,
             html: `
         <!DOCTYPE html>
@@ -69,7 +87,7 @@ export async function sendAdminNotification(data: any) {
               </div>
               
               <div style="text-align: center;">
-                <a href="https://ivs.edu.pk/admin/applications/${data.applicationId}" class="button">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin/applications/${data.applicationId}" class="button">
                   View Full Application
                 </a>
               </div>
@@ -77,16 +95,16 @@ export async function sendAdminNotification(data: any) {
           </div>
         </body>
         </html>
-      `
+      `,
         })
 
         if (error) {
-            console.error('Email Error:', error)
+            console.error('Admin notification email error:', error)
             return false
         }
         return true
     } catch (error) {
-        console.error('Email Send Error:', error)
+        console.error('Failed to send admin notification:', error)
         return false
     }
 }
@@ -95,10 +113,12 @@ export async function sendConfirmationEmail(
     email: string,
     applicationId: string,
     studentName: string
-) {
+): Promise<boolean> {
+    if (!isEmailConfigured()) return false
+
     try {
-        const { error } = await resend.emails.send({
-            from: 'IVS Admissions <admissions@ivs.edu.pk>',
+        const { error } = await resend!.emails.send({
+            from: FROM_EMAIL,
             to: email,
             subject: 'Application Received - International Vision School',
             html: `
@@ -162,9 +182,9 @@ export async function sendConfirmationEmail(
               
               <p style="text-align: center; color: #666;">
                 <strong>Need Help?</strong><br>
-                📞 Call: +92 300 1234567<br>
+                📞 Call: ${process.env.NEXT_PUBLIC_WHATSAPP || '+92 300 1234567'}<br>
                 📧 Email: admissions@ivs.edu.pk<br>
-                💬 WhatsApp: +92 300 1234567
+                💬 WhatsApp: ${process.env.NEXT_PUBLIC_WHATSAPP || '+92 300 1234567'}
               </p>
               
               <p style="text-align: center; margin-top: 30px;">
@@ -175,57 +195,69 @@ export async function sendConfirmationEmail(
           </div>
         </body>
         </html>
-      `
+      `,
         })
 
         if (error) {
-            console.error('Confirmation Email Error:', error)
+            console.error('Confirmation email error:', error)
             return false
         }
         return true
     } catch (error) {
-        console.error('Email Send Error:', error)
+        console.error('Failed to send confirmation email:', error)
         return false
     }
 }
-
 
 export async function sendStatusUpdateEmail(
     email: string,
     studentName: string,
     applicationId: string,
     status: string
-) {
+): Promise<boolean> {
+    if (!isEmailConfigured()) return false
+
+    const statusConfig = {
+        approved: {
+            subject: 'Congratulations! Application Approved - IVS',
+            title: '🎉 Application Approved!',
+            message: `We are pleased to inform you that the admission application for ${studentName} has been approved.`,
+            color: '#16a34a',
+            nextSteps: `
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+        <h3>Next Steps:</h3>
+        <ol>
+          <li>Visit the school office within 3 days</li>
+          <li>Submit original documents</li>
+          <li>Pay the admission fee</li>
+          <li>Collect your admission slip</li>
+        </ol>
+      `,
+        },
+        rejected: {
+            subject: 'Application Status Update - IVS',
+            title: 'Application Status',
+            message: `Thank you for your interest in IVS. Unfortunately, we are unable to process the application for ${studentName} at this time.`,
+            color: '#dc2626',
+            nextSteps: '',
+        },
+        under_review: {
+            subject: 'Application Under Review - IVS',
+            title: 'Application Under Review',
+            message: `The admission application for ${studentName} is currently under review by our admissions team.`,
+            color: '#2563eb',
+            nextSteps: '',
+        },
+    }
+
+    const config = statusConfig[status as keyof typeof statusConfig]
+    if (!config) return false
+
     try {
-        const statusMessages = {
-            approved: {
-                subject: 'Congratulations! Application Approved - IVS',
-                title: '🎉 Application Approved!',
-                message: `We are pleased to inform you that the admission application for ${studentName} has been approved.`,
-                color: '#16a34a'
-            },
-            rejected: {
-                subject: 'Application Status Update - IVS',
-                title: 'Application Status',
-                message: `Thank you for your interest in IVS. Unfortunately, we are unable to process the application for ${studentName} at this time.`,
-                color: '#dc2626'
-            },
-            under_review: {
-                subject: 'Application Under Review - IVS',
-                title: 'Application Under Review',
-                message: `The admission application for ${studentName} is currently under review by our admissions team.`,
-                color: '#2563eb'
-            }
-        }
-
-        const statusInfo = statusMessages[status as keyof typeof statusMessages]
-
-        if (!statusInfo) return
-
-        const { error } = await resend.emails.send({
-            from: 'IVS Admissions <admissions@ivs.edu.pk>',
+        const { error } = await resend!.emails.send({
+            from: FROM_EMAIL,
             to: email,
-            subject: statusInfo.subject,
+            subject: config.subject,
             html: `
         <!DOCTYPE html>
         <html>
@@ -233,38 +265,28 @@ export async function sendStatusUpdateEmail(
           <style>
             body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-            .header { background: ${statusInfo.color}; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+            .header { background: ${config.color}; color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
             .content { background: #f9fafb; padding: 30px; border-radius: 0 0 10px 10px; }
-            .button { display: inline-block; background: ${statusInfo.color}; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin-top: 20px; }
           </style>
         </head>
         <body>
           <div class="container">
             <div class="header">
-              <h1>${statusInfo.title}</h1>
+              <h1>${config.title}</h1>
             </div>
             <div class="content">
               <p>Dear Parent/Guardian,</p>
-              <p>${statusInfo.message}</p>
+              <p>${config.message}</p>
               <p><strong>Application ID:</strong> ${applicationId}</p>
               <p><strong>Student Name:</strong> ${studentName}</p>
               
-              ${status === 'approved' ? `
-                <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
-                <h3>Next Steps:</h3>
-                <ol>
-                  <li>Visit the school office within 3 days</li>
-                  <li>Submit original documents</li>
-                  <li>Pay the admission fee</li>
-                  <li>Collect your admission slip</li>
-                </ol>
-              ` : ''}
+              ${config.nextSteps}
               
               <p style="margin-top: 30px;">For any queries, please contact us:</p>
               <p>
-                📞 Phone: +92 300 1234567<br>
+                📞 Phone: ${process.env.NEXT_PUBLIC_WHATSAPP || '+92 300 1234567'}<br>
                 📧 Email: admissions@ivs.edu.pk<br>
-                💬 WhatsApp: +92 300 1234567
+                💬 WhatsApp: ${process.env.NEXT_PUBLIC_WHATSAPP || '+92 300 1234567'}
               </p>
               
               <p style="margin-top: 30px;">Best Regards,<br><strong>IVS Admissions Team</strong></p>
@@ -272,7 +294,7 @@ export async function sendStatusUpdateEmail(
           </div>
         </body>
         </html>
-      `
+      `,
         })
 
         if (error) {
@@ -281,7 +303,7 @@ export async function sendStatusUpdateEmail(
         }
         return true
     } catch (error) {
-        console.error('Email send error:', error)
+        console.error('Failed to send status update email:', error)
         return false
     }
 }

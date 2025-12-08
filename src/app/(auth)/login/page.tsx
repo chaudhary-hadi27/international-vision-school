@@ -1,10 +1,19 @@
+// src/app/(auth)/login/page.tsx
 'use client'
 
-import { useState } from 'react'
+import { useState, type FormEvent, type ChangeEvent } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { GraduationCap, Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react'
 import Link from 'next/link'
+
+type UserRole = 'PARENT' | 'ADMIN'
+
+interface FormData {
+    email: string
+    password: string
+    role: UserRole
+}
 
 export default function LoginPage() {
     const router = useRouter()
@@ -12,16 +21,16 @@ export default function LoginPage() {
     const callbackUrl = searchParams.get('callbackUrl') || '/'
     const authError = searchParams.get('error')
 
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<FormData>({
         email: '',
         password: '',
-        role: 'PARENT'
+        role: 'PARENT',
     })
     const [showPassword, setShowPassword] = useState(false)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(authError || '')
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setLoading(true)
         setError('')
@@ -40,25 +49,29 @@ export default function LoginPage() {
             }
 
             if (result?.ok) {
-                // Redirect based on role
-                if (formData.role === 'ADMIN') {
-                    router.push('/admin')
-                } else {
-                    router.push('/parent-portal')
-                }
+                const redirectUrl = formData.role === 'ADMIN' ? '/admin' : '/parent-portal'
+                router.push(redirectUrl)
                 router.refresh()
             }
-        } catch (error) {
-            console.error('Login error:', error)
+        } catch (err) {
+            console.error('Login error:', err)
             setError('Something went wrong. Please try again.')
             setLoading(false)
         }
     }
 
+    const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target
+        setFormData((prev) => ({ ...prev, [name]: value }))
+    }
+
+    const handleRoleChange = (role: UserRole) => {
+        setFormData((prev) => ({ ...prev, role }))
+    }
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
             <div className="max-w-md w-full">
-
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/">
@@ -72,12 +85,11 @@ export default function LoginPage() {
 
                 {/* Login Form */}
                 <div className="bg-white rounded-2xl shadow-2xl p-8">
-
                     {/* Role Selector */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                         <button
                             type="button"
-                            onClick={() => setFormData({ ...formData, role: 'PARENT' })}
+                            onClick={() => handleRoleChange('PARENT')}
                             className={`py-3 rounded-lg font-semibold transition ${
                                 formData.role === 'PARENT'
                                     ? 'bg-blue-900 text-white'
@@ -88,7 +100,7 @@ export default function LoginPage() {
                         </button>
                         <button
                             type="button"
-                            onClick={() => setFormData({ ...formData, role: 'ADMIN' })}
+                            onClick={() => handleRoleChange('ADMIN')}
                             className={`py-3 rounded-lg font-semibold transition ${
                                 formData.role === 'ADMIN'
                                     ? 'bg-blue-900 text-white'
@@ -107,31 +119,34 @@ export default function LoginPage() {
                     )}
 
                     <form onSubmit={handleSubmit} className="space-y-5">
-
                         <div>
-                            <label className="block text-gray-700 font-semibold mb-2">
+                            <label htmlFor="email" className="block text-gray-700 font-semibold mb-2">
                                 Email Address
                             </label>
                             <input
+                                id="email"
+                                name="email"
                                 type="email"
                                 required
                                 value={formData.email}
-                                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                onChange={handleInputChange}
                                 className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
                                 placeholder="your.email@example.com"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-gray-700 font-semibold mb-2">
+                            <label htmlFor="password" className="block text-gray-700 font-semibold mb-2">
                                 Password
                             </label>
                             <div className="relative">
                                 <input
+                                    id="password"
+                                    name="password"
                                     type={showPassword ? 'text' : 'password'}
                                     required
                                     value={formData.password}
-                                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                    onChange={handleInputChange}
                                     className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition pr-12"
                                     placeholder="••••••••"
                                 />
@@ -139,6 +154,7 @@ export default function LoginPage() {
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                                    aria-label={showPassword ? 'Hide password' : 'Show password'}
                                 >
                                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>
@@ -146,13 +162,13 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex items-center justify-between">
-                            <label className="flex items-center">
+                            <label className="flex items-center cursor-pointer">
                                 <input type="checkbox" className="w-4 h-4 text-blue-900 rounded" />
                                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
                             </label>
-                            <a href="#" className="text-sm text-blue-900 hover:underline font-semibold">
+                            <Link href="/forgot-password" className="text-sm text-blue-900 hover:underline font-semibold">
                                 Forgot Password?
-                            </a>
+                            </Link>
                         </div>
 
                         <button
@@ -169,7 +185,6 @@ export default function LoginPage() {
                                 'Sign In'
                             )}
                         </button>
-
                     </form>
 
                     <div className="mt-6 text-center text-sm text-gray-600">
@@ -178,21 +193,17 @@ export default function LoginPage() {
                             Apply for Admission
                         </Link>
                     </div>
-
                 </div>
 
-                {/* Demo Credentials */}
-                <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
-                    <p className="font-semibold text-amber-900 mb-2">🔐 Demo Credentials:</p>
-                    <p className="text-amber-800 text-xs">
-                        <strong>Admin:</strong> admin@ivs.edu.pk / admin123<br />
-                        <strong>Parent:</strong> parent@ivs.edu.pk / parent123
-                    </p>
-                    <p className="text-amber-700 text-xs mt-2">
-                        ⚠️ First run: <code className="bg-amber-100 px-1 py-0.5 rounded">npx prisma db seed</code>
-                    </p>
-                </div>
-
+                {/* Demo Note - Remove in production */}
+                {process.env.NODE_ENV === 'development' && (
+                    <div className="mt-6 bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm">
+                        <p className="font-semibold text-amber-900 mb-2">🔐 Development Mode</p>
+                        <p className="text-amber-800 text-xs">
+                            Run seed command to create demo accounts: <code className="bg-amber-100 px-1 py-0.5 rounded">pnpm db:seed</code>
+                        </p>
+                    </div>
+                )}
             </div>
         </div>
     )

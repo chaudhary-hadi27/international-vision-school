@@ -27,13 +27,13 @@ export default function Hero() {
 
                         {/* Heading */}
                         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                            Building Tomorrow's
-                            <span className="block text-blue-300">Leaders Today</span>
+                            International Vision
+                            <span className="block text-blue-300 text">School</span>
                         </h1>
 
                         {/* Description */}
                         <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-8 sm:mb-10 leading-relaxed">
-                            International Vision School provides quality education from Playgroup to Grade 10, nurturing young minds with modern teaching and Islamic values.
+                            Building Tomorrow's Leaders Today - International Vision School provides quality education from Playgroup to Grade 10, nurturing young minds with modern teaching and Islamic values.
                         </p>
 
                         {/* CTA Buttons */}
