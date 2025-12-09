@@ -12,7 +12,7 @@
     "check": "biome check --write . && npm run type-check",
     "type-check": "tsc --noEmit",
     "db:push": "prisma db push",
-    "db:seed": "tsx src/prisma/seed.ts",
+    "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio",
     "db:migrate": "prisma migrate dev",
     "postinstall": "prisma generate"
