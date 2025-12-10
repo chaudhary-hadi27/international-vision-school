@@ -1,4 +1,4 @@
-// src/app/actions/admin.ts
+// src/lib/actions/admin.ts
 'use server'
 
 import { getServerSession } from 'next-auth'

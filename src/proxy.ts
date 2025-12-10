@@ -1,34 +1,29 @@
-// src/middleware.ts
-import { withAuth } from 'next-auth/middleware'
+// src/proxy.ts
 import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { getToken } from 'next-auth/jwt'
 
-export default withAuth(
-    function middleware(req) {
-        const token = req.nextauth.token
-        const path = req.nextUrl.pathname
+export async function proxy(req: NextRequest) {
+    const token = await getToken({ req, secret: process.env.NEXTAUTH_SECRET })
+    const path = req.nextUrl.pathname
 
-        // Admin routes protection
-        if (path.startsWith('/admin') && token?.role !== 'ADMIN') {
+    // Admin routes protection
+    if (path.startsWith('/admin')) {
+        if (!token || token.role !== 'ADMIN') {
             return NextResponse.redirect(new URL('/login?error=unauthorized', req.url))
         }
-
-        // Parent portal protection
-        if (path.startsWith('/parent-portal') && token?.role !== 'PARENT') {
-            return NextResponse.redirect(new URL('/login?error=unauthorized', req.url))
-        }
-
-        return NextResponse.next()
-    },
-    {
-        callbacks: {
-            authorized: ({ token }) => !!token,
-        },
     }
-)
+
+    // Parent portal protection
+    if (path.startsWith('/parent-portal')) {
+        if (!token || token.role !== 'PARENT') {
+            return NextResponse.redirect(new URL('/login?error=unauthorized', req.url))
+        }
+    }
+
+    return NextResponse.next()
+}
 
 export const config = {
-    matcher: [
-        '/admin/:path*',
-        '/parent-portal/:path*',
-    ],
+    matcher: ['/admin/:path*', '/parent-portal/:path*'],
 }

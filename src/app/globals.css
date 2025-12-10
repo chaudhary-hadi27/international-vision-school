@@ -1,64 +1,64 @@
 @import "tailwindcss";
 
-/* 🎨 Custom Theme Configuration */
-@theme {
-    /* Primary Colors */
-    --color-primary-50: #eff6ff;
-    --color-primary-100: #dbeafe;
-    --color-primary-200: #bfdbfe;
-    --color-primary-300: #93c5fd;
-    --color-primary-400: #60a5fa;
-    --color-primary-500: #3b82f6;
-    --color-primary-600: #2563eb;
-    --color-primary-700: #1d4ed8;
-    --color-primary-800: #1e40af;
-    --color-primary-900: #1e3a8a;
+/*!* 🎨 Custom Theme Configuration *!*/
+/*@theme {*/
+/*    !* Primary Colors *!*/
+/*    --color-primary-50: #eff6ff;*/
+/*    --color-primary-100: #dbeafe;*/
+/*    --color-primary-200: #bfdbfe;*/
+/*    --color-primary-300: #93c5fd;*/
+/*    --color-primary-400: #60a5fa;*/
+/*    --color-primary-500: #3b82f6;*/
+/*    --color-primary-600: #2563eb;*/
+/*    --color-primary-700: #1d4ed8;*/
+/*    --color-primary-800: #1e40af;*/
+/*    --color-primary-900: #1e3a8a;*/
 
-    /* Custom Fonts */
-    --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-    --font-mono: var(--font-geist-mono), monospace;
+/*    !* Custom Fonts *!*/
+/*    --font-sans: var(--font-geist-sans), system-ui, sans-serif;*/
+/*    --font-mono: var(--font-geist-mono), monospace;*/
 
-    /* Spacing Scale (if needed custom) */
-    --spacing-xs: 0.5rem;
-    --spacing-sm: 0.75rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 1.5rem;
-    --spacing-xl: 2rem;
+/*    !* Spacing Scale (if needed custom) *!*/
+/*    --spacing-xs: 0.5rem;*/
+/*    --spacing-sm: 0.75rem;*/
+/*    --spacing-md: 1rem;*/
+/*    --spacing-lg: 1.5rem;*/
+/*    --spacing-xl: 2rem;*/
 
-    /* Border Radius */
-    --radius-sm: 0.5rem;
-    --radius-md: 0.75rem;
-    --radius-lg: 1rem;
-    --radius-xl: 1.5rem;
-}
+/*    !* Border Radius *!*/
+/*    --radius-sm: 0.5rem;*/
+/*    --radius-md: 0.75rem;*/
+/*    --radius-lg: 1rem;*/
+/*    --radius-xl: 1.5rem;*/
+/*}*/
 
-/* 🌐 Base Styles */
-@layer base {
-    body {
-        @apply bg-white text-gray-900 antialiased;
-        font-family: var(--font-sans);
-    }
+/*!* 🌐 Base Styles *!*/
+/*@layer base {*/
+/*    body {*/
+/*        @apply bg-white text-gray-900 antialiased;*/
+/*        font-family: var(--font-sans);*/
+/*    }*/
 
-    h1, h2, h3, h4, h5, h6 {
-        @apply font-bold;
-    }
+/*    h1, h2, h3, h4, h5, h6 {*/
+/*        @apply font-bold;*/
+/*    }*/
 
-    a {
-        @apply text-blue-900 hover:underline;
-    }
-}
+/*    a {*/
+/*        @apply text-blue-900 hover:underline;*/
+/*    }*/
+/*}*/
 
-/* 🎯 Custom Utilities */
-@layer utilities {
-    .text-balance {
-        text-wrap: balance;
-    }
+/*!* 🎯 Custom Utilities *!*/
+/*@layer utilities {*/
+/*    .text-balance {*/
+/*        text-wrap: balance;*/
+/*    }*/
 
-    .gradient-primary {
-        @apply bg-gradient-to-r from-blue-900 to-blue-700;
-    }
+/*    .gradient-primary {*/
+/*        @apply bg-gradient-to-r from-blue-900 to-blue-700;*/
+/*    }*/
 
-    .shadow-glow {
-        box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);
-    }
-}
+/*    .shadow-glow {*/
+/*        box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);*/
+/*    }*/
+/*}*/

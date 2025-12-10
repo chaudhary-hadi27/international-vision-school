@@ -1,11 +1,20 @@
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  reactCompiler: true,
-    reactStrictMode: true,
-    experimental: {
-        serverComponentsExternalPackages: ['@prisma/client', 'bcryptjs'],
+    // ✅ NEW: serverExternalPackages (not experimental anymore)
+    serverExternalPackages: [
+        '@prisma/client',
+        'bcryptjs',
+    ],
+
+    images: {
+        remotePatterns: [
+            {
+                protocol: 'https',
+                hostname: 'images.unsplash.com',
+            },
+        ],
     },
 };
 

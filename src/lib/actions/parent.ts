@@ -1,4 +1,4 @@
-// src/app/actions/parent.ts
+// src/lib/actions/parent.ts
 'use server'
 
 import { getServerSession } from 'next-auth'
@@ -15,8 +15,6 @@ function ensureSessionUserId(session: any): string {
 }
 
 function toNumber(value: unknown): number {
-    // Prisma Decimal and other numeric shapes -> safe Number conversion
-    // Using Number(...) handles string/number/Decimal-like objects
     return Number((value as any) ?? 0)
 }
 
@@ -95,7 +93,7 @@ export async function getStudentAttendance(studentId: string, days = 30) {
             orderBy: { date: 'desc' },
         })
 
-        // Calculate stats (typed guards)
+        // Calculate stats
         const total = attendance.length
         const present = attendance.filter(a => a.status === 'PRESENT').length
         const absent = attendance.filter(a => a.status === 'ABSENT').length
@@ -143,8 +141,6 @@ export async function getStudentFees(studentId: string) {
             orderBy: { dueDate: 'desc' },
         })
 
-        // Prisma may return Decimal-like values for monetary fields.
-        // Use toNumber conversion to avoid `any` inference and reduce type issues.
         const totalAmount = fees.reduce<number>((sum, f) => sum + toNumber(f.amount), 0)
         const totalPaid = fees.reduce<number>((sum, f) => sum + toNumber(f.paidAmount), 0)
         const totalDue = totalAmount - totalPaid
