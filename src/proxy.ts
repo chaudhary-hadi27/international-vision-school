@@ -8,14 +8,14 @@ export async function proxy(req: NextRequest) {
     const path = req.nextUrl.pathname
 
     // Admin routes protection
-    if (path.startsWith('/admin')) {
+    if (path.startsWith('/admin9i21901029')) {
         if (!token || token.role !== 'ADMIN') {
             return NextResponse.redirect(new URL('/login?error=unauthorized', req.url))
         }
     }
 
     // Parent portal protection
-    if (path.startsWith('/parent-portal')) {
+    if (path.startsWith('/parent-portal/182798217921')) {
         if (!token || token.role !== 'PARENT') {
             return NextResponse.redirect(new URL('/login?error=unauthorized', req.url))
         }

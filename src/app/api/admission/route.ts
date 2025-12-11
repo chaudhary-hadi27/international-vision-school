@@ -1,12 +1,10 @@
 // src/app/api/admission/route.ts
-
 import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
 import { writeFile, mkdir } from 'fs/promises'
 import { join } from 'path'
 import { existsSync } from 'fs'
-
-// Email service (you can use Resend, NodeMailer, or any other)
-// For now, we'll just log the data
+import { sendAdminNotification, sendConfirmationEmail } from '@/lib/email'
 
 interface AdmissionData {
     studentName: string
@@ -67,9 +65,8 @@ export async function POST(request: NextRequest) {
 
         // Generate unique application ID
         const applicationId = `IVS${Date.now()}`
-        const timestamp = new Date().toISOString()
 
-        // Create uploads directory if it doesn't exist
+        // Create uploads directory for this application
         const uploadDir = join(process.cwd(), 'public', 'uploads', applicationId)
         if (!existsSync(uploadDir)) {
             await mkdir(uploadDir, { recursive: true })
@@ -97,33 +94,57 @@ export async function POST(request: NextRequest) {
             }
         }
 
-        // Store application in database (for now, we'll use a JSON file)
-        // In production, use PostgreSQL, MongoDB, or any database
-        const applicationData = {
-            applicationId,
-            timestamp,
-            status: 'pending',
-            ...data,
-            files: filePaths,
+        // ✅ SAVE TO DATABASE using Prisma
+        const admission = await prisma.admission.create({
+            data: {
+                applicationId,
+
+                // Student Information
+                studentName: data.studentName,
+                dateOfBirth: new Date(data.dateOfBirth),
+                gender: data.gender.toUpperCase() as 'MALE' | 'FEMALE',
+                grade: data.grade,
+                previousSchool: data.previousSchool || null,
+
+                // Father Information
+                fatherName: data.fatherName,
+                fatherCNIC: data.fatherCNIC,
+                fatherPhone: data.fatherPhone,
+                fatherOccupation: data.fatherOccupation || null,
+
+                // Mother Information
+                motherName: data.motherName,
+                motherCNIC: data.motherCNIC || null,
+                motherPhone: data.motherPhone || null,
+                motherOccupation: data.motherOccupation || null,
+
+                // Contact Details
+                address: data.address,
+                city: data.city,
+                whatsappNumber: data.whatsappNumber,
+                email: data.email,
+                emergencyContact: data.emergencyContact || null,
+                emergencyRelation: data.emergencyRelation || null,
+
+                // Document URLs
+                studentPhotoUrl: filePaths.studentPhoto || null,
+                birthCertUrl: filePaths.birthCertificate || null,
+                fatherCNICUrl: filePaths.fatherCNICDoc || null,
+                motherCNICUrl: filePaths.motherCNICDoc || null,
+
+                // Status (default is PENDING from schema)
+                status: 'PENDING',
+            },
+        })
+
+        // Send email notifications
+        try {
+            await sendAdminNotification(admission)
+            await sendConfirmationEmail(data.email, applicationId, data.studentName)
+        } catch (emailError) {
+            console.error('Email notification error:', emailError)
+            // Don't fail the request if emails fail
         }
-
-        // Save to a JSON file (temporary storage)
-        const dataDir = join(process.cwd(), 'data', 'admissions')
-        if (!existsSync(dataDir)) {
-            await mkdir(dataDir, { recursive: true })
-        }
-
-        const dataFile = join(dataDir, `${applicationId}.json`)
-        await writeFile(dataFile, JSON.stringify(applicationData, null, 2))
-
-        // TODO: Send email to admin
-        await sendAdminNotification(applicationData)
-
-        // TODO: Send confirmation email to parent
-        await sendConfirmationEmail(data.email, applicationId, data.studentName)
-
-        // TODO: Send WhatsApp notification (optional)
-        // await sendWhatsAppNotification(data.whatsappNumber, applicationId)
 
         return NextResponse.json({
             success: true,
@@ -134,70 +155,14 @@ export async function POST(request: NextRequest) {
     } catch (error) {
         console.error('Admission API Error:', error)
         return NextResponse.json(
-            { success: false, message: 'Internal server error' },
+            {
+                success: false,
+                message: 'Internal server error',
+                error: error instanceof Error ? error.message : 'Unknown error'
+            },
             { status: 500 }
         )
     }
-}
-
-// Email notification functions
-async function sendAdminNotification(data: any) {
-    // TODO: Implement email sending
-    // Using Resend, NodeMailer, or SendGrid
-    console.log('Admin Notification:', {
-        to: 'admin@ivs.edu.pk',
-        subject: `New Admission Application - ${data.applicationId}`,
-        student: data.studentName,
-        grade: data.grade,
-    })
-
-    // Example with Resend:
-    /*
-    const resend = new Resend(process.env.RESEND_API_KEY)
-
-    await resend.emails.send({
-      from: 'IVS Admissions <admissions@ivs.edu.pk>',
-      to: 'admin@ivs.edu.pk',
-      subject: `New Admission Application - ${data.applicationId}`,
-      html: `
-        <h2>New Admission Application</h2>
-        <p><strong>Application ID:</strong> ${data.applicationId}</p>
-        <p><strong>Student Name:</strong> ${data.studentName}</p>
-        <p><strong>Grade:</strong> ${data.grade}</p>
-        <p><strong>Father Name:</strong> ${data.fatherName}</p>
-        <p><strong>Phone:</strong> ${data.fatherPhone}</p>
-        <p><strong>Email:</strong> ${data.email}</p>
-        <p><a href="https://ivs.edu.pk/admin/applications/${data.applicationId}">View Full Application</a></p>
-      `
-    })
-    */
-}
-
-async function sendConfirmationEmail(email: string, applicationId: string, studentName: string) {
-    console.log('Confirmation Email:', {
-        to: email,
-        subject: `Application Received - ${applicationId}`,
-        student: studentName,
-    })
-
-    // TODO: Send actual email
-    /*
-    await resend.emails.send({
-      from: 'IVS Admissions <admissions@ivs.edu.pk>',
-      to: email,
-      subject: 'Admission Application Received',
-      html: `
-        <h2>Thank You for Applying to IVS!</h2>
-        <p>Dear Parent/Guardian,</p>
-        <p>We have received the admission application for <strong>${studentName}</strong>.</p>
-        <p><strong>Application ID:</strong> ${applicationId}</p>
-        <p>Our admissions team will review your application and contact you within 2-3 business days.</p>
-        <p>You can track your application status at: <a href="https://ivs.edu.pk/admission-portal/status">Track Application</a></p>
-        <br>
-        <p>Best Regards,<br>IVS Admissions Team</p>
-      `
-    })
-    */
 }
 
 // GET endpoint to retrieve application status
@@ -213,28 +178,31 @@ export async function GET(request: NextRequest) {
     }
 
     try {
-        const dataFile = join(process.cwd(), 'data', 'admissions', `${applicationId}.json`)
+        const application = await prisma.admission.findUnique({
+            where: { applicationId },
+            select: {
+                applicationId: true,
+                studentName: true,
+                grade: true,
+                status: true,
+                createdAt: true,
+            },
+        })
 
-        if (!existsSync(dataFile)) {
+        if (!application) {
             return NextResponse.json(
                 { success: false, message: 'Application not found' },
                 { status: 404 }
             )
         }
 
-        const fs = require('fs')
-        const data = JSON.parse(fs.readFileSync(dataFile, 'utf-8'))
-
-        // Don't send sensitive info
-        const publicData = {
-            applicationId: data.applicationId,
-            studentName: data.studentName,
-            grade: data.grade,
-            status: data.status,
-            timestamp: data.timestamp,
-        }
-
-        return NextResponse.json({ success: true, data: publicData })
+        return NextResponse.json({
+            success: true,
+            data: {
+                ...application,
+                status: application.status.toLowerCase(), // Convert to lowercase for frontend
+            }
+        })
     } catch (error) {
         console.error('Error fetching application:', error)
         return NextResponse.json(
