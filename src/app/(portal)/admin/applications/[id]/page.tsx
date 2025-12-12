@@ -84,7 +84,7 @@ export default function ApplicationDetailPage() {
         <div className="space-y-6">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
-                    <Link href="/admin/applications" className="p-2 hover:bg-gray-100 rounded-lg">
+                    <Link href="/src/app/(portal)/admin/applications" className="p-2 hover:bg-gray-100 rounded-lg">
                         <ArrowLeft className="w-6 h-6" />
                     </Link>
                     <div>

@@ -1,4 +1,4 @@
-// src/app/(portal)/(admin)/admin/applications/page.tsx
+// src/app/(portal)/admin/applications/page.tsx
 'use client'
 
 import { useState, useEffect, type ChangeEvent } from 'react'
@@ -307,7 +307,7 @@ export default function AdminApplicationsPage() {
                                     </td>
                                     <td className="px-6 py-4">
                                         <Link
-                                            href={`/admin/applications/${app.applicationId}`}
+                                            href={`/src/app/(portal)/admin/applications/${app.applicationId}`}
                                             className="p-2 bg-blue-100 text-blue-900 rounded-lg hover:bg-blue-200 transition inline-block"
                                         >
                                             <Eye className="w-4 h-4" />

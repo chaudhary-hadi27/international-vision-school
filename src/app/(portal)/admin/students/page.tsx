@@ -61,7 +61,7 @@ export default function StudentsPage() {
                         Export
                     </button>
                     <a
-                        href="/admin/students/add"
+                        href="/src/app/(portal)/admin/students/add"
                         className="px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition flex items-center gap-2"
                     >
                         <UserPlus className="w-5 h-5" />
