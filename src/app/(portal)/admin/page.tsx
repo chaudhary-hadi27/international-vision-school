@@ -69,7 +69,7 @@ export default function AdminDashboard() {
             const [studentsData, applicationsData, feesData, attendanceData] = await Promise.all([
                 studentsRes.json(),
                 applicationsRes.json(),
-                feesData.json(),
+                feesRes.json(),
                 attendanceRes.json()
             ])
 
