@@ -100,7 +100,7 @@ export default function ParentAnnouncementsPage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading announcements...</p>
                 </div>
             </div>
@@ -125,7 +125,7 @@ export default function ParentAnnouncementsPage() {
                                 onClick={() => setSelectedChild(child)}
                                 className={`px-6 py-3 rounded-lg font-semibold transition ${
                                     selectedChild?.id === child.id
-                                        ? 'bg-blue-900 text-white'
+                                        ? 'bg-ivs-navy text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
@@ -149,7 +149,7 @@ export default function ParentAnnouncementsPage() {
                             onClick={() => setTypeFilter(type)}
                             className={`px-4 py-2 rounded-lg font-semibold transition ${
                                 typeFilter === type
-                                    ? 'bg-blue-900 text-white'
+                                    ? 'bg-ivs-navy text-white'
                                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                             }`}
                         >
@@ -163,7 +163,7 @@ export default function ParentAnnouncementsPage() {
             <div className="grid md:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-6 shadow-md">
                     <div className="flex items-center gap-3 mb-2">
-                        <Bell className="w-5 h-5 text-blue-900" />
+                        <Bell className="w-5 h-5 text-ivs-navy" />
                         <span className="text-gray-600 text-sm">Total</span>
                     </div>
                     <p className="text-3xl font-bold text-gray-900">{announcements.length}</p>

@@ -1,7 +1,7 @@
 "use client";
 
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare, Calendar, Users } from 'lucide-react'
-import { useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 
 export default function ContactPage() {
     const [formData, setFormData] = useState({
@@ -13,7 +13,7 @@ export default function ContactPage() {
     })
     const [submitted, setSubmitted] = useState(false)
 
-    const handleChange = (e) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setFormData({
             ...formData,
             [e.target.name]: e.target.value
@@ -42,8 +42,8 @@ export default function ContactPage() {
             {/* Hero Section */}
             <section className="bg-gradient-to-br from-slate-50 to-blue-50 py-20 px-4">
                 <div className="max-w-7xl mx-auto text-center">
-                    <h1 className="text-5xl font-bold text-gray-900 mb-6">Contact Us</h1>
-                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                    <h1 className="text-5xl font-bold text-ivs-navy mb-6">Contact Us</h1>
+                    <p className="text-xl text-gray-700 max-w-3xl mx-auto">
                         Have questions about admissions, curriculum, or campus facilities?
                         We're here to help. Get in touch with us today.
                     </p>
@@ -52,49 +52,49 @@ export default function ContactPage() {
 
             {/* Contact Cards */}
             <section className="py-16 bg-white">
-                <div className="max-w-7xl mx-auto px-4">
-                    <div className="grid md:grid-cols-4 gap-6">
+                <div className="container-custom">
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
 
-                        <div className="bg-blue-50 rounded-2xl p-6 text-center">
-                            <div className="w-16 h-16 bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Phone className="w-8 h-8 text-white" />
+                        <div className="premium-card rounded-3xl p-8 text-center group">
+                            <div className="w-16 h-16 bg-ivs-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-ivs-blue group-hover:text-white">
+                                <Phone className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">Phone</h3>
-                            <p className="text-gray-600 text-sm mb-2">Call us anytime</p>
-                            <a href="tel:+92423xxxxxxx" className="text-blue-900 font-semibold hover:underline">
+                            <h3 className="text-xl font-bold text-ivs-navy mb-2">Phone</h3>
+                            <p className="text-slate-500 text-sm mb-4">Call us anytime</p>
+                            <a href="tel:+92423xxxxxxx" className="text-ivs-blue font-bold hover:text-ivs-navy hover:underline transition-colors">
                                 +92 42 3XXXXXXX
                             </a>
                         </div>
 
-                        <div className="bg-green-50 rounded-2xl p-6 text-center">
-                            <div className="w-16 h-16 bg-green-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Mail className="w-8 h-8 text-white" />
+                        <div className="premium-card rounded-3xl p-8 text-center group">
+                            <div className="w-16 h-16 bg-ivs-gold/10 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-ivs-gold group-hover:text-ivs-navy">
+                                <Mail className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">Email</h3>
-                            <p className="text-gray-600 text-sm mb-2">Send us a message</p>
-                            <a href="mailto:info@ivs.edu.pk" className="text-green-700 font-semibold hover:underline">
+                            <h3 className="text-xl font-bold text-ivs-navy mb-2">Email</h3>
+                            <p className="text-slate-500 text-sm mb-4">Send us a message</p>
+                            <a href="mailto:info@ivs.edu.pk" className="text-ivs-blue font-bold hover:text-ivs-navy hover:underline transition-colors">
                                 info@ivs.edu.pk
                             </a>
                         </div>
 
-                        <div className="bg-purple-50 rounded-2xl p-6 text-center">
-                            <div className="w-16 h-16 bg-purple-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <MapPin className="w-8 h-8 text-white" />
+                        <div className="premium-card rounded-3xl p-8 text-center group">
+                            <div className="w-16 h-16 bg-ivs-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-ivs-navy group-hover:text-white">
+                                <MapPin className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">Location</h3>
-                            <p className="text-gray-600 text-sm mb-2">Visit our campus</p>
-                            <p className="text-purple-700 font-semibold">
+                            <h3 className="text-xl font-bold text-ivs-navy mb-2">Location</h3>
+                            <p className="text-slate-500 text-sm mb-4">Visit our campus</p>
+                            <p className="text-ivs-navy font-bold">
                                 Lahore, Pakistan
                             </p>
                         </div>
 
-                        <div className="bg-amber-50 rounded-2xl p-6 text-center">
-                            <div className="w-16 h-16 bg-amber-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Clock className="w-8 h-8 text-white" />
+                        <div className="premium-card rounded-3xl p-8 text-center group">
+                            <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-slate-800 group-hover:text-white">
+                                <Clock className="w-8 h-8" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900 mb-2">Office Hours</h3>
-                            <p className="text-gray-600 text-sm mb-2">Monday - Friday</p>
-                            <p className="text-amber-700 font-semibold">
+                            <h3 className="text-xl font-bold text-ivs-navy mb-2">Office Hours</h3>
+                            <p className="text-slate-500 text-sm mb-4">Monday - Friday</p>
+                            <p className="text-ivs-navy font-bold">
                                 8:00 AM - 3:00 PM
                             </p>
                         </div>
@@ -121,7 +121,7 @@ export default function ContactPage() {
 
                             <div className="space-y-6">
                                 <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Full Name *</label>
+                                    <label className="block text-gray-800 font-bold mb-2">Full Name *</label>
                                     <input
                                         type="text"
                                         name="name"
@@ -133,7 +133,7 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Email Address *</label>
+                                    <label className="block text-gray-800 font-bold mb-2">Email Address *</label>
                                     <input
                                         type="email"
                                         name="email"
@@ -145,7 +145,7 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Phone Number *</label>
+                                    <label className="block text-gray-800 font-bold mb-2">Phone Number *</label>
                                     <input
                                         type="tel"
                                         name="phone"
@@ -157,7 +157,7 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Subject *</label>
+                                    <label className="block text-gray-800 font-bold mb-2">Subject *</label>
                                     <select
                                         name="subject"
                                         value={formData.subject}
@@ -174,12 +174,12 @@ export default function ContactPage() {
                                 </div>
 
                                 <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Message *</label>
+                                    <label className="block text-gray-800 font-bold mb-2">Message *</label>
                                     <textarea
                                         name="message"
                                         value={formData.message}
                                         onChange={handleChange}
-                                        rows="5"
+                                        rows={5}
                                         className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition resize-none"
                                         placeholder="Tell us how we can help you..."
                                     ></textarea>
@@ -187,7 +187,7 @@ export default function ContactPage() {
 
                                 <button
                                     onClick={handleSubmit}
-                                    className="w-full bg-blue-900 text-white py-4 rounded-lg font-semibold hover:bg-blue-800 transition flex items-center justify-center gap-2 shadow-lg"
+                                    className="btn-premium w-full !bg-ivs-blue hover:!bg-ivs-navy hover:shadow-ivs-blue/20"
                                 >
                                     <Send className="w-5 h-5" />
                                     Send Message
@@ -354,17 +354,18 @@ export default function ContactPage() {
             </section>
 
             {/* Call to Action */}
-            <section className="py-20 px-4 bg-gradient-to-br from-white to-white text-black">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl font-bold mb-6">Still Have Questions?</h2>
-                    <p className="text-xl opacity-90 mb-8">
-                        Our team is ready to assist you. Contact us today and we'll be happy to help!
+            <section className="py-24 sm:py-32 lg:py-40 relative overflow-hidden bg-slate-50">
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-ivs-blue/20 to-transparent" />
+                <div className="container-custom relative z-10 text-center">
+                    <h2 className="text-4xl lg:text-7xl font-bold text-ivs-navy mb-8 font-heading tracking-tight">Still Have <span className="text-ivs-blue">Questions?</span></h2>
+                    <p className="text-xl text-slate-600 mb-16 max-w-3xl mx-auto leading-relaxed">
+                        Our specialized team is ready to assist you. Contact us today and experience the IVS difference.
                     </p>
-                    <div className="flex flex-wrap gap-4 justify-center">
-                        <a href="tel:+92423xxxxxxx" className="px-8 py-4 bg-white text-blue-900 rounded-lg font-semibold hover:bg-gray-100 transition shadow-lg">
+                    <div className="flex flex-col sm:flex-row gap-6 justify-center">
+                        <a href="tel:+92423xxxxxxx" className="btn-premium">
                             Call Now
                         </a>
-                        <a href="/admissions" className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-blue-900 transition">
+                        <a href="/admissions" className="btn-outline-premium">
                             Apply for Admission
                         </a>
                     </div>

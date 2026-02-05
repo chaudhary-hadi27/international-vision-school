@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
+import { FeeStatus } from '@prisma/client'
 
 interface RouteParams {
     params: Promise<{ id: string }>
@@ -26,7 +27,7 @@ export async function PUT(request: NextRequest, { params }: RouteParams) {
         }
 
         const totalPaid = feeRecord.paidAmount + parseFloat(paidAmount)
-        let status = 'UNPAID'
+        let status: FeeStatus = 'UNPAID'
         if (totalPaid >= feeRecord.amount) status = 'PAID'
         else if (totalPaid > 0) status = 'PARTIALLY_PAID'
 

@@ -4,10 +4,10 @@ import { prisma } from '@/lib/prisma'
 // GET - Fetch single application by ID
 export async function GET(
     request: NextRequest,
-    { params }: { params: { id: string } }
+    { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-        const applicationId = params.id
+        const { id: applicationId } = await params
 
         const application = await prisma.admission.findUnique({
             where: { applicationId }

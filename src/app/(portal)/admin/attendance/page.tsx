@@ -2,7 +2,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { Calendar, Users, CheckCircle2, XCircle, Clock, AlertCircle, Filter, Download } from 'lucide-react'
+import {
+    Calendar,
+    Users,
+    CheckCircle2,
+    XCircle,
+    Clock,
+    AlertCircle,
+    Filter,
+    Download,
+    RefreshCcw,
+    ChevronDown,
+    Search,
+    User,
+    Check
+} from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 interface Student {
     id: string
@@ -18,6 +33,21 @@ interface AttendanceRecord {
     date: string
     status: 'PRESENT' | 'ABSENT' | 'LEAVE' | 'LATE'
     student: Student
+}
+
+const containerVars = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.05
+        }
+    }
+}
+
+const itemVars = {
+    hidden: { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0 }
 }
 
 export default function AttendancePage() {
@@ -98,12 +128,11 @@ export default function AttendancePage() {
             }
         } catch (error) {
             console.error('Error marking attendance:', error)
-            alert('Failed to mark attendance')
         }
     }
 
     const markAllPresent = async () => {
-        if (!confirm('Mark all students as present?')) return
+        if (!confirm('Mark all active students as present for today?')) return
 
         setSaving(true)
         for (const student of students) {
@@ -135,13 +164,13 @@ export default function AttendancePage() {
         URL.revokeObjectURL(url)
     }
 
-    const getStatusColor = (status?: string) => {
+    const getStatusStyles = (status?: string) => {
         switch (status) {
-            case 'PRESENT': return 'bg-green-100 text-green-700 border-green-300'
-            case 'ABSENT': return 'bg-red-100 text-red-700 border-red-300'
-            case 'LEAVE': return 'bg-blue-100 text-blue-700 border-blue-300'
-            case 'LATE': return 'bg-amber-100 text-amber-700 border-amber-300'
-            default: return 'bg-gray-100 text-gray-700 border-gray-300'
+            case 'PRESENT': return 'bg-emerald-50 text-emerald-600 border-emerald-100'
+            case 'ABSENT': return 'bg-rose-50 text-rose-600 border-rose-100'
+            case 'LEAVE': return 'bg-blue-50 text-blue-600 border-blue-100'
+            case 'LATE': return 'bg-amber-50 text-amber-600 border-amber-100'
+            default: return 'bg-slate-50 text-slate-400 border-slate-100'
         }
     }
 
@@ -156,236 +185,216 @@ export default function AttendancePage() {
     }
 
     return (
-        <div className="space-y-6">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-10"
+        >
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Attendance Management</h1>
-                    <p className="text-gray-600 mt-1">Mark and track student attendance</p>
+                    <h1 className="text-4xl font-bold text-ivs-navy font-heading mb-2">Daily Attendance</h1>
+                    <p className="text-slate-500 font-medium">Record and track student presence across the campus.</p>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex items-center gap-3">
                     <button
                         onClick={exportAttendance}
-                        className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition flex items-center gap-2"
+                        className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-navy transition-all shadow-sm group"
+                        title="Export CSV"
                     >
-                        <Download className="w-5 h-5" />
-                        Export
+                        <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
                     </button>
                     <button
                         onClick={markAllPresent}
-                        disabled={saving}
-                        className="px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition disabled:opacity-50"
+                        disabled={saving || students.length === 0}
+                        className="btn-premium py-4 px-8 flex items-center gap-3 group relative overflow-hidden disabled:opacity-50"
                     >
-                        Mark All Present
+                        {saving ? (
+                            <RefreshCcw className="w-5 h-5 animate-spin" />
+                        ) : (
+                            <CheckCircle2 className="w-5 h-5 group-hover:scale-110 transition-transform text-ivs-gold" />
+                        )}
+                        <span className="relative z-10 font-bold">Mark All Present</span>
                     </button>
                 </div>
             </div>
 
-            {/* Stats */}
-            <div className="grid md:grid-cols-5 gap-6">
-                <div className="bg-white rounded-xl p-6 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <Users className="w-5 h-5 text-blue-900" />
-                        <span className="text-gray-600 text-sm">Total</span>
-                    </div>
-                    <p className="text-3xl font-bold text-gray-900">{stats.total}</p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <CheckCircle2 className="w-5 h-5 text-green-600" />
-                        <span className="text-gray-600 text-sm">Present</span>
-                    </div>
-                    <p className="text-3xl font-bold text-green-600">{stats.present}</p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <XCircle className="w-5 h-5 text-red-600" />
-                        <span className="text-gray-600 text-sm">Absent</span>
-                    </div>
-                    <p className="text-3xl font-bold text-red-600">{stats.absent}</p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <AlertCircle className="w-5 h-5 text-blue-600" />
-                        <span className="text-gray-600 text-sm">Leave</span>
-                    </div>
-                    <p className="text-3xl font-bold text-blue-600">{stats.leave}</p>
-                </div>
-
-                <div className="bg-white rounded-xl p-6 shadow-md">
-                    <div className="flex items-center gap-3 mb-2">
-                        <Calendar className="w-5 h-5 text-purple-600" />
-                        <span className="text-gray-600 text-sm">Rate</span>
-                    </div>
-                    <p className="text-3xl font-bold text-purple-600">{stats.percentage}%</p>
-                </div>
+            {/* Quick Stats Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {[
+                    { label: "Total Students", value: stats.total, icon: Users, color: "text-ivs-blue", bg: "bg-blue-50" },
+                    { label: "Present", value: stats.present, icon: CheckCircle2, color: "text-emerald-600", bg: "bg-emerald-50" },
+                    { label: "Absent", value: stats.absent, icon: XCircle, color: "text-rose-600", bg: "bg-rose-50" },
+                    { label: "Leave", value: stats.leave, icon: AlertCircle, color: "text-amber-600", bg: "bg-amber-50" },
+                    { label: "Rate", value: `${stats.percentage}%`, icon: Calendar, color: "text-violet-600", bg: "bg-violet-50" }
+                ].map((stat, idx) => (
+                    <motion.div
+                        key={idx}
+                        variants={itemVars}
+                        className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between h-full"
+                    >
+                        <div className={`w-8 h-8 ${stat.bg} ${stat.color} rounded-lg flex items-center justify-center mb-3`}>
+                            <stat.icon className="w-4 h-4" />
+                        </div>
+                        <div>
+                            <p className="text-2xl font-bold text-ivs-navy tabular-nums tracking-tight">{stat.value}</p>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest leading-none mt-1">{stat.label}</p>
+                        </div>
+                    </motion.div>
+                ))}
             </div>
 
-            {/* Filters */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="grid md:grid-cols-4 gap-4">
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Date</label>
-                        <input
-                            type="date"
-                            value={selectedDate}
-                            onChange={(e) => setSelectedDate(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none"
-                        />
+            {/* Controls */}
+            <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                    <div className="md:col-span-4">
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Date</label>
+                        <div className="relative">
+                            <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
+                            <input
+                                type="date"
+                                value={selectedDate}
+                                onChange={(e) => setSelectedDate(e.target.value)}
+                                className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-ivs-blue outline-none text-sm font-medium text-ivs-navy transition-all"
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Grade</label>
-                        <select
-                            value={selectedGrade}
-                            onChange={(e) => setSelectedGrade(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none"
-                        >
-                            <option value="all">All Grades</option>
-                            {grades.map(grade => (
-                                <option key={grade} value={grade}>{grade}</option>
-                            ))}
-                        </select>
+                    <div className="md:col-span-3">
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Grade</label>
+                        <div className="relative">
+                            <select
+                                value={selectedGrade}
+                                onChange={(e) => setSelectedGrade(e.target.value)}
+                                className="w-full pl-3 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-ivs-blue outline-none text-sm font-medium text-ivs-navy appearance-none cursor-pointer"
+                            >
+                                <option value="all">All Grades</option>
+                                {grades.map(grade => (
+                                    <option key={grade} value={grade}>{grade}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
+                        </div>
                     </div>
 
-                    <div>
-                        <label className="block text-gray-700 font-semibold mb-2">Section</label>
-                        <select
-                            value={selectedSection}
-                            onChange={(e) => setSelectedSection(e.target.value)}
-                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none"
-                        >
-                            <option value="all">All Sections</option>
-                            {sections.map(section => (
-                                <option key={section} value={section}>Section {section}</option>
-                            ))}
-                        </select>
+                    <div className="md:col-span-3">
+                        <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Section</label>
+                        <div className="relative">
+                            <select
+                                value={selectedSection}
+                                onChange={(e) => setSelectedSection(e.target.value)}
+                                className="w-full pl-3 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-ivs-blue outline-none text-sm font-medium text-ivs-navy appearance-none cursor-pointer"
+                            >
+                                <option value="all">All Sections</option>
+                                {sections.map(section => (
+                                    <option key={section} value={section}>Section {section}</option>
+                                ))}
+                            </select>
+                            <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
+                        </div>
                     </div>
 
-                    <div className="flex items-end">
+                    <div className="md:col-span-2 flex items-end">
                         <button
                             onClick={() => {
                                 setSelectedGrade('all')
                                 setSelectedSection('all')
                                 setSelectedDate(new Date().toISOString().split('T')[0])
                             }}
-                            className="w-full px-4 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition"
+                            className="w-full py-2.5 bg-slate-100 text-slate-600 rounded-lg font-bold text-sm hover:bg-slate-200 transition-all"
                         >
-                            Clear Filters
+                            Reset
                         </button>
                     </div>
                 </div>
             </div>
 
-            {/* Attendance Table */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
+            {/* Table */}
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
                 {loading ? (
-                    <div className="p-12 text-center">
-                        <div className="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                        <p className="text-gray-600">Loading students...</p>
-                    </div>
-                ) : students.length === 0 ? (
-                    <div className="p-12 text-center">
-                        <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-                        <p className="text-gray-600">No students found</p>
+                    <div className="py-20 flex flex-col items-center justify-center">
+                        <div className="w-8 h-8 border-2 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b-2 border-gray-200">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Roll No</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Student Name</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Grade</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Section</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Status</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                            {students.map(student => (
-                                <tr key={student.id} className="hover:bg-gray-50 transition">
-                                    <td className="px-6 py-4">
-                      <span className="font-mono text-sm font-semibold text-blue-900">
-                        {student.rollNumber}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <p className="font-semibold text-gray-900">{student.name}</p>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-900 rounded-full text-sm font-semibold">
-                        {student.grade}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-purple-100 text-purple-900 rounded-full text-sm font-semibold">
-                        {student.section}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold border ${getStatusColor(attendance[student.id])}`}>
-                        {attendance[student.id] || 'Not Marked'}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => markAttendance(student.id, 'PRESENT')}
-                                                className={`p-2 rounded-lg transition ${
-                                                    attendance[student.id] === 'PRESENT'
-                                                        ? 'bg-green-600 text-white'
-                                                        : 'bg-green-100 text-green-700 hover:bg-green-200'
-                                                }`}
-                                                title="Present"
-                                            >
-                                                <CheckCircle2 className="w-5 h-5" />
-                                            </button>
-                                            <button
-                                                onClick={() => markAttendance(student.id, 'ABSENT')}
-                                                className={`p-2 rounded-lg transition ${
-                                                    attendance[student.id] === 'ABSENT'
-                                                        ? 'bg-red-600 text-white'
-                                                        : 'bg-red-100 text-red-700 hover:bg-red-200'
-                                                }`}
-                                                title="Absent"
-                                            >
-                                                <XCircle className="w-5 h-5" />
-                                            </button>
-                                            <button
-                                                onClick={() => markAttendance(student.id, 'LEAVE')}
-                                                className={`p-2 rounded-lg transition ${
-                                                    attendance[student.id] === 'LEAVE'
-                                                        ? 'bg-blue-600 text-white'
-                                                        : 'bg-blue-100 text-blue-700 hover:bg-blue-200'
-                                                }`}
-                                                title="Leave"
-                                            >
-                                                <AlertCircle className="w-5 h-5" />
-                                            </button>
-                                            <button
-                                                onClick={() => markAttendance(student.id, 'LATE')}
-                                                className={`p-2 rounded-lg transition ${
-                                                    attendance[student.id] === 'LATE'
-                                                        ? 'bg-amber-600 text-white'
-                                                        : 'bg-amber-100 text-amber-700 hover:bg-amber-200'
-                                                }`}
-                                                title="Late"
-                                            >
-                                                <Clock className="w-5 h-5" />
-                                            </button>
-                                        </div>
-                                    </td>
+                        <table className="w-full text-left">
+                            <thead>
+                                <tr className="border-b border-slate-100 bg-slate-50/50">
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Student</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Class</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Action</th>
                                 </tr>
-                            ))}
-                            </tbody>
+                            </thead>
+                            <motion.tbody
+                                variants={containerVars}
+                                initial="hidden"
+                                animate="visible"
+                                className="divide-y divide-slate-100"
+                            >
+                                {students.length === 0 ? (
+                                    <tr>
+                                        <td colSpan={4} className="py-16 text-center text-slate-500">
+                                            No students found
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    students.map(student => (
+                                        <motion.tr
+                                            key={student.id}
+                                            variants={itemVars}
+                                            className="group hover:bg-slate-50/80 transition-colors"
+                                        >
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center gap-3">
+                                                    <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-ivs-navy">
+                                                        {student.name.charAt(0)}
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-sm font-medium text-ivs-navy">{student.name}</p>
+                                                        <p className="text-xs text-slate-400 font-mono">#{student.rollNumber}</p>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <p className="text-sm text-slate-700">{student.grade}</p>
+                                                <p className="text-xs text-slate-400">Section {student.section}</p>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusStyles(attendance[student.id])}`}>
+                                                    {attendance[student.id] || 'Not Marked'}
+                                                </span>
+                                            </td>
+                                            <td className="px-6 py-4">
+                                                <div className="flex items-center justify-end gap-1">
+                                                    {[
+                                                        { id: 'PRESENT', color: 'bg-emerald-500', hover: 'hover:bg-emerald-600', icon: Check, title: 'Present' },
+                                                        { id: 'ABSENT', color: 'bg-rose-500', hover: 'hover:bg-rose-600', icon: XCircle, title: 'Absent' },
+                                                        { id: 'LEAVE', color: 'bg-blue-500', hover: 'hover:bg-blue-600', icon: AlertCircle, title: 'Leave' },
+                                                        { id: 'LATE', color: 'bg-amber-500', hover: 'hover:bg-amber-600', icon: Clock, title: 'Late' }
+                                                    ].map(action => (
+                                                        <button
+                                                            key={action.id}
+                                                            onClick={() => markAttendance(student.id, action.id)}
+                                                            className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${attendance[student.id] === action.id
+                                                                    ? `${action.color} text-white shadow-md scale-105`
+                                                                    : `bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600`
+                                                                }`}
+                                                            title={action.title}
+                                                        >
+                                                            <action.icon className="w-4 h-4" />
+                                                        </button>
+                                                    ))}
+                                                </div>
+                                            </td>
+                                        </motion.tr>
+                                    ))
+                                )}
+                            </motion.tbody>
                         </table>
                     </div>
                 )}
             </div>
-        </div>
+        </motion.div>
     )
 }

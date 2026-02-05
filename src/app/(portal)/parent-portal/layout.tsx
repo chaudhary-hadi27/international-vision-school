@@ -55,7 +55,7 @@ export default function ParentPortalLayout({
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-gradient-to-br from-blue-900 to-blue-700 rounded-lg flex items-center justify-center">
+                        <div className="w-10 h-10 bg-gradient-to-br from-ivs-navy to-blue-700 rounded-lg flex items-center justify-center">
                             <GraduationCap className="w-6 h-6 text-white" />
                         </div>
                         <div className="hidden sm:block">
@@ -73,7 +73,7 @@ export default function ParentPortalLayout({
 
                         <div className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-gray-100 cursor-pointer">
                             <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <User className="w-4 h-4 text-blue-900" />
+                                <User className="w-4 h-4 text-ivs-navy" />
                             </div>
                             <div className="hidden sm:block">
                                 <div className="text-sm font-semibold text-gray-900">Parent Name</div>
@@ -107,7 +107,7 @@ export default function ParentPortalLayout({
                                     className={`
                     flex items-center gap-3 px-4 py-3 rounded-lg transition
                     ${active
-                                        ? 'bg-blue-900 text-white'
+                                        ? 'bg-ivs-navy text-white'
                                         : 'text-gray-700 hover:bg-gray-100'
                                     }
                   `}

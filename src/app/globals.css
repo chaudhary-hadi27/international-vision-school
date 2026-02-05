@@ -1,64 +1,135 @@
 @import "tailwindcss";
 
-/*!* 🎨 Custom Theme Configuration *!*/
-/*@theme {*/
-/*    !* Primary Colors *!*/
-/*    --color-primary-50: #eff6ff;*/
-/*    --color-primary-100: #dbeafe;*/
-/*    --color-primary-200: #bfdbfe;*/
-/*    --color-primary-300: #93c5fd;*/
-/*    --color-primary-400: #60a5fa;*/
-/*    --color-primary-500: #3b82f6;*/
-/*    --color-primary-600: #2563eb;*/
-/*    --color-primary-700: #1d4ed8;*/
-/*    --color-primary-800: #1e40af;*/
-/*    --color-primary-900: #1e3a8a;*/
+/**
+ * [TECHNICAL DEBT MITIGATION]
+ * The @theme and @apply directives below are part of the Tailwind CSS v4 engine.
+ * IDE-specific linting warnings (e.g. "Unknown at rule") may persist in some environments
+ * but are functionally correct and processed by the Tailwind 4 compiler.
+ */
+@theme {
+    /* Google Enterprise Colors */
+    --color-ivs-navy: #202124;
+    /* Google Dark Grey */
+    --color-ivs-blue: #1a73e8;
+    /* Google Blue */
+    --color-ivs-accent: #4285F4;
+    /* Google Lighter Blue */
+    --color-ivs-gold: #FBBC04;
+    /* Google Yellow/Gold */
+    --color-ivs-green: #34A853;
+    /* Google Green */
+    --color-ivs-red: #EA4335;
+    /* Google Red */
+    --color-ivs-background: #FFFFFF;
+    /* Pure White */
+    --color-ivs-surface: #F8F9FA;
+    /* Off-white surface */
 
-/*    !* Custom Fonts *!*/
-/*    --font-sans: var(--font-geist-sans), system-ui, sans-serif;*/
-/*    --font-mono: var(--font-geist-mono), monospace;*/
+    /* Typography Hierarchy */
+    --font-heading: "Inter", "Google Sans", sans-serif;
+    /* Clean Sans-serif */
+    --font-sans: "Inter", system-ui, sans-serif;
 
-/*    !* Spacing Scale (if needed custom) *!*/
-/*    --spacing-xs: 0.5rem;*/
-/*    --spacing-sm: 0.75rem;*/
-/*    --spacing-md: 1rem;*/
-/*    --spacing-lg: 1.5rem;*/
-/*    --spacing-xl: 2rem;*/
+    /* Google Material Shadows */
+    --shadow-premium: 0 1px 2px 0 rgba(60, 64, 67, 0.3), 0 1px 3px 1px rgba(60, 64, 67, 0.15);
+    --shadow-premium-lg: 0 1px 3px 0 rgba(60, 64, 67, 0.3), 0 4px 8px 3px rgba(60, 64, 67, 0.15);
+    --shadow-premium-xl: 0 4px 4px 0 rgba(60, 64, 67, 0.3), 0 8px 12px 6px rgba(60, 64, 67, 0.15);
 
-/*    !* Border Radius *!*/
-/*    --radius-sm: 0.5rem;*/
-/*    --radius-md: 0.75rem;*/
-/*    --radius-lg: 1rem;*/
-/*    --radius-xl: 1.5rem;*/
-/*}*/
+    /* Animation & Transitions */
+    --ease-premium: cubic-bezier(0.4, 0.0, 0.2, 1);
+    /* Standard Material Ease */
+    --duration-standard: 200ms;
+    --duration-slow: 400ms;
 
-/*!* 🌐 Base Styles *!*/
-/*@layer base {*/
-/*    body {*/
-/*        @apply bg-white text-gray-900 antialiased;*/
-/*        font-family: var(--font-sans);*/
-/*    }*/
+    @keyframes fade-in-up {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
 
-/*    h1, h2, h3, h4, h5, h6 {*/
-/*        @apply font-bold;*/
-/*    }*/
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
 
-/*    a {*/
-/*        @apply text-blue-900 hover:underline;*/
-/*    }*/
-/*}*/
+    @keyframes float {
 
-/*!* 🎯 Custom Utilities *!*/
-/*@layer utilities {*/
-/*    .text-balance {*/
-/*        text-wrap: balance;*/
-/*    }*/
+        0%,
+        100% {
+            transform: translateY(0);
+        }
 
-/*    .gradient-primary {*/
-/*        @apply bg-gradient-to-r from-blue-900 to-blue-700;*/
-/*    }*/
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+}
 
-/*    .shadow-glow {*/
-/*        box-shadow: 0 0 20px rgba(37, 99, 235, 0.3);*/
-/*    }*/
-/*}*/
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-ivs-background text-slate-800 antialiased;
+        font-family: var(--font-sans);
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-bold tracking-tight text-ivs-navy;
+        font-family: var(--font-heading);
+    }
+
+    /* Selection Color */
+    ::selection {
+        @apply bg-ivs-blue/20 text-ivs-navy;
+    }
+}
+
+@layer utilities {
+    .glass-surface {
+        @apply bg-white/70 backdrop-blur-xl border border-white/20;
+    }
+
+    .glass-surface-dark {
+        @apply bg-ivs-navy/80 backdrop-blur-xl border border-white/10;
+    }
+
+    .text-gradient {
+        @apply bg-gradient-to-br from-ivs-navy via-ivs-blue to-ivs-accent bg-clip-text text-transparent;
+    }
+
+    .premium-card {
+        @apply bg-white border border-slate-100 shadow-premium hover:shadow-premium-lg transition-all duration-300;
+    }
+
+    .section-padding {
+        @apply py-20 lg:py-32;
+    }
+
+    .container-custom {
+        @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-12;
+    }
+
+    .btn-premium {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-ivs-blue text-white rounded-lg font-medium transition-all shadow-sm hover:bg-blue-600 hover:shadow-premium active:shadow-none;
+    }
+
+    .btn-glass {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-white/80 backdrop-blur-md text-ivs-navy border border-gray-200 rounded-lg font-medium transition-all hover:bg-white hover:shadow-premium active:bg-gray-50;
+    }
+
+    .btn-outline-premium {
+        @apply inline-flex items-center justify-center gap-2 px-6 py-3 bg-transparent border border-gray-300 text-ivs-blue rounded-lg font-medium transition-all hover:bg-blue-50 hover:border-ivs-blue hover:text-blue-700 active:bg-blue-100;
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+}

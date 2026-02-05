@@ -3,7 +3,7 @@ export default function ParentPortalLoading() {
     return (
         <div className="space-y-6">
             <div className="animate-pulse">
-                <div className="bg-gradient-to-r from-blue-900 to-blue-700 rounded-2xl p-8 mb-6">
+                <div className="bg-gradient-to-r from-ivs-navy to-blue-700 rounded-2xl p-8 mb-6">
                     <div className="flex items-center gap-6">
                         <div className="w-20 h-20 bg-white/20 rounded-full" />
                         <div className="flex-1">

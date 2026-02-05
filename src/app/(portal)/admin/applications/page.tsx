@@ -16,7 +16,12 @@ import {
     Mail,
     Phone,
     Loader2,
+    Calendar,
+    User,
+    ArrowRight,
+    RefreshCcw,
 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 type ApplicationStatus = 'pending' | 'approved' | 'under_review' | 'rejected'
 
@@ -53,6 +58,21 @@ const GRADES = [
     'Class 8',
 ]
 
+const containerVars = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.05
+        }
+    }
+}
+
+const rowVars = {
+    hidden: { opacity: 0, x: -10 },
+    visible: { opacity: 1, x: 0 }
+}
+
 export default function AdminApplicationsPage() {
     const [applications, setApplications] = useState<Application[]>([])
     const [loading, setLoading] = useState(true)
@@ -65,6 +85,7 @@ export default function AdminApplicationsPage() {
     }, [])
 
     const fetchApplications = async () => {
+        setLoading(true)
         try {
             const response = await fetch('/api/admin/applications')
             const data = await response.json()
@@ -97,22 +118,22 @@ export default function AdminApplicationsPage() {
         rejected: applications.filter((a) => a.status === 'rejected').length,
     }
 
-    const getStatusColor = (status: ApplicationStatus): string => {
-        const colors = {
-            approved: 'bg-green-100 text-green-700 border-green-200',
-            pending: 'bg-amber-100 text-amber-700 border-amber-200',
-            under_review: 'bg-blue-100 text-blue-700 border-blue-200',
-            rejected: 'bg-red-100 text-red-700 border-red-200',
+    const getStatusStyles = (status: ApplicationStatus): string => {
+        const styles = {
+            approved: 'bg-emerald-50 text-emerald-600 border-emerald-100',
+            pending: 'bg-amber-50 text-amber-600 border-amber-100',
+            under_review: 'bg-blue-50 text-blue-600 border-blue-100',
+            rejected: 'bg-rose-50 text-rose-600 border-rose-100',
         }
-        return colors[status]
+        return styles[status]
     }
 
     const getStatusIcon = (status: ApplicationStatus) => {
         const icons = {
-            approved: <CheckCircle2 className="w-4 h-4" />,
-            pending: <Clock className="w-4 h-4" />,
-            under_review: <AlertCircle className="w-4 h-4" />,
-            rejected: <XCircle className="w-4 h-4" />,
+            approved: <CheckCircle2 className="w-3.5 h-3.5" />,
+            pending: <Clock className="w-3.5 h-3.5" />,
+            under_review: <AlertCircle className="w-3.5 h-3.5" />,
+            rejected: <XCircle className="w-3.5 h-3.5" />,
         }
         return icons[status]
     }
@@ -143,193 +164,209 @@ export default function AdminApplicationsPage() {
         URL.revokeObjectURL(url)
     }
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-96">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-900" />
-            </div>
-        )
-    }
-
     return (
-        <div className="space-y-6">
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-8"
+        >
             {/* Header */}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Admission Applications</h1>
-                    <p className="text-gray-600 mt-1">Manage and review all admission applications</p>
+                    <h1 className="text-4xl font-bold text-ivs-navy font-heading mb-2">Applications Portal</h1>
+                    <p className="text-slate-500 font-medium">Review and process new admission requests.</p>
                 </div>
-                <button
-                    onClick={handleExport}
-                    className="px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition flex items-center gap-2"
-                >
-                    <Download className="w-5 h-5" />
-                    Export Data
-                </button>
-            </div>
-
-            {/* Status Tabs */}
-            <div className="bg-white rounded-xl shadow-md p-2">
-                <div className="flex flex-wrap gap-2">
-                    {Object.entries(statusCounts).map(([status, count]) => (
-                        <button
-                            key={status}
-                            onClick={() => setStatusFilter(status)}
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${
-                                statusFilter === status
-                                    ? 'bg-blue-900 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
-                        >
-                            {status.replace('_', ' ').toUpperCase()} ({count})
-                        </button>
-                    ))}
-                </div>
-            </div>
-
-            {/* Filters */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-                <div className="grid md:grid-cols-3 gap-4">
-                    {/* Search */}
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <input
-                            type="text"
-                            placeholder="Search by name or ID..."
-                            value={searchTerm}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none"
-                        />
-                    </div>
-
-                    {/* Grade Filter */}
-                    <div className="relative">
-                        <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                        <select
-                            value={gradeFilter}
-                            onChange={(e: ChangeEvent<HTMLSelectElement>) => setGradeFilter(e.target.value)}
-                            className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none appearance-none"
-                        >
-                            <option value="all">All Grades</option>
-                            {GRADES.map((grade) => (
-                                <option key={grade} value={grade}>
-                                    {grade}
-                                </option>
-                            ))}
-                        </select>
-                        <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-                    </div>
-
-                    {/* Clear Filters */}
+                <div className="flex items-center gap-3">
                     <button
-                        onClick={() => {
-                            setSearchTerm('')
-                            setGradeFilter('all')
-                            setStatusFilter('all')
-                        }}
-                        className="px-4 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition"
+                        onClick={fetchApplications}
+                        className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-navy transition-all shadow-sm"
+                        title="Refresh Data"
                     >
-                        Clear Filters
+                        <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
+                    </button>
+                    <button
+                        onClick={handleExport}
+                        className="btn-premium py-3 px-6 flex items-center gap-2 group"
+                    >
+                        <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
+                        Export Registry
                     </button>
                 </div>
             </div>
 
-            {/* Applications Table */}
-            <div className="bg-white rounded-xl shadow-md overflow-hidden">
-                {filteredApplications.length === 0 ? (
-                    <div className="text-center py-12">
-                        <p className="text-gray-500">No applications found</p>
+            {/* Stats Overview */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                {Object.entries(statusCounts).map(([status, count], idx) => (
+                    <motion.button
+                        key={status}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.05 }}
+                        onClick={() => setStatusFilter(status)}
+                        className={`p-5 rounded-xl border transition-all duration-300 relative overflow-hidden group text-left ${statusFilter === status
+                            ? 'bg-ivs-navy border-ivs-navy text-white shadow-lg'
+                            : 'bg-white border-slate-200 text-slate-600 hover:border-ivs-blue/30 hover:shadow-md'
+                            }`}
+                    >
+                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${statusFilter === status ? 'text-ivs-gold' : 'text-slate-400'}`}>
+                            {status === 'all' ? 'Total' : status.replace('_', ' ')}
+                        </p>
+                        <p className="text-3xl font-bold tabular-nums tracking-tight">{count}</p>
+                    </motion.button>
+                ))}
+            </div>
+
+            {/* Filters & Search */}
+            <div className="bg-white rounded-xl p-4 border border-slate-200">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+                    <div className="md:col-span-6 relative group">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-ivs-blue transition-colors" />
+                        <input
+                            type="text"
+                            placeholder="Search student name or ID..."
+                            value={searchTerm}
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-ivs-blue focus:ring-2 focus:ring-ivs-blue/10 transition-all outline-none font-medium text-sm text-ivs-navy"
+                        />
+                    </div>
+
+                    <div className="md:col-span-4 relative group">
+                        <Filter className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 group-focus-within:text-ivs-blue transition-colors" />
+                        <select
+                            value={gradeFilter}
+                            onChange={(e: ChangeEvent<HTMLSelectElement>) => setGradeFilter(e.target.value)}
+                            className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-lg focus:bg-white focus:border-ivs-blue outline-none font-medium text-sm text-ivs-navy appearance-none cursor-pointer"
+                        >
+                            <option value="all">All Grades</option>
+                            {GRADES.map((grade) => (
+                                <option key={grade} value={grade}>{grade}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4 pointer-events-none" />
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <button
+                            onClick={() => {
+                                setSearchTerm('')
+                                setGradeFilter('all')
+                                setStatusFilter('all')
+                            }}
+                            className="w-full h-full py-2.5 bg-slate-100 text-slate-600 rounded-lg font-bold text-sm hover:bg-slate-200 transition-all flex items-center justify-center gap-2"
+                        >
+                            Reset
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Results Table */}
+            <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm">
+                {loading ? (
+                    <div className="py-20 flex flex-col items-center justify-center">
+                        <div className="w-8 h-8 border-2 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                ) : filteredApplications.length === 0 ? (
+                    <div className="py-20 text-center">
+                        <div className="w-12 h-12 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-3 border border-slate-200">
+                            <Search className="w-6 h-6 text-slate-400" />
+                        </div>
+                        <h3 className="text-lg font-bold text-ivs-navy">No records found</h3>
+                        <p className="text-slate-500 text-sm mt-1">Try adjusting your search or filters.</p>
                     </div>
                 ) : (
                     <div className="overflow-x-auto">
-                        <table className="w-full">
-                            <thead className="bg-gray-50 border-b-2 border-gray-200">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">
-                                    Application ID
-                                </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">
-                                    Student Name
-                                </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">
-                                    Father Name
-                                </th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Grade</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Contact</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Date</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Status</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-200">
-                            {filteredApplications.map((app) => (
-                                <tr key={app.id} className="hover:bg-gray-50 transition">
-                                    <td className="px-6 py-4">
-                      <span className="font-mono text-sm font-semibold text-blue-900">
-                        {app.applicationId}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <p className="font-semibold text-gray-900">{app.studentName}</p>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <p className="text-gray-700">{app.fatherName}</p>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className="px-3 py-1 bg-blue-100 text-blue-900 rounded-full text-sm font-semibold">
-                        {app.grade}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="space-y-1">
-                                            <p className="text-sm text-gray-700 flex items-center gap-1">
-                                                <Phone className="w-3 h-3" /> {app.phone}
-                                            </p>
-                                            <p className="text-sm text-gray-700 flex items-center gap-1">
-                                                <Mail className="w-3 h-3" /> {app.email}
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <p className="text-sm text-gray-700">
-                                            {new Date(app.dateApplied).toLocaleDateString()}
-                                        </p>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span
-                          className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-1 w-fit ${getStatusColor(
-                              app.status
-                          )}`}
-                      >
-                        {getStatusIcon(app.status)}
-                          {app.status.replace('_', ' ')}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <Link
-                                            href={`/src/app/(portal)/admin/applications/${app.applicationId}`}
-                                            className="p-2 bg-blue-100 text-blue-900 rounded-lg hover:bg-blue-200 transition inline-block"
-                                        >
-                                            <Eye className="w-4 h-4" />
-                                        </Link>
-                                    </td>
+                        <table className="w-full text-left">
+                            <thead>
+                                <tr className="border-b border-slate-100 bg-slate-50/50">
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Application</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Guardian</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Grade</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Contact</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">Status</th>
+                                    <th className="px-6 py-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">Action</th>
                                 </tr>
-                            ))}
-                            </tbody>
+                            </thead>
+                            <motion.tbody
+                                variants={containerVars}
+                                initial="hidden"
+                                animate="visible"
+                                className="divide-y divide-slate-100"
+                            >
+                                {filteredApplications.map((app) => (
+                                    <motion.tr
+                                        key={app.id}
+                                        variants={rowVars}
+                                        className="group hover:bg-slate-50/80 transition-colors"
+                                    >
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-3">
+                                                <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold text-ivs-navy">
+                                                    {app.studentName.charAt(0)}
+                                                </div>
+                                                <div>
+                                                    <p className="text-sm font-medium text-ivs-navy">
+                                                        {app.studentName}
+                                                    </p>
+                                                    <p className="text-xs text-slate-400 font-mono">
+                                                        {app.applicationId}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-2 text-slate-600">
+                                                <User className="w-3.5 h-3.5 text-slate-400" />
+                                                <span className="text-sm">{app.fatherName}</span>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-xs font-medium border border-slate-200">
+                                                {app.grade}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="space-y-1">
+                                                <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                                                    <Phone className="w-3 h-3" /> {app.phone}
+                                                </p>
+                                                <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                                                    <Mail className="w-3 h-3" /> {app.email}
+                                                </p>
+                                            </div>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border flex items-center gap-1.5 w-fit ${getStatusStyles(app.status)}`}>
+                                                {app.status.replace('_', ' ')}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                            <Link
+                                                href={`/admin/applications/${app.applicationId}`}
+                                                className="inline-flex items-center justify-center w-8 h-8 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-ivs-blue hover:border-ivs-blue transition-all"
+                                            >
+                                                <Eye className="w-4 h-4" />
+                                            </Link>
+                                        </td>
+                                    </motion.tr>
+                                ))}
+                            </motion.tbody>
                         </table>
                     </div>
                 )}
             </div>
 
-            {/* Pagination */}
+            {/* Pagination / Footer */}
             {filteredApplications.length > 0 && (
-                <div className="bg-white rounded-xl shadow-md p-4 flex items-center justify-between">
-                    <p className="text-sm text-gray-600">
-                        Showing <span className="font-semibold">{filteredApplications.length}</span> of{' '}
-                        <span className="font-semibold">{applications.length}</span> applications
+                <div className="flex items-center justify-between px-2">
+                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                        Displaying <span className="text-ivs-navy">{filteredApplications.length}</span> of <span className="text-ivs-navy">{applications.length}</span> entries
                     </p>
+                    <div className="flex gap-2">
+                        {/* Pagination controls could go here if needed */}
+                    </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }

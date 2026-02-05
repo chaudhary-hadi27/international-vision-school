@@ -12,60 +12,87 @@ export const authOptions: NextAuthOptions = {
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials) {
-                if (!credentials?.email || !credentials?.password) {
-                    throw new Error('Invalid credentials')
-                }
-
-                const user = await prisma.user.findUnique({
-                    where: { email: credentials.email },
-                    include: {
-                        parent: true,
-                        admin: true
+                try {
+                    if (!credentials?.email || !credentials?.password) {
+                        throw new Error('Please enter email and password')
                     }
-                })
 
-                if (!user || !user.isActive) {
-                    throw new Error('Invalid credentials')
-                }
+                    // Find user with relations
+                    const user = await prisma.user.findUnique({
+                        where: { email: credentials.email.toLowerCase().trim() },
+                        include: {
+                            parent: true,
+                            admin: true
+                        }
+                    })
 
-                const isPasswordValid = await bcrypt.compare(
-                    credentials.password,
-                    user.password
-                )
+                    // Check if user exists
+                    if (!user) {
+                        throw new Error('Invalid email or password')
+                    }
 
-                if (!isPasswordValid) {
-                    throw new Error('Invalid credentials')
-                }
+                    // Check if account is active
+                    if (!user.isActive) {
+                        throw new Error('Your account has been deactivated')
+                    }
 
-                return {
-                    id: user.id,
-                    email: user.email,
-                    name: user.name,
-                    role: user.role,
+                    // Verify password
+                    const isPasswordValid = await bcrypt.compare(
+                        credentials.password,
+                        user.password
+                    )
+
+                    if (!isPasswordValid) {
+                        throw new Error('Invalid email or password')
+                    }
+
+                    // Return user data
+                    return {
+                        id: user.id,
+                        email: user.email,
+                        name: user.name,
+                        role: user.role,
+                    }
+                } catch (error) {
+                    console.error('Auth error:', error)
+                    throw error
                 }
             }
         })
     ],
+
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.role = user.role
                 token.id = user.id
+                token.role = user.role
+                token.name = user.name
+                token.email = user.email
             }
             return token
         },
+
         async session({ session, token }) {
-            if (session.user) {
-                session.user.role = token.role as string
+            if (token && session.user) {
                 session.user.id = token.id as string
+                session.user.role = token.role as string
+                session.user.name = token.name as string
+                session.user.email = token.email as string
             }
             return session
-        }
+        },
     },
+
     pages: {
         signIn: '/login',
+        error: '/login',
     },
+
     session: {
         strategy: 'jwt',
+        maxAge: 30 * 24 * 60 * 60, // 30 days
     },
+
+    secret: process.env.NEXTAUTH_SECRET,
+    debug: process.env.NODE_ENV === 'development',
 }

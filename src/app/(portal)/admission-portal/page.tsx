@@ -12,6 +12,9 @@ import {
     AlertCircle,
     Loader2
 } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { compressImage } from '@/lib/utils/image'
+import { useEffect } from 'react'
 
 export default function AdmissionPortal() {
     const [currentStep, setCurrentStep] = useState(1)
@@ -44,12 +47,32 @@ export default function AdmissionPortal() {
         whatsappNumber: '',
         email: '',
 
-        // Step 4: Documents (we'll store file names)
-        studentPhoto: null as File | null,
-        birthCertificate: null as File | null,
-        fatherCNICDoc: null as File | null,
-        motherCNICDoc: null as File | null,
+        // Step 4: Documents (storing URLs or local previews)
+        studentPhoto: null as File | string | null,
+        birthCertificate: null as File | string | null,
+        fatherCNICDoc: null as File | string | null,
+        motherCNICDoc: null as File | string | null,
     })
+
+    // Load draft from localStorage on mount
+    useEffect(() => {
+        const draft = localStorage.getItem('admission_draft')
+        if (draft) {
+            try {
+                const parsed = JSON.parse(draft)
+                // Don't restore files from localStorage, just text data
+                setFormData(prev => ({ ...prev, ...parsed }))
+            } catch (e) {
+                console.error('Failed to parse draft')
+            }
+        }
+    }, [])
+
+    // Save draft to localStorage whenever text data changes
+    useEffect(() => {
+        const { studentPhoto, birthCertificate, fatherCNICDoc, motherCNICDoc, ...textData } = formData
+        localStorage.setItem('admission_draft', JSON.stringify(textData))
+    }, [formData])
 
     const steps = [
         { number: 1, title: 'Student Info', icon: User },
@@ -73,16 +96,23 @@ export default function AdmissionPortal() {
         }
     }
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
+    const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>, fieldName: string) => {
         const file = e.target.files?.[0]
         if (file) {
-            // Validate file size (max 2MB)
-            if (file.size > 2 * 1024 * 1024) {
-                setErrors(prev => ({ ...prev, [fieldName]: 'File size should be less than 2MB' }))
-                return
+            // Only compress images, keep PDFs as is but check size
+            if (file.type.startsWith('image/')) {
+                setErrors(prev => ({ ...prev, [fieldName]: 'Optimizing image...' }))
+                const compressed = await compressImage(file)
+                setFormData(prev => ({ ...prev, [fieldName]: compressed }))
+                setErrors(prev => ({ ...prev, [fieldName]: '' }))
+            } else {
+                if (file.size > 2 * 1024 * 1024) {
+                    setErrors(prev => ({ ...prev, [fieldName]: 'PDF size should be less than 2MB' }))
+                    return
+                }
+                setFormData(prev => ({ ...prev, [fieldName]: file }))
+                setErrors(prev => ({ ...prev, [fieldName]: '' }))
             }
-            setFormData(prev => ({ ...prev, [fieldName]: file }))
-            setErrors(prev => ({ ...prev, [fieldName]: '' }))
         }
     }
 
@@ -139,6 +169,7 @@ export default function AdmissionPortal() {
         if (!validateStep(4)) return
 
         setIsSubmitting(true)
+        const toastId = 'submitting' // Placeholder for actual toast library if used
 
         try {
             const submitData = new FormData()
@@ -150,7 +181,7 @@ export default function AdmissionPortal() {
                 }
             })
 
-            // Append files
+            // Append files (already compressed on client if they were images)
             if (formData.studentPhoto) submitData.append('studentPhoto', formData.studentPhoto)
             if (formData.birthCertificate) submitData.append('birthCertificate', formData.birthCertificate)
             if (formData.fatherCNICDoc) submitData.append('fatherCNICDoc', formData.fatherCNICDoc)
@@ -161,62 +192,70 @@ export default function AdmissionPortal() {
                 body: submitData,
             })
 
+            const result = await response.json()
+
             if (response.ok) {
-                const data = await response.json()
-                // Redirect to thank you page
-                window.location.href = `/admission-portal/thank-you?id=${data.applicationId}`
+                // Clear draft on success
+                localStorage.removeItem('admission_draft')
+                window.location.href = `/admission-portal/thank-you?id=${result.applicationId}`
             } else {
-                const error = await response.json()
-                alert(error.message || 'Submission failed. Please try again.')
+                alert(result.message || 'Submission failed. Please try again.')
             }
         } catch (error) {
             console.error('Submission error:', error)
-            alert('Something went wrong. Please try again.')
+            alert('A network error occurred. Please check your connection and try again.')
         } finally {
             setIsSubmitting(false)
         }
     }
 
     return (
-        <main className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 py-12 px-4">
-            <div className="max-w-4xl mx-auto">
-
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Admission Application Form</h1>
-                    <p className="text-gray-600">Complete all steps to submit your application</p>
+        <main className="min-h-screen bg-gray-50 pb-20">
+            {/* Hero Section */}
+            <section className="bg-ivs-navy text-white py-16 px-4 text-center mb-12">
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <h1 className="text-3xl md:text-5xl font-heading font-bold mb-4">Admission Application</h1>
+                    <p className="text-blue-100 max-w-2xl mx-auto">
+                        Begin your journey with IVS. Complete the form below to apply for usage of our world-class facilities and education.
+                    </p>
                 </div>
+            </section>
+
+            <div className="max-w-4xl mx-auto px-4">
 
                 {/* Step Indicator */}
-                <div className="bg-white rounded-2xl shadow-lg p-6 mb-8">
-                    <div className="flex justify-between items-center">
+                <div className="bg-white/80 backdrop-blur-md rounded-3xl shadow-premium-xl border border-slate-100 p-8 mb-12 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-slate-50" />
+                    <div className="flex justify-between items-center relative z-10">
                         {steps.map((step, index) => {
                             const Icon = step.icon
                             const isActive = currentStep === step.number
                             const isCompleted = currentStep > step.number
 
                             return (
-                                <div key={step.number} className="flex items-center flex-1">
-                                    <div className="flex flex-col items-center flex-1">
-                                        <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                                            isCompleted
-                                                ? 'bg-green-600 text-white'
-                                                : isActive
-                                                    ? 'bg-blue-900 text-white'
-                                                    : 'bg-gray-200 text-gray-500'
-                                        }`}>
+                                <div key={step.number} className="flex items-center flex-1 last:flex-none">
+                                    <div className="flex flex-col items-center flex-1 relative">
+                                        <motion.div
+                                            initial={false}
+                                            animate={{
+                                                scale: isActive ? 1.1 : 1,
+                                                backgroundColor: isCompleted ? '#16a34a' : isActive ? '#0A2540' : '#f8fafc'
+                                            }}
+                                            className={`w-12 h-12 md:w-14 md:h-14 rounded-2xl flex items-center justify-center transition-all ${isCompleted || isActive ? 'text-white shadow-lg' : 'text-slate-400 border border-slate-100'
+                                                }`}
+                                        >
                                             {isCompleted ? <CheckCircle2 className="w-6 h-6" /> : <Icon className="w-6 h-6" />}
-                                        </div>
-                                        <div className={`mt-2 text-sm font-semibold ${
-                                            isActive ? 'text-blue-900' : isCompleted ? 'text-green-600' : 'text-gray-500'
-                                        }`}>
+                                        </motion.div>
+                                        <div className={`mt-3 text-[10px] md:text-xs font-bold uppercase tracking-widest transition-colors duration-300 ${isActive ? 'text-ivs-navy' : isCompleted ? 'text-green-600' : 'text-slate-400'
+                                            }`}>
                                             {step.title}
                                         </div>
                                     </div>
                                     {index < steps.length - 1 && (
-                                        <div className={`h-0.5 flex-1 mx-4 ${
-                                            isCompleted ? 'bg-green-600' : 'bg-gray-200'
-                                        }`} />
+                                        <div className="flex-1 px-2 md:px-4">
+                                            <div className={`h-[2px] w-full rounded-full transition-all duration-500 ${isCompleted ? 'bg-green-600' : 'bg-slate-100'
+                                                }`} />
+                                        </div>
                                     )}
                                 </div>
                             )
@@ -225,491 +264,326 @@ export default function AdmissionPortal() {
                 </div>
 
                 {/* Form Content */}
-                <div className="bg-white rounded-2xl shadow-xl p-8">
+                <div className="premium-card rounded-[2.5rem] p-8 md:p-12 mb-12 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-ivs-blue/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
-                    {/* Step 1: Student Information */}
-                    {currentStep === 1 && (
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Student Information</h2>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Student Full Name *</label>
-                                <input
-                                    type="text"
-                                    name="studentName"
-                                    value={formData.studentName}
-                                    onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                        errors.studentName ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                    }`}
-                                    placeholder="Enter student's full name"
-                                />
-                                {errors.studentName && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.studentName}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Date of Birth *</label>
-                                    <input
-                                        type="date"
-                                        name="dateOfBirth"
-                                        value={formData.dateOfBirth}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.dateOfBirth ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                    />
-                                    {errors.dateOfBirth && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.dateOfBirth}
-                                        </p>
-                                    )}
+                    <AnimatePresence mode="wait">
+                        {/* Step 1: Student Information */}
+                        {currentStep === 1 && (
+                            <motion.div
+                                key="step1"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="space-y-8 relative z-10"
+                            >
+                                <div className="mb-10">
+                                    <h2 className="text-3xl font-bold text-ivs-navy mb-2 font-heading">Student Information</h2>
+                                    <p className="text-slate-500">Provide personal details of the applicant.</p>
                                 </div>
 
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Gender *</label>
-                                    <select
-                                        name="gender"
-                                        value={formData.gender}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.gender ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                    >
-                                        <option value="">Select Gender</option>
-                                        <option value="male">Male</option>
-                                        <option value="female">Female</option>
-                                    </select>
-                                    {errors.gender && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.gender}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Applying for Grade *</label>
-                                    <select
-                                        name="grade"
-                                        value={formData.grade}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.grade ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                    >
-                                        <option value="">Select Grade</option>
-                                        {grades.map(grade => (
-                                            <option key={grade} value={grade}>{grade}</option>
-                                        ))}
-                                    </select>
-                                    {errors.grade && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.grade}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Previous School (if any)</label>
-                                    <input
-                                        type="text"
-                                        name="previousSchool"
-                                        value={formData.previousSchool}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                        placeholder="Previous school name"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Step 2: Parent Information */}
-                    {currentStep === 2 && (
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Parent/Guardian Information</h2>
-
-                            <div className="bg-blue-50 rounded-lg p-4 mb-6">
-                                <h3 className="font-bold text-blue-900 mb-2">Father's Information</h3>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Father's Full Name *</label>
-                                <input
-                                    type="text"
-                                    name="fatherName"
-                                    value={formData.fatherName}
-                                    onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                        errors.fatherName ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                    }`}
-                                    placeholder="Enter father's full name"
-                                />
-                                {errors.fatherName && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.fatherName}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Father's CNIC *</label>
-                                    <input
-                                        type="text"
-                                        name="fatherCNIC"
-                                        value={formData.fatherCNIC}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.fatherCNIC ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                        placeholder="12345-1234567-1"
-                                    />
-                                    {errors.fatherCNIC && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.fatherCNIC}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Father's Phone *</label>
-                                    <input
-                                        type="tel"
-                                        name="fatherPhone"
-                                        value={formData.fatherPhone}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.fatherPhone ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                        placeholder="03XX XXXXXXX"
-                                    />
-                                    {errors.fatherPhone && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.fatherPhone}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Father's Occupation</label>
-                                <input
-                                    type="text"
-                                    name="fatherOccupation"
-                                    value={formData.fatherOccupation}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                    placeholder="Enter occupation"
-                                />
-                            </div>
-
-                            <div className="bg-pink-50 rounded-lg p-4 mb-6 mt-8">
-                                <h3 className="font-bold text-pink-900 mb-2">Mother's Information</h3>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Mother's Full Name *</label>
-                                <input
-                                    type="text"
-                                    name="motherName"
-                                    value={formData.motherName}
-                                    onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                        errors.motherName ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                    }`}
-                                    placeholder="Enter mother's full name"
-                                />
-                                {errors.motherName && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.motherName}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Mother's CNIC</label>
-                                    <input
-                                        type="text"
-                                        name="motherCNIC"
-                                        value={formData.motherCNIC}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                        placeholder="12345-1234567-1"
-                                    />
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Mother's Phone</label>
-                                    <input
-                                        type="tel"
-                                        name="motherPhone"
-                                        value={formData.motherPhone}
-                                        onChange={handleInputChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                        placeholder="03XX XXXXXXX"
-                                    />
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Mother's Occupation</label>
-                                <input
-                                    type="text"
-                                    name="motherOccupation"
-                                    value={formData.motherOccupation}
-                                    onChange={handleInputChange}
-                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                    placeholder="Enter occupation"
-                                />
-                            </div>
-                        </div>
-                    )}
-
-                    {/* Step 3: Address & Contact */}
-                    {currentStep === 3 && (
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Contact Details</h2>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Complete Address *</label>
-                                <textarea
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleInputChange}
-                                    rows={3}
-                                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition resize-none ${
-                                        errors.address ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                    }`}
-                                    placeholder="House #, Street, Area"
-                                />
-                                {errors.address && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.address}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">City *</label>
-                                <input
-                                    type="text"
-                                    name="city"
-                                    value={formData.city}
-                                    onChange={handleInputChange}
-                                    className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                        errors.city ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                    }`}
-                                    placeholder="Lahore"
-                                />
-                                {errors.city && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.city}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div className="grid md:grid-cols-2 gap-6">
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">WhatsApp Number *</label>
-                                    <input
-                                        type="tel"
-                                        name="whatsappNumber"
-                                        value={formData.whatsappNumber}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.whatsappNumber ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                        placeholder="03XX XXXXXXX"
-                                    />
-                                    {errors.whatsappNumber && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.whatsappNumber}
-                                        </p>
-                                    )}
-                                </div>
-
-                                <div>
-                                    <label className="block text-gray-700 font-semibold mb-2">Email Address *</label>
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                        className={`w-full px-4 py-3 border-2 rounded-lg focus:outline-none transition ${
-                                            errors.email ? 'border-red-500' : 'border-gray-200 focus:border-blue-900'
-                                        }`}
-                                        placeholder="your.email@example.com"
-                                    />
-                                    {errors.email && (
-                                        <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                            <AlertCircle className="w-4 h-4" /> {errors.email}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="bg-amber-50 rounded-lg p-4">
-                                <h3 className="font-bold text-amber-900 mb-3">Emergency Contact</h3>
-                                <div className="grid md:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Contact Person</label>
+                                <div className="grid gap-8">
+                                    <div className="group">
+                                        <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Student Full Name *</label>
                                         <input
                                             type="text"
-                                            name="emergencyContact"
-                                            value={formData.emergencyContact}
+                                            name="studentName"
+                                            value={formData.studentName}
                                             onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                            placeholder="Name"
+                                            className={`w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl focus:outline-none transition-all duration-300 group-hover:bg-white ${errors.studentName ? 'border-red-200 bg-red-50 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:bg-white focus:shadow-lg focus:shadow-ivs-blue/10'
+                                                }`}
+                                            placeholder="Enter student's full name"
+                                        />
+                                        {errors.studentName && <p className="text-red-500 text-sm mt-2 flex items-center gap-2 font-medium"><AlertCircle className="w-4 h-4" /> {errors.studentName}</p>}
+                                    </div>
+
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Date of Birth *</label>
+                                            <input
+                                                type="date"
+                                                name="dateOfBirth"
+                                                value={formData.dateOfBirth}
+                                                onChange={handleInputChange}
+                                                className={`w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl focus:outline-none transition-all duration-300 group-hover:bg-white ${errors.dateOfBirth ? 'border-red-200 bg-red-50 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:bg-white'
+                                                    }`}
+                                            />
+                                        </div>
+
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Gender *</label>
+                                            <select
+                                                name="gender"
+                                                value={formData.gender}
+                                                onChange={handleInputChange}
+                                                className={`w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl focus:outline-none transition-all duration-300 group-hover:bg-white ${errors.gender ? 'border-red-200 bg-red-50 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:bg-white'
+                                                    }`}
+                                            >
+                                                <option value="">Select Gender</option>
+                                                <option value="male">Male</option>
+                                                <option value="female">Female</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Applying for Grade *</label>
+                                            <select
+                                                name="grade"
+                                                value={formData.grade}
+                                                onChange={handleInputChange}
+                                                className={`w-full px-6 py-4 bg-slate-50 border-2 rounded-2xl focus:outline-none transition-all duration-300 group-hover:bg-white ${errors.grade ? 'border-red-200 bg-red-50 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:bg-white'
+                                                    }`}
+                                            >
+                                                <option value="">Select Grade</option>
+                                                {grades.map(grade => <option key={grade} value={grade}>{grade}</option>)}
+                                            </select>
+                                        </div>
+
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Previous School (if any)</label>
+                                            <input
+                                                type="text"
+                                                name="previousSchool"
+                                                value={formData.previousSchool}
+                                                onChange={handleInputChange}
+                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:bg-white focus:outline-none transition-all"
+                                                placeholder="Previous school name"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* Step 2: Parent Information */}
+                        {currentStep === 2 && (
+                            <motion.div
+                                key="step2"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="space-y-10 relative z-10"
+                            >
+                                <div>
+                                    <h2 className="text-3xl font-bold text-ivs-navy mb-2 font-heading">Parent Information</h2>
+                                    <p className="text-slate-500">Provide details of the parents/guardians.</p>
+                                </div>
+
+                                <div className="space-y-8">
+                                    <div className="p-8 bg-ivs-blue/5 rounded-3xl border border-ivs-blue/10">
+                                        <h3 className="text-lg font-bold text-ivs-navy mb-6 flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-ivs-blue rounded-xl flex items-center justify-center text-white shadow-lg shadow-ivs-blue/20">
+                                                <Users className="w-5 h-5" />
+                                            </div>
+                                            Father's Information
+                                        </h3>
+                                        <div className="grid gap-6">
+                                            <div className="group">
+                                                <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Father's Full Name *</label>
+                                                <input
+                                                    type="text"
+                                                    name="fatherName"
+                                                    value={formData.fatherName}
+                                                    onChange={handleInputChange}
+                                                    className={`w-full px-6 py-4 bg-white border-2 rounded-2xl focus:outline-none transition-all ${errors.fatherName ? 'border-red-200 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:shadow-lg'
+                                                        }`}
+                                                    placeholder="Enter full name"
+                                                />
+                                            </div>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <div className="group">
+                                                    <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Father's CNIC *</label>
+                                                    <input
+                                                        type="text"
+                                                        name="fatherCNIC"
+                                                        value={formData.fatherCNIC}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:outline-none transition-all"
+                                                        placeholder="12345-1234567-1"
+                                                    />
+                                                </div>
+                                                <div className="group">
+                                                    <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Father's Phone *</label>
+                                                    <input
+                                                        type="tel"
+                                                        name="fatherPhone"
+                                                        value={formData.fatherPhone}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:outline-none transition-all"
+                                                        placeholder="03XX XXXXXXX"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="p-8 bg-ivs-blue/5 rounded-3xl border border-ivs-blue/10">
+                                        <h3 className="text-lg font-bold text-ivs-navy mb-6 flex items-center gap-3">
+                                            <div className="w-10 h-10 bg-ivs-blue/10 text-ivs-blue rounded-xl flex items-center justify-center">
+                                                <Users className="w-5 h-5" />
+                                            </div>
+                                            Mother's Information
+                                        </h3>
+                                        <div className="grid gap-6">
+                                            <div className="group">
+                                                <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Mother's Full Name *</label>
+                                                <input
+                                                    type="text"
+                                                    name="motherName"
+                                                    value={formData.motherName}
+                                                    onChange={handleInputChange}
+                                                    className={`w-full px-6 py-4 bg-white border-2 rounded-2xl focus:outline-none transition-all ${errors.motherName ? 'border-red-200 focus:border-red-500' : 'border-transparent focus:border-ivs-blue focus:shadow-lg'
+                                                        }`}
+                                                    placeholder="Enter full name"
+                                                />
+                                            </div>
+                                            <div className="grid md:grid-cols-2 gap-6">
+                                                <div className="group">
+                                                    <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Mother's CNIC (Optional)</label>
+                                                    <input
+                                                        type="text"
+                                                        name="motherCNIC"
+                                                        value={formData.motherCNIC}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:outline-none transition-all"
+                                                        placeholder="12345-1234567-1"
+                                                    />
+                                                </div>
+                                                <div className="group">
+                                                    <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">Mother's Phone (Optional)</label>
+                                                    <input
+                                                        type="tel"
+                                                        name="motherPhone"
+                                                        value={formData.motherPhone}
+                                                        onChange={handleInputChange}
+                                                        className="w-full px-6 py-4 bg-white border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:outline-none transition-all"
+                                                        placeholder="03XX XXXXXXX"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* Step 3: Contact Details */}
+                        {currentStep === 3 && (
+                            <motion.div
+                                key="step3"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="space-y-10 relative z-10"
+                            >
+                                <div>
+                                    <h2 className="text-3xl font-bold text-ivs-navy mb-2 font-heading">Contact Details</h2>
+                                    <p className="text-slate-500">How can we reach you?</p>
+                                </div>
+
+                                <div className="grid gap-8">
+                                    <div className="group">
+                                        <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Complete Address *</label>
+                                        <textarea
+                                            name="address"
+                                            value={formData.address}
+                                            onChange={handleInputChange}
+                                            rows={3}
+                                            className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:bg-white focus:outline-none transition-all resize-none"
+                                            placeholder="House #, Street, Area"
                                         />
                                     </div>
-                                    <div>
-                                        <label className="block text-gray-700 font-semibold mb-2">Relation</label>
-                                        <input
-                                            type="text"
-                                            name="emergencyRelation"
-                                            value={formData.emergencyRelation}
-                                            onChange={handleInputChange}
-                                            className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
-                                            placeholder="Uncle, Aunt, etc."
-                                        />
+                                    <div className="grid md:grid-cols-2 gap-8">
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">WhatsApp Number *</label>
+                                            <input
+                                                type="tel"
+                                                name="whatsappNumber"
+                                                value={formData.whatsappNumber}
+                                                onChange={handleInputChange}
+                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:bg-white focus:outline-none transition-all"
+                                                placeholder="03XX XXXXXXX"
+                                            />
+                                        </div>
+                                        <div className="group">
+                                            <label className="block text-sm font-bold text-ivs-navy mb-3 uppercase tracking-wider">Email Address *</label>
+                                            <input
+                                                type="email"
+                                                name="email"
+                                                value={formData.email}
+                                                onChange={handleInputChange}
+                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:border-ivs-blue focus:bg-white focus:outline-none transition-all"
+                                                placeholder="your.email@example.com"
+                                            />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
+                            </motion.div>
+                        )}
 
-                    {/* Step 4: Documents */}
-                    {currentStep === 4 && (
-                        <div className="space-y-6">
-                            <h2 className="text-2xl font-bold text-gray-900 mb-6">Upload Documents</h2>
-
-                            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                                <p className="text-sm text-blue-800">
-                                    <strong>Note:</strong> All files must be in JPG, PNG, or PDF format and less than 2MB in size.
-                                </p>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Student Photo (Passport Size) *</label>
-                                <div className={`border-2 border-dashed rounded-lg p-6 text-center transition ${
-                                    errors.studentPhoto ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-blue-900'
-                                }`}>
-                                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={(e) => handleFileChange(e, 'studentPhoto')}
-                                        className="hidden"
-                                        id="studentPhoto"
-                                    />
-                                    <label htmlFor="studentPhoto" className="cursor-pointer">
-                                        <span className="text-blue-900 font-semibold hover:underline">Click to upload</span>
-                                        <span className="text-gray-600"> or drag and drop</span>
-                                    </label>
-                                    {formData.studentPhoto && (
-                                        <p className="text-sm text-green-600 mt-2">✓ {formData.studentPhoto.name}</p>
-                                    )}
+                        {/* Step 4: Documents */}
+                        {currentStep === 4 && (
+                            <motion.div
+                                key="step4"
+                                initial={{ opacity: 0, x: 20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -20 }}
+                                className="space-y-10 relative z-10"
+                            >
+                                <div>
+                                    <h2 className="text-3xl font-bold text-ivs-navy mb-2 font-heading">Upload Documents</h2>
+                                    <p className="text-slate-500">Provide necessary documentation (Max 2MB per file).</p>
                                 </div>
-                                {errors.studentPhoto && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.studentPhoto}
-                                    </p>
-                                )}
-                            </div>
 
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Birth Certificate / B-Form *</label>
-                                <div className={`border-2 border-dashed rounded-lg p-6 text-center transition ${
-                                    errors.birthCertificate ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-blue-900'
-                                }`}>
-                                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                                    <input
-                                        type="file"
-                                        accept="image/*,.pdf"
-                                        onChange={(e) => handleFileChange(e, 'birthCertificate')}
-                                        className="hidden"
-                                        id="birthCertificate"
-                                    />
-                                    <label htmlFor="birthCertificate" className="cursor-pointer">
-                                        <span className="text-blue-900 font-semibold hover:underline">Click to upload</span>
-                                        <span className="text-gray-600"> or drag and drop</span>
-                                    </label>
-                                    {formData.birthCertificate && (
-                                        <p className="text-sm text-green-600 mt-2">✓ {formData.birthCertificate.name}</p>
-                                    )}
+                                <div className="grid md:grid-cols-2 gap-8">
+                                    {[
+                                        { label: 'Student Photo *', id: 'studentPhoto', value: formData.studentPhoto },
+                                        { label: 'Birth Certificate *', id: 'birthCertificate', value: formData.birthCertificate },
+                                        { label: 'Father CNIC Doc', id: 'fatherCNICDoc', value: formData.fatherCNICDoc },
+                                        { label: 'Mother CNIC Doc', id: 'motherCNICDoc', value: formData.motherCNICDoc },
+                                    ].map((field) => (
+                                        <div key={field.id} className="group">
+                                            <label className="block text-xs font-bold text-ivs-navy mb-3 uppercase tracking-wider">{field.label}</label>
+                                            <div className="relative border-2 border-dashed border-slate-200 bg-slate-50/50 rounded-3xl p-8 text-center hover:border-ivs-blue hover:bg-white transition-all group">
+                                                <input
+                                                    type="file"
+                                                    accept="image/*,.pdf"
+                                                    onChange={(e) => handleFileChange(e, field.id)}
+                                                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                                />
+                                                <Upload className="w-10 h-10 text-slate-300 mx-auto mb-4 group-hover:text-ivs-blue transition-colors" />
+                                                <div className="text-sm font-bold text-ivs-navy mb-1">Click to upload</div>
+                                                <div className="text-xs text-slate-400">JPG, PNG or PDF</div>
+                                                {field.value && (
+                                                    <div className="mt-4 px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-full inline-flex items-center gap-2">
+                                                        <CheckCircle2 className="w-3 h-3" />
+                                                        {field.value instanceof File ? field.value.name : 'Uploaded'}
+                                                    </div>
+                                                )}
+                                                {errors[field.id] && (
+                                                    <div className={`mt-3 text-xs font-bold flex items-center justify-center gap-2 ${errors[field.id].includes('Optimizing') ? 'text-blue-500' : 'text-red-500'}`}>
+                                                        {errors[field.id].includes('Optimizing') ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <AlertCircle className="w-3.5 h-3.5" />}
+                                                        {errors[field.id]}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    ))}
                                 </div>
-                                {errors.birthCertificate && (
-                                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
-                                        <AlertCircle className="w-4 h-4" /> {errors.birthCertificate}
-                                    </p>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Father's CNIC Copy (Optional)</label>
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-900 transition">
-                                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                                    <input
-                                        type="file"
-                                        accept="image/*,.pdf"
-                                        onChange={(e) => handleFileChange(e, 'fatherCNICDoc')}
-                                        className="hidden"
-                                        id="fatherCNICDoc"
-                                    />
-                                    <label htmlFor="fatherCNICDoc" className="cursor-pointer">
-                                        <span className="text-blue-900 font-semibold hover:underline">Click to upload</span>
-                                    </label>
-                                    {formData.fatherCNICDoc && (
-                                        <p className="text-sm text-green-600 mt-2">✓ {formData.fatherCNICDoc.name}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-gray-700 font-semibold mb-2">Mother's CNIC Copy (Optional)</label>
-                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-900 transition">
-                                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-3" />
-                                    <input
-                                        type="file"
-                                        accept="image/*,.pdf"
-                                        onChange={(e) => handleFileChange(e, 'motherCNICDoc')}
-                                        className="hidden"
-                                        id="motherCNICDoc"
-                                    />
-                                    <label htmlFor="motherCNICDoc" className="cursor-pointer">
-                                        <span className="text-blue-900 font-semibold hover:underline">Click to upload</span>
-                                    </label>
-                                    {formData.motherCNICDoc && (
-                                        <p className="text-sm text-green-600 mt-2">✓ {formData.motherCNICDoc.name}</p>
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                                <CheckCircle2 className="w-6 h-6 text-green-600 mb-2" />
-                                <p className="text-sm text-green-800">
-                                    <strong>Almost Done!</strong> Review your information and click submit to complete your application.
-                                </p>
-                            </div>
-                        </div>
-                    )}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     {/* Navigation Buttons */}
-                    <div className="flex justify-between items-center mt-8 pt-6 border-t">
+                    <div className="flex justify-between items-center mt-12 pt-8 border-t border-slate-100 relative z-10">
                         {currentStep > 1 && (
                             <button
                                 onClick={prevStep}
-                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-semibold hover:bg-gray-300 transition inline-flex items-center gap-2"
+                                className="px-8 py-4 bg-slate-100 text-slate-600 rounded-2xl font-bold hover:bg-slate-200 transition-all flex items-center gap-2 group"
                             >
-                                <ChevronLeft className="w-5 h-5" />
+                                <ChevronLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform" />
                                 Previous
                             </button>
                         )}
@@ -717,25 +591,25 @@ export default function AdmissionPortal() {
                         {currentStep < 4 ? (
                             <button
                                 onClick={nextStep}
-                                className="ml-auto px-6 py-3 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition inline-flex items-center gap-2"
+                                className="ml-auto px-10 py-4 btn-premium group"
                             >
                                 Next Step
-                                <ChevronRight className="w-5 h-5" />
+                                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                             </button>
                         ) : (
                             <button
                                 onClick={handleSubmit}
                                 disabled={isSubmitting}
-                                className="ml-auto px-8 py-4 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition inline-flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="ml-auto px-10 py-5 bg-emerald-500 text-white rounded-2xl font-bold hover:bg-emerald-600 transition-all flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-emerald-500/20"
                             >
                                 {isSubmitting ? (
                                     <>
-                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                        Submitting...
+                                        <Loader2 className="w-6 h-6 animate-spin" />
+                                        Processing...
                                     </>
                                 ) : (
                                     <>
-                                        <CheckCircle2 className="w-5 h-5" />
+                                        <CheckCircle2 className="w-6 h-6" />
                                         Submit Application
                                     </>
                                 )}
@@ -745,18 +619,19 @@ export default function AdmissionPortal() {
                 </div>
 
                 {/* Help Section */}
-                <div className="mt-8 text-center">
-                    <p className="text-gray-600 mb-2">Need help with your application?</p>
-                    <div className="flex justify-center gap-4">
-                        <a href="tel:+923001234567" className="text-blue-900 font-semibold hover:underline">
-                            📞 Call: +92 300 1234567
+                <div className="mt-12 text-center relative z-10">
+                    <p className="text-slate-500 mb-6 font-medium">Need help with your application?</p>
+                    <div className="flex flex-col sm:flex-row justify-center gap-6 items-center">
+                        <a href="tel:+923001234567" className="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all text-ivs-navy font-bold">
+                            <span className="w-8 h-8 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center">📞</span>
+                            +92 300 1234567
                         </a>
-                        <a href="https://wa.me/923001234567" className="text-green-600 font-semibold hover:underline">
-                            💬 WhatsApp Support
+                        <a href="https://wa.me/923001234567" className="flex items-center gap-3 px-6 py-3 bg-white rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-all text-green-600 font-bold">
+                            <span className="w-8 h-8 bg-green-50 text-green-600 rounded-lg flex items-center justify-center">💬</span>
+                            WhatsApp Support
                         </a>
                     </div>
                 </div>
-
             </div>
         </main>
     )

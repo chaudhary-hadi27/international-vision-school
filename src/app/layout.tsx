@@ -1,34 +1,38 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Playfair_Display, Inter } from 'next/font/google'
+import './globals.css'
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+})
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+})
 
 // 🔥 IVS Website Metadata
 export const metadata: Metadata = {
-    title: 'IVS - International Vision School',
-    description: 'Quality Education from Playgroup to Grade 10 in Pakistan',
+  title: 'International Vision School | Excellence in Education',
+  description: 'Providing quality education with a blend of scientific excellence and moral values. Playgroup to Grade 10.',
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/favicon.ico', // In production you'd use a real apple-touch-icon
+  }
 }
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${playfair.variable} ${inter.variable} font-sans antialiased text-gray-900 bg-white`}>
         {children}
       </body>
     </html>
-  );
+  )
 }

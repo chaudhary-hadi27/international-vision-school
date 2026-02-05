@@ -111,7 +111,7 @@ export default function ParentAttendancePage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading attendance...</p>
                 </div>
             </div>
@@ -137,7 +137,7 @@ export default function ParentAttendancePage() {
                                 onClick={() => setSelectedChild(child)}
                                 className={`px-6 py-3 rounded-lg font-semibold transition ${
                                     selectedChild?.id === child.id
-                                        ? 'bg-blue-900 text-white'
+                                        ? 'bg-ivs-navy text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >

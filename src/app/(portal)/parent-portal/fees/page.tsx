@@ -102,7 +102,7 @@ export default function ParentFeesPage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading fee records...</p>
                 </div>
             </div>
@@ -134,7 +134,7 @@ export default function ParentFeesPage() {
                                 onClick={() => setSelectedChild(child)}
                                 className={`px-6 py-3 rounded-lg font-semibold transition ${
                                     selectedChild?.id === child.id
-                                        ? 'bg-blue-900 text-white'
+                                        ? 'bg-ivs-navy text-white'
                                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                                 }`}
                             >
@@ -150,7 +150,7 @@ export default function ParentFeesPage() {
                 <div className="grid md:grid-cols-4 gap-6">
                     <div className="bg-white rounded-xl p-6 shadow-md">
                         <div className="flex items-center gap-3 mb-2">
-                            <DollarSign className="w-5 h-5 text-blue-900" />
+                            <DollarSign className="w-5 h-5 text-ivs-navy" />
                             <span className="text-gray-600 text-sm">Total Amount</span>
                         </div>
                         <p className="text-3xl font-bold text-gray-900">Rs. {summary.totalAmount.toLocaleString()}</p>
@@ -260,7 +260,7 @@ export default function ParentFeesPage() {
 
             {/* Payment Instructions */}
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-                <h3 className="font-bold text-blue-900 mb-3 flex items-center gap-2">
+                <h3 className="font-bold text-ivs-navy mb-3 flex items-center gap-2">
                     <AlertCircle className="w-5 h-5" />
                     Payment Instructions
                 </h3>

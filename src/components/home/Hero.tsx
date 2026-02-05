@@ -1,79 +1,130 @@
-import { ChevronRight, Award } from 'lucide-react';
+'use client';
+
+import { ArrowRight, Award, Play } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import NextImage from 'next/image';
 
 export default function Hero() {
     return (
-        <section className="relative h-screen min-h-[500px] sm:min-h-[600px] flex items-center overflow-hidden">
-            {/* Background Image with Overlay */}
+        <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden bg-ivs-navy">
+            {/* Background Image with Slow Zoom */}
             <div className="absolute inset-0 z-0">
-                <img
-                    src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?w=1920&h=1080&fit=crop&q=80"
-                    alt="Students learning"
-                    className="w-full h-full object-cover object-center"
-                />
-                {/* Dark Overlay for text readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/70 to-black/50"></div>
+                <motion.div
+                    initial={{ scale: 1.1, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 1.5, ease: [0.65, 0, 0.35, 1] }}
+                    className="w-full h-full relative"
+                >
+                    <NextImage
+                        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=2070&auto=format&fit=crop"
+                        alt="International Vision School Students"
+                        fill
+                        className="object-cover object-center brightness-[0.4]"
+                        priority
+                    />
+                </motion.div>
+                {/* Refined Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-r from-ivs-navy via-ivs-navy/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-ivs-navy via-transparent to-transparent opacity-60"></div>
             </div>
 
-            {/* Content */}
-            <div className="relative z-10 w-full px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="max-w-3xl">
+            {/* Content Container */}
+            <div className="relative z-10 w-full container-custom">
+                <div className="max-w-4xl">
+                    {/* Premium Badge */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.6, delay: 0.2 }}
+                        className="inline-flex items-center gap-2.5 px-5 py-2 glass-surface rounded-full mb-10 border border-white/10 shadow-gold-glow animate-float"
+                    >
+                        <Award className="w-4 h-4 text-ivs-gold" />
+                        <span className="text-[13px] font-bold text-white tracking-[0.15em] uppercase">Excellence Since 2010</span>
+                    </motion.div>
 
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-2 sm:px-4 bg-white/10 backdrop-blur-md rounded-full mb-6 sm:mb-8 border border-white/20">
-                            <Award className="w-3 h-3 sm:w-4 sm:h-4 text-blue-300 flex-shrink-0" />
-                            <span className="text-xs sm:text-sm font-semibold text-white">Excellence in Education Since 2010</span>
-                        </div>
+                    {/* Main Heading */}
+                    <motion.h1
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.4 }}
+                        className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[1.1] tracking-tight"
+                    >
+                        Nurturing Minds,<br />
+                        <span className="text-gradient from-ivs-gold via-yellow-400 to-ivs-gold animate-gradient-x">
+                            Building Character
+                        </span>
+                    </motion.h1>
 
-                        {/* Heading */}
-                        <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 leading-tight">
-                            International Vision
-                            <span className="block text-blue-300 text">School</span>
-                        </h1>
+                    {/* Description */}
+                    <motion.p
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.6 }}
+                        className="text-lg sm:text-xl lg:text-2xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-light italic"
+                    >
+                        IVS blends academic rigor with moral excellence, shaping visionary leaders for a global future.
+                    </motion.p>
 
-                        {/* Description */}
-                        <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-200 mb-8 sm:mb-10 leading-relaxed">
-                            Building Tomorrow's Leaders Today - International Vision School provides quality education from Playgroup to Grade 10, nurturing young minds with modern teaching and Islamic values.
-                        </p>
+                    {/* CTA Buttons */}
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, delay: 0.8 }}
+                        className="flex flex-col sm:flex-row flex-wrap gap-5"
+                    >
+                        <Link
+                            href="/admissions"
+                            className="btn-premium !rounded-full !bg-ivs-blue hover:!bg-ivs-accent"
+                        >
+                            Apply Now
+                            <ArrowRight className="w-5 h-5 group-hover:translate-x-1.5 transition-transform" />
+                        </Link>
 
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-8 sm:mb-12">
-                            <button className="group w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 shadow-2xl hover:shadow-blue-500/50 hover:scale-105 flex items-center justify-center gap-2">
-                                Start Admission Process
-                                <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
-                            </button>
-                            <button className="w-full sm:w-auto px-6 py-3 sm:px-8 sm:py-4 bg-white/10 hover:bg-white/20 backdrop-blur-md text-white border-2 border-white/30 rounded-xl font-semibold text-base sm:text-lg transition-all duration-300 hover:scale-105">
-                                Schedule Campus Tour
-                            </button>
-                        </div>
-
-                        {/* Stats */}
-                        <div className="grid grid-cols-3 gap-4 sm:gap-6 lg:gap-8 pt-6 sm:pt-8 border-t border-white/20">
-                            <div className="text-center sm:text-left">
-                                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">15+</div>
-                                <div className="text-xs sm:text-sm text-gray-300">Years Excellence</div>
-                            </div>
-                            <div className="text-center sm:text-left">
-                                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">2000+</div>
-                                <div className="text-xs sm:text-sm text-gray-300">Happy Students</div>
-                            </div>
-                            <div className="text-center sm:text-left">
-                                <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-1 sm:mb-2">98%</div>
-                                <div className="text-xs sm:text-sm text-gray-300">Success Rate</div>
-                            </div>
-                        </div>
-
-                    </div>
+                        <Link
+                            href="/about"
+                            className="btn-glass !rounded-full"
+                        >
+                            <span className="w-10 h-10 rounded-full bg-ivs-gold/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                                <Play className="w-4 h-4 fill-ivs-gold text-ivs-gold" />
+                            </span>
+                            Discover Our Vision
+                        </Link>
+                    </motion.div>
                 </div>
             </div>
 
-            {/* Scroll Indicator */}
-            <div className="hidden sm:block absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
-                <div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center p-2">
-                    <div className="w-1 h-3 bg-white rounded-full"></div>
+            {/* Stats - Desktop Only */}
+            <motion.div
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1, delay: 1 }}
+                className="hidden xl:flex absolute right-12 bottom-24 flex-col gap-12 z-10 py-8 border-l border-white/10 pl-12"
+            >
+                <div>
+                    <div className="text-5xl font-bold text-white mb-2">15+</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Years of Legacy</div>
                 </div>
-            </div>
+                <div>
+                    <div className="text-5xl font-bold text-white mb-2">100%</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Success Rate</div>
+                </div>
+                <div>
+                    <div className="text-5xl font-bold text-white mb-2">2k+</div>
+                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Global Alumni</div>
+                </div>
+            </motion.div>
 
+            {/* Decorative Scroll Indicator */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1.5, duration: 1 }}
+                className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+            >
+                <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-ivs-gold to-transparent opacity-50"></div>
+                <span className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">Scroll</span>
+            </motion.div>
         </section>
     );
 }

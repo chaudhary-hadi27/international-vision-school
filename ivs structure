@@ -79,7 +79,7 @@ ivs/
 │   │   └── seed.ts                             ✅ Keep
 │   │
 │   ├── instrumentation.ts                      ✅ Keep
-│   └── proxy.ts                                ✅ Keep
+│   └── middleware.ts                                ✅ Keep
 │
 ├── public/
 │   └── images/                                 ✅ Keep (add your images)

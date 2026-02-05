@@ -13,9 +13,13 @@ import {
     Clock,
     AlertCircle,
     ArrowUpRight,
-    ArrowDownRight
+    ArrowDownRight,
+    Search,
+    ChevronRight,
+    MoreVertical
 } from 'lucide-react'
 import Link from 'next/link'
+import { motion } from 'framer-motion'
 
 interface DashboardStats {
     totalStudents: number
@@ -41,10 +45,19 @@ interface RecentApplication {
     createdAt: string
 }
 
-interface PendingTask {
-    task: string
-    priority: 'high' | 'medium' | 'low'
-    count: number
+const containerVars = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.1
+        }
+    }
+}
+
+const itemVars = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 }
 }
 
 export default function AdminDashboard() {
@@ -58,7 +71,6 @@ export default function AdminDashboard() {
 
     const fetchDashboardData = async () => {
         try {
-            // Fetch all data in parallel
             const [studentsRes, applicationsRes, feesRes, attendanceRes] = await Promise.all([
                 fetch('/api/admin/students'),
                 fetch('/api/admin/applications'),
@@ -73,7 +85,6 @@ export default function AdminDashboard() {
                 attendanceRes.json()
             ])
 
-            // Calculate stats
             const students = studentsData.success ? studentsData.data : []
             const applications = applicationsData.success ? applicationsData.data : []
             const fees = feesData.success ? feesData.data : []
@@ -105,7 +116,6 @@ export default function AdminDashboard() {
                 }
             })
 
-            // Get recent 5 applications
             setRecentApplications(applications.slice(0, 5))
 
         } catch (error) {
@@ -115,241 +125,275 @@ export default function AdminDashboard() {
         }
     }
 
-    const getStatusColor = (status: string) => {
-        switch(status?.toLowerCase()) {
-            case 'approved': return 'bg-green-100 text-green-700'
-            case 'pending': return 'bg-amber-100 text-amber-700'
-            case 'under_review': return 'bg-blue-100 text-blue-700'
-            case 'rejected': return 'bg-red-100 text-red-700'
-            default: return 'bg-gray-100 text-gray-700'
+    const getStatusStyles = (status: string) => {
+        switch (status?.toLowerCase()) {
+            case 'approved': return 'bg-emerald-50 text-emerald-600 border-emerald-100'
+            case 'pending': return 'bg-amber-50 text-amber-600 border-amber-100'
+            case 'under_review': return 'bg-blue-50 text-blue-600 border-blue-100'
+            case 'rejected': return 'bg-rose-50 text-rose-600 border-rose-100'
+            default: return 'bg-slate-50 text-slate-600 border-slate-100'
         }
     }
 
     const getStatusIcon = (status: string) => {
-        switch(status?.toLowerCase()) {
-            case 'approved': return <CheckCircle2 className="w-4 h-4" />
-            case 'pending': return <Clock className="w-4 h-4" />
-            case 'under_review': return <AlertCircle className="w-4 h-4" />
-            case 'rejected': return <XCircle className="w-4 h-4" />
+        switch (status?.toLowerCase()) {
+            case 'approved': return <CheckCircle2 className="w-3.5 h-3.5" />
+            case 'pending': return <Clock className="w-3.5 h-3.5" />
+            case 'under_review': return <AlertCircle className="w-3.5 h-3.5" />
+            case 'rejected': return <XCircle className="w-3.5 h-3.5" />
             default: return null
         }
     }
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-96">
-                <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-blue-900 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-gray-600">Loading dashboard...</p>
+            <div className="flex flex-col items-center justify-center h-[60vh]">
+                <div className="relative w-16 h-16">
+                    <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
                 </div>
+                <p className="mt-6 text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Dashboard Data</p>
             </div>
         )
     }
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <div className="flex items-center justify-between">
+        <motion.div
+            initial="hidden"
+            animate="visible"
+            variants={containerVars}
+            className="space-y-10"
+        >
+            {/* Header section */}
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
-                    <p className="text-gray-600 mt-1">Welcome back! Here's what's happening today.</p>
+                    <h1 className="text-4xl font-bold text-ivs-navy font-heading mb-2">Internal Dashboard</h1>
+                    <p className="text-slate-500 font-medium">Monitoring International Vision School's operations and metrics.</p>
                 </div>
-                <div className="text-right">
-                    <p className="text-sm text-gray-600">Today</p>
-                    <p className="text-lg font-semibold text-gray-900">
-                        {new Date().toLocaleDateString('en-US', {
-                            weekday: 'long',
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
-                        })}
-                    </p>
+                <div className="bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100 flex items-center gap-4">
+                    <div className="w-10 h-10 bg-ivs-blue/5 rounded-xl flex items-center justify-center">
+                        <Calendar className="w-5 h-5 text-ivs-blue" />
+                    </div>
+                    <div>
+                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest leading-none mb-1">Current Date</p>
+                        <p className="text-sm font-bold text-ivs-navy">
+                            {new Date().toLocaleDateString('en-US', {
+                                weekday: 'long',
+                                month: 'short',
+                                day: 'numeric',
+                                year: 'numeric'
+                            })}
+                        </p>
+                    </div>
                 </div>
             </div>
 
             {/* Stats Grid */}
             {stats && (
-                <div className="grid md:grid-cols-4 gap-6">
-                    <Link href="/admin/students" className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition group">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-blue-100 text-blue-900 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                                <Users className="w-6 h-6" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <motion.div variants={itemVars}>
+                        <Link href="/admin/students" className="premium-card group block p-6 h-full border border-slate-200 hover:border-ivs-blue/30 relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="p-3 bg-blue-50 text-ivs-blue rounded-xl group-hover:bg-ivs-blue group-hover:text-white transition-colors duration-300">
+                                    <Users className="w-6 h-6" />
+                                </div>
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
+                                    <ArrowUpRight className="w-3 h-3" />
+                                    Active
+                                </span>
                             </div>
-                            <ArrowUpRight className="w-5 h-5 text-green-600" />
-                        </div>
-                        <h3 className="text-gray-600 text-sm mb-1">Total Students</h3>
-                        <p className="text-3xl font-bold text-gray-900 mb-1">{stats.totalStudents}</p>
-                        <p className="text-sm font-semibold text-green-600">
-                            {stats.activeStudents} active
-                        </p>
-                    </Link>
+                            <div className="space-y-1">
+                                <p className="text-3xl font-bold text-ivs-navy tabular-nums tracking-tight">{stats.totalStudents}</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Total Students</p>
+                            </div>
+                        </Link>
+                    </motion.div>
 
-                    <Link href="/admin/applications" className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition group">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-green-100 text-green-700 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                                <FileText className="w-6 h-6" />
+                    <motion.div variants={itemVars}>
+                        <Link href="/admin/applications" className="premium-card group block p-6 h-full border border-slate-200 hover:border-ivs-blue/30 relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="p-3 bg-amber-50 text-amber-600 rounded-xl group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+                                    <FileText className="w-6 h-6" />
+                                </div>
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg">
+                                    <AlertCircle className="w-3 h-3" />
+                                    Pending
+                                </span>
                             </div>
-                            <ArrowUpRight className="w-5 h-5 text-green-600" />
-                        </div>
-                        <h3 className="text-gray-600 text-sm mb-1">Applications</h3>
-                        <p className="text-3xl font-bold text-gray-900 mb-1">{stats.totalApplications}</p>
-                        <p className="text-sm font-semibold text-amber-600">
-                            {stats.pendingApplications} pending
-                        </p>
-                    </Link>
+                            <div className="space-y-1">
+                                <p className="text-3xl font-bold text-ivs-navy tabular-nums tracking-tight">{stats.totalApplications}</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Applications</p>
+                            </div>
+                        </Link>
+                    </motion.div>
 
-                    <Link href="/admin/fees" className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition group">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-purple-100 text-purple-700 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                                <DollarSign className="w-6 h-6" />
+                    <motion.div variants={itemVars}>
+                        <Link href="/admin/fees" className="premium-card group block p-6 h-full border border-slate-200 hover:border-ivs-blue/30 relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="p-3 bg-violet-50 text-violet-600 rounded-xl group-hover:bg-violet-600 group-hover:text-white transition-colors duration-300">
+                                    <DollarSign className="w-6 h-6" />
+                                </div>
+                                <span className="flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-50 px-2 py-1 rounded-lg">
+                                    Collection
+                                </span>
                             </div>
-                            <ArrowUpRight className="w-5 h-5 text-green-600" />
-                        </div>
-                        <h3 className="text-gray-600 text-sm mb-1">Fee Collection</h3>
-                        <p className="text-3xl font-bold text-gray-900 mb-1">
-                            Rs. {(stats.collectedFees / 1000).toFixed(0)}K
-                        </p>
-                        <p className="text-sm font-semibold text-green-600">
-                            {stats.totalFeeAmount > 0
-                                ? Math.round((stats.collectedFees / stats.totalFeeAmount) * 100)
-                                : 0}% collected
-                        </p>
-                    </Link>
+                            <div className="space-y-1">
+                                <p className="text-3xl font-bold text-ivs-navy tabular-nums tracking-tight">
+                                    {stats.totalFeeAmount > 0 ? Math.round((stats.collectedFees / stats.totalFeeAmount) * 100) : 0}%
+                                </p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Fee Recovery</p>
+                            </div>
+                            <div className="mt-4 h-1 w-full bg-slate-100 rounded-full overflow-hidden">
+                                <motion.div
+                                    initial={{ width: 0 }}
+                                    animate={{ width: `${stats.totalFeeAmount > 0 ? (stats.collectedFees / stats.totalFeeAmount) * 100 : 0}%` }}
+                                    className="h-full bg-violet-500 rounded-full"
+                                />
+                            </div>
+                        </Link>
+                    </motion.div>
 
-                    <Link href="/admin/attendance" className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition group">
-                        <div className="flex items-center justify-between mb-4">
-                            <div className="w-12 h-12 bg-amber-100 text-amber-700 rounded-lg flex items-center justify-center group-hover:scale-110 transition">
-                                <Calendar className="w-6 h-6" />
+                    <motion.div variants={itemVars}>
+                        <Link href="/admin/attendance" className="premium-card group block p-6 h-full border border-slate-200 hover:border-ivs-blue/30 relative overflow-hidden">
+                            <div className="flex items-start justify-between mb-6">
+                                <div className="p-3 bg-blue-50 text-blue-600 rounded-xl group-hover:bg-ivs-blue group-hover:text-white transition-colors duration-300">
+                                    <Calendar className="w-6 h-6" />
+                                </div>
+                                <span className={`flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-lg ${stats.attendanceToday.percentage >= 90 ? 'text-emerald-600 bg-emerald-50' : 'text-rose-600 bg-rose-50'}`}>
+                                    {stats.attendanceToday.percentage >= 90 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
+                                    Today
+                                </span>
                             </div>
-                            {stats.attendanceToday.percentage >= 90 ? (
-                                <ArrowUpRight className="w-5 h-5 text-green-600" />
-                            ) : (
-                                <ArrowDownRight className="w-5 h-5 text-red-600" />
-                            )}
-                        </div>
-                        <h3 className="text-gray-600 text-sm mb-1">Attendance Today</h3>
-                        <p className="text-3xl font-bold text-gray-900 mb-1">{stats.attendanceToday.percentage}%</p>
-                        <p className="text-sm font-semibold text-gray-600">
-                            {stats.attendanceToday.present} / {stats.attendanceToday.total} present
-                        </p>
-                    </Link>
+                            <div className="space-y-1">
+                                <p className="text-3xl font-bold text-ivs-navy tabular-nums tracking-tight">{stats.attendanceToday.percentage}%</p>
+                                <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest">Attendance</p>
+                            </div>
+                        </Link>
+                    </motion.div>
                 </div>
             )}
 
-            <div className="grid lg:grid-cols-3 gap-6">
+            <div className="grid lg:grid-cols-3 gap-10">
                 {/* Recent Applications */}
-                <div className="lg:col-span-2 bg-white rounded-xl shadow-md p-6">
-                    <div className="flex items-center justify-between mb-6">
-                        <h2 className="text-xl font-bold text-gray-900">Recent Applications</h2>
-                        <Link href="/admin/applications" className="text-blue-900 font-semibold hover:underline text-sm">
-                            View All
-                        </Link>
-                    </div>
-
-                    {recentApplications.length === 0 ? (
-                        <div className="text-center py-8">
-                            <FileText className="w-12 h-12 text-gray-400 mx-auto mb-2" />
-                            <p className="text-gray-600">No recent applications</p>
+                <motion.div variants={itemVars} className="lg:col-span-2">
+                    <div className="premium-card rounded-2xl p-8 h-full border border-slate-200">
+                        <div className="flex items-center justify-between mb-6">
+                            <div>
+                                <h2 className="text-xl font-bold text-ivs-navy font-heading">Recent Applications</h2>
+                            </div>
+                            <Link href="/admin/applications" className="text-sm font-bold text-ivs-blue hover:text-blue-700 transition-colors flex items-center gap-1">
+                                View All
+                                <ChevronRight className="w-4 h-4" />
+                            </Link>
                         </div>
-                    ) : (
+
                         <div className="space-y-3">
-                            {recentApplications.map((app) => (
-                                <div key={app.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-3">
-                                            <p className="font-semibold text-gray-900">{app.studentName}</p>
-                                            <span className={`px-2 py-1 rounded text-xs font-semibold flex items-center gap-1 ${getStatusColor(app.status)}`}>
-                        {getStatusIcon(app.status)}
-                                                {app.status?.replace('_', ' ')}
-                      </span>
+                            {recentApplications.length === 0 ? (
+                                <div className="text-center py-12 bg-slate-50 rounded-xl border border-dashed border-slate-200">
+                                    <p className="text-slate-500 font-medium">No recent applications</p>
+                                </div>
+                            ) : (
+                                recentApplications.map((app, idx) => (
+                                    <motion.div
+                                        key={app.id}
+                                        initial={{ opacity: 0, x: -10 }}
+                                        animate={{ opacity: 1, x: 0 }}
+                                        transition={{ delay: idx * 0.05 }}
+                                        className="group p-4 bg-white border border-slate-100 hover:border-ivs-blue/20 hover:shadow-md rounded-xl transition-all duration-200 flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center font-bold text-ivs-navy text-sm">
+                                                {app.studentName.charAt(0)}
+                                            </div>
+                                            <div>
+                                                <p className="font-bold text-ivs-navy text-sm">{app.studentName}</p>
+                                                <p className="text-xs text-slate-500">{app.grade} • {app.applicationId}</p>
+                                            </div>
                                         </div>
-                                        <p className="text-sm text-gray-600 mt-1">{app.grade} • {app.applicationId}</p>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-sm text-gray-500">
-                                            {new Date(app.createdAt).toLocaleDateString()}
-                                        </p>
-                                        <Link
-                                            href={`/admin/applications/${app.applicationId}`}
-                                            className="text-xs text-blue-900 hover:underline font-semibold"
-                                        >
-                                            View Details
-                                        </Link>
+                                        <div className="flex items-center gap-4">
+                                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wide border ${getStatusStyles(app.status)}`}>
+                                                {app.status?.replace('_', ' ')}
+                                            </span>
+                                            <Link href={`/admin/applications/${app.applicationId}`} className="p-2 text-slate-400 hover:text-ivs-blue hover:bg-blue-50 rounded-lg transition-all">
+                                                <ChevronRight className="w-4 h-4" />
+                                            </Link>
+                                        </div>
+                                    </motion.div>
+                                ))
+                            )}
+                        </div>
+                    </div>
+                </motion.div>
+
+                {/* Quick Stats & Actions */}
+                <motion.div variants={itemVars} className="space-y-6">
+                    <div className="premium-card rounded-[2.5rem] p-8 border border-slate-100">
+                        <h2 className="text-xl font-bold text-ivs-navy font-heading mb-6 flex items-center gap-3">
+                            <TrendingUp className="w-5 h-5 text-ivs-blue" />
+                            Financial Health
+                        </h2>
+
+                        {stats && (
+                            <div className="space-y-4">
+                                <div className="p-5 bg-blue-50/50 border border-blue-100 rounded-3xl group">
+                                    <p className="text-[10px] text-blue-400 font-bold uppercase tracking-widest mb-1">Total Expected</p>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-2xl font-bold text-ivs-navy tabular-nums">Rs. {stats.totalFeeAmount.toLocaleString()}</p>
+                                        <div className="w-8 h-8 rounded-full bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-400">
+                                            <ArrowUpRight className="w-4 h-4" />
+                                        </div>
                                     </div>
                                 </div>
-                            ))}
+
+                                <div className="p-5 bg-emerald-50/50 border border-emerald-100 rounded-3xl group">
+                                    <p className="text-[10px] text-emerald-500 font-bold uppercase tracking-widest mb-1">Already Collected</p>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-2xl font-bold text-emerald-600 tabular-nums">Rs. {stats.collectedFees.toLocaleString()}</p>
+                                        <div className="w-8 h-8 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-500">
+                                            <CheckCircle2 className="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-5 bg-rose-50/50 border border-rose-100 rounded-3xl group">
+                                    <p className="text-[10px] text-rose-400 font-bold uppercase tracking-widest mb-1">Pending Balance</p>
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-2xl font-bold text-rose-600 tabular-nums">Rs. {stats.pendingFees.toLocaleString()}</p>
+                                        <div className="w-8 h-8 rounded-full bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-400">
+                                            <AlertCircle className="w-4 h-4" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="premium-card rounded-[2.5rem] p-8 border border-slate-100">
+                        <h2 className="text-xl font-bold text-ivs-navy font-heading mb-6 flex items-center gap-3">
+                            <MoreVertical className="w-5 h-5 text-ivs-blue" />
+                            Quick Actions
+                        </h2>
+                        <div className="grid grid-cols-2 gap-3">
+                            <Link href="/admin/students" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
+                                <Users className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Students</span>
+                            </Link>
+                            <Link href="/admin/attendance" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
+                                <Calendar className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Attendance</span>
+                            </Link>
+                            <Link href="/admin/reports" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
+                                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Analytics</span>
+                            </Link>
+                            <button className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
+                                <Search className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                                <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Search</span>
+                            </button>
                         </div>
-                    )}
-                </div>
-
-                {/* Quick Stats */}
-                <div className="bg-white rounded-xl shadow-md p-6">
-                    <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Stats</h2>
-
-                    {stats && (
-                        <div className="space-y-4">
-                            <div className="p-4 bg-blue-50 rounded-lg">
-                                <p className="text-sm text-gray-600 mb-1">Total Revenue</p>
-                                <p className="text-2xl font-bold text-blue-900">
-                                    Rs. {stats.totalFeeAmount.toLocaleString()}
-                                </p>
-                            </div>
-
-                            <div className="p-4 bg-green-50 rounded-lg">
-                                <p className="text-sm text-gray-600 mb-1">Collected</p>
-                                <p className="text-2xl font-bold text-green-600">
-                                    Rs. {stats.collectedFees.toLocaleString()}
-                                </p>
-                            </div>
-
-                            <div className="p-4 bg-amber-50 rounded-lg">
-                                <p className="text-sm text-gray-600 mb-1">Pending</p>
-                                <p className="text-2xl font-bold text-amber-600">
-                                    Rs. {stats.pendingFees.toLocaleString()}
-                                </p>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                    </div>
+                </motion.div>
             </div>
-
-            {/* Quick Actions */}
-            <div className="bg-white rounded-xl shadow-md p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-6">Quick Actions</h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <Link
-                        href="/admin/applications"
-                        className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-center group"
-                    >
-                        <FileText className="w-8 h-8 text-blue-900 mx-auto mb-2 group-hover:scale-110 transition" />
-                        <span className="font-semibold text-gray-900 text-sm">View Applications</span>
-                    </Link>
-
-                    <Link
-                        href="/admin/students"
-                        className="p-4 bg-green-50 hover:bg-green-100 rounded-lg transition text-center group"
-                    >
-                        <Users className="w-8 h-8 text-green-700 mx-auto mb-2 group-hover:scale-110 transition" />
-                        <span className="font-semibold text-gray-900 text-sm">Manage Students</span>
-                    </Link>
-
-                    <Link
-                        href="/admin/attendance"
-                        className="p-4 bg-purple-50 hover:bg-purple-100 rounded-lg transition text-center group"
-                    >
-                        <Calendar className="w-8 h-8 text-purple-700 mx-auto mb-2 group-hover:scale-110 transition" />
-                        <span className="font-semibold text-gray-900 text-sm">Mark Attendance</span>
-                    </Link>
-
-                    <Link
-                        href="/admin/announcements"
-                        className="p-4 bg-amber-50 hover:bg-amber-100 rounded-lg transition text-center group"
-                    >
-                        <TrendingUp className="w-8 h-8 text-amber-700 mx-auto mb-2 group-hover:scale-110 transition" />
-                        <span className="font-semibold text-gray-900 text-sm">New Announcement</span>
-                    </Link>
-                </div>
-            </div>
-        </div>
+        </motion.div>
     )
 }

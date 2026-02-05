@@ -29,7 +29,7 @@ export default function ApplicationDetailError({
                 <div className="flex gap-4 justify-center">
                     <button
                         onClick={reset}
-                        className="px-6 py-2 bg-blue-900 text-white rounded-lg font-semibold hover:bg-blue-800 transition"
+                        className="px-6 py-2 bg-ivs-navy text-white rounded-lg font-semibold hover:bg-blue-800 transition"
                     >
                         Try Again
                     </button>
