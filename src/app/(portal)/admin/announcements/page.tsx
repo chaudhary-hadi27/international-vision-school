@@ -247,7 +247,7 @@ export default function AnnouncementsPage() {
                         <div className="py-24 flex flex-col items-center justify-center bg-white rounded-xl border border-slate-200">
                             <div className="relative w-10 h-10">
                                 <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                                <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                                <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                             </div>
                             <p className="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Retrieving Notice Board...</p>
                         </div>
@@ -260,7 +260,7 @@ export default function AnnouncementsPage() {
                             <p className="text-slate-500 mt-2 max-w-sm mx-auto font-medium text-sm">No announcements have been broadcasted yet. Start by creating a new one.</p>
                             <button
                                 onClick={() => setShowModal(true)}
-                                className="mt-6 px-6 py-2.5 bg-ivs-navy text-white rounded-lg text-sm font-bold hover:bg-ivs-blue transition-all shadow-sm"
+                                className="mt-6 px-6 py-2.5 bg-ivs-blue text-white rounded-lg text-sm font-bold hover:bg-ivs-accent transition-all shadow-sm shadow-ivs-blue/20"
                             >
                                 Dispatch First Notice
                             </button>
@@ -343,7 +343,7 @@ export default function AnnouncementsPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowModal(false)}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -353,7 +353,7 @@ export default function AnnouncementsPage() {
                         >
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-ivs-navy rounded-lg flex items-center justify-center text-white">
+                                    <div className="w-12 h-12 bg-ivs-blue rounded-lg flex items-center justify-center text-white">
                                         <Megaphone className="w-6 h-6" />
                                     </div>
                                     <div>
@@ -438,7 +438,7 @@ export default function AnnouncementsPage() {
                                                 onClick={() => handleAudienceToggle(audience)}
                                                 className={`px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-wide transition-all border
                                                     ${formData.targetAudience.includes(audience)
-                                                        ? 'bg-ivs-navy border-ivs-navy text-white shadow-sm'
+                                                        ? 'bg-ivs-blue border-ivs-blue text-white shadow-sm shadow-ivs-blue/20'
                                                         : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
                                                     }`}
                                             >
@@ -501,7 +501,7 @@ export default function AnnouncementsPage() {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-[2] py-2.5 bg-ivs-navy text-white rounded-lg font-bold hover:bg-ivs-navy/90 shadow-sm transition-all flex items-center justify-center gap-2"
+                                        className="flex-[2] py-2.5 bg-ivs-blue text-white rounded-lg font-bold hover:bg-ivs-accent shadow-sm shadow-ivs-blue/20 transition-all flex items-center justify-center gap-2"
                                     >
                                         <Megaphone className="w-4 h-4" />
                                         Launch Announcement

@@ -1,27 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { SupabaseService } from '@/lib/services/supabase-service'
 import { z } from 'zod'
 
 const createStudentSchema = z.object({
-    name: z.string().min(3),
-    fatherName: z.string().min(3),
-    motherName: z.string().optional(),
-    dateOfBirth: z.string(),
-    gender: z.enum(['MALE', 'FEMALE']),
-    grade: z.string(),
+    firstName: z.string().min(2),
+    lastName: z.string().min(2),
+    gradeLevel: z.number(),
     section: z.string(),
-    rollNumber: z.string().optional(),
-    admissionDate: z.string().optional(),
-    address: z.string(),
-    city: z.string(),
+    dateOfBirth: z.string(),
+    gender: z.enum(['male', 'female', 'other']),
+    fatherName: z.string().min(3),
     phone: z.string(),
-    whatsapp: z.string(),
-    email: z.string().email().optional(),
-    previousSchool: z.string().optional(),
-    medicalInfo: z.string().optional(),
-    status: z.enum(['ACTIVE', 'INACTIVE', 'ALUMNI', 'SUSPENDED']).optional(),
+    address: z.string().optional(),
+    bloodGroup: z.string().optional(),
 })
 
 export async function GET() {
@@ -35,26 +28,35 @@ export async function GET() {
             )
         }
 
-        const students = await prisma.student.findMany({
-            orderBy: { createdAt: 'desc' },
-            include: {
-                parent: {
-                    include: {
-                        user: {
-                            select: {
-                                name: true,
-                                email: true,
-                                phone: true,
-                            },
-                        },
-                    },
-                },
-            },
+        const { data: students, error } = await SupabaseService.getStudents()
+
+        if (error) {
+            console.error('Supabase error fetching students:', error)
+            return NextResponse.json(
+                { success: false, message: 'Error fetching students from Supabase' },
+                { status: 500 }
+            )
+        }
+
+        // Transform data to match frontend expectations
+        const transformedStudents = students?.map(s => {
+            const primaryParent = s.parents?.find((p: any) => p.is_primary) || s.parents?.[0]
+            return {
+                id: s.id,
+                studentId: s.student_id,
+                name: `${s.first_name} ${s.last_name}`,
+                grade: s.class?.grade_level ? `Class ${s.class.grade_level}` : 'Unassigned',
+                section: s.class?.section || 'N/A',
+                rollNo: s.student_id,
+                fatherName: primaryParent?.parent?.full_name || 'N/A',
+                phone: primaryParent?.parent?.phone || 'N/A',
+                status: (s.status?.toUpperCase() || 'ACTIVE') as any
+            }
         })
 
         return NextResponse.json({
             success: true,
-            data: students,
+            data: transformedStudents,
         })
     } catch (error) {
         console.error('Error fetching students:', error)
@@ -77,31 +79,63 @@ export async function POST(request: NextRequest) {
         }
 
         const body = await request.json()
-
-        // Validate request body
         const validatedData = createStudentSchema.parse(body)
 
-        // Check if roll number exists
-        if (validatedData.rollNumber) {
-            const existing = await prisma.student.findUnique({
-                where: { rollNumber: validatedData.rollNumber },
-            })
-            if (existing) {
-                return NextResponse.json(
-                    { success: false, message: 'Roll number already exists' },
-                    { status: 400 }
-                )
-            }
+        // 1. Find the class ID
+        const { data: classData, error: classError } = await SupabaseService.findClass(
+            validatedData.gradeLevel,
+            validatedData.section
+        )
+
+        if (classError || !classData) {
+            return NextResponse.json(
+                { success: false, message: `Class not found for Grade ${validatedData.gradeLevel} Section ${validatedData.section}` },
+                { status: 400 }
+            )
         }
 
-        // Note: In production, you need to link student to a parent
-        // For now, this will fail without a valid parentId
-        // You should create/find parent first, then create student
+        // 2. Generate Roll Number / Student ID
+        const studentId = `IVS-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`
 
-        return NextResponse.json(
-            { success: false, message: 'Parent linking not implemented. Create parent first.' },
-            { status: 501 }
+        // 3. Create Student with Parent Link
+        const studentPayload = {
+            student_id: studentId,
+            first_name: validatedData.firstName,
+            last_name: validatedData.lastName,
+            date_of_birth: validatedData.dateOfBirth,
+            gender: validatedData.gender,
+            class_id: classData.id,
+            blood_group: validatedData.bloodGroup,
+            status: 'active',
+            medical_conditions: 'N/A'
+        }
+
+        const parentPayload = {
+            full_name: validatedData.fatherName,
+            phone: validatedData.phone,
+            relationship: 'father'
+        }
+
+        const { data: student, error: createError, warning } = await SupabaseService.createStudentWithParent(
+            studentPayload,
+            parentPayload
         )
+
+        if (createError) {
+            console.error('Error creating student in Supabase:', createError)
+            return NextResponse.json(
+                { success: false, message: 'Error creating student', error: createError },
+                { status: 500 }
+            )
+        }
+
+        return NextResponse.json({
+            success: true,
+            message: 'Student created successfully',
+            data: student,
+            warning // Include warning if parent profile not linked
+        })
+
     } catch (error) {
         if (error instanceof z.ZodError) {
             return NextResponse.json(

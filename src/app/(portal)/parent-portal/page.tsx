@@ -117,7 +117,7 @@ export default function ParentPortalDashboard() {
         return (
             <div className="flex items-center justify-center h-screen">
                 <div className="text-center">
-                    <div className="w-16 h-16 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-16 h-16 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600 font-medium">Loading portal...</p>
                 </div>
             </div>
@@ -133,7 +133,7 @@ export default function ParentPortalDashboard() {
                     <p className="text-gray-600 mb-6">Please contact the school administration to link your children to your account.</p>
                     <Link
                         href="/contact"
-                        className="inline-block px-6 py-3 bg-ivs-navy text-white rounded-lg font-semibold hover:bg-blue-800 transition"
+                        className="inline-block px-6 py-3 bg-ivs-blue text-white rounded-lg font-semibold hover:bg-ivs-accent transition shadow-lg shadow-ivs-blue/20"
                     >
                         Contact School
                     </Link>
@@ -153,11 +153,10 @@ export default function ParentPortalDashboard() {
                             <button
                                 key={child.id}
                                 onClick={() => setSelectedChild(child)}
-                                className={`px-6 py-3 rounded-lg font-semibold transition ${
-                                    selectedChild?.id === child.id
-                                        ? 'bg-ivs-navy text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                                className={`px-6 py-3 rounded-lg font-semibold transition ${selectedChild?.id === child.id
+                                        ? 'bg-ivs-blue text-white shadow-md shadow-ivs-blue/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-ivs-blue'
+                                    }`}
                             >
                                 {child.name} ({child.grade})
                             </button>
@@ -168,7 +167,7 @@ export default function ParentPortalDashboard() {
 
             {/* Header Card */}
             {selectedChild && (
-                <div className="bg-gradient-to-r from-ivs-navy to-blue-700 rounded-2xl p-8 text-white shadow-xl">
+                <div className="bg-gradient-to-r from-ivs-blue to-blue-700 rounded-2xl p-8 text-white shadow-xl shadow-ivs-blue/20">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-6">
                             <div className="w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
@@ -196,7 +195,7 @@ export default function ParentPortalDashboard() {
                 <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition">
                     <div className="flex items-center justify-between mb-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                            <Calendar className="w-6 h-6 text-ivs-navy" />
+                            <Calendar className="w-6 h-6 text-ivs-blue" />
                         </div>
                     </div>
                     <h3 className="text-gray-600 text-sm mb-1">Attendance</h3>
@@ -250,7 +249,7 @@ export default function ParentPortalDashboard() {
                 <div className="bg-white rounded-xl shadow-md p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-900">Recent Attendance</h2>
-                        <Link href="/parent-portal/attendance" className="text-ivs-navy font-semibold hover:underline text-sm">
+                        <Link href="/parent-portal/attendance" className="text-ivs-blue font-semibold hover:underline text-sm">
                             View All
                         </Link>
                     </div>
@@ -283,7 +282,7 @@ export default function ParentPortalDashboard() {
                 <div className="bg-white rounded-xl shadow-md p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h2 className="text-xl font-bold text-gray-900">Announcements</h2>
-                        <Link href="/parent-portal/announcements" className="text-ivs-navy font-semibold hover:underline text-sm">
+                        <Link href="/parent-portal/announcements" className="text-ivs-blue font-semibold hover:underline text-sm">
                             View All
                         </Link>
                     </div>
@@ -299,11 +298,10 @@ export default function ParentPortalDashboard() {
                                 <div key={announcement.id} className="p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
                                     <div className="flex items-start justify-between mb-2">
                                         <h3 className="font-semibold text-gray-900 flex-1">{announcement.title}</h3>
-                                        <span className={`px-2 py-1 rounded text-xs font-semibold ${
-                                            announcement.priority === 'URGENT' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
-                                        }`}>
-                  {announcement.type}
-                </span>
+                                        <span className={`px-2 py-1 rounded text-xs font-semibold ${announcement.priority === 'URGENT' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'
+                                            }`}>
+                                            {announcement.type}
+                                        </span>
                                     </div>
                                     <p className="text-sm text-gray-600 line-clamp-2 mb-2">{announcement.content}</p>
                                     <p className="text-xs text-gray-500">
@@ -324,7 +322,7 @@ export default function ParentPortalDashboard() {
                         href="/parent-portal/attendance"
                         className="p-4 bg-blue-50 hover:bg-blue-100 rounded-lg transition text-center group"
                     >
-                        <Calendar className="w-8 h-8 text-ivs-navy mx-auto mb-2 group-hover:scale-110 transition" />
+                        <Calendar className="w-8 h-8 text-ivs-blue mx-auto mb-2 group-hover:scale-110 transition" />
                         <span className="font-semibold text-gray-900">View Attendance</span>
                     </Link>
 

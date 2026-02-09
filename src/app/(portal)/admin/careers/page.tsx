@@ -127,7 +127,7 @@ export default function AdminCareersPage() {
                     >
                         <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
-                    <button className="px-4 py-2 bg-ivs-navy text-white rounded-lg text-sm font-bold hover:bg-ivs-navy/90 flex items-center gap-2 shadow-sm transition-all">
+                    <button className="px-4 py-2 bg-ivs-blue text-white rounded-lg text-sm font-bold hover:bg-ivs-accent flex items-center gap-2 shadow-sm shadow-ivs-blue/20 transition-all">
                         <Download className="w-4 h-4" />
                         <span>Export CSV</span>
                     </button>
@@ -178,7 +178,7 @@ export default function AdminCareersPage() {
                             key={status}
                             onClick={() => setFilterStatus(status)}
                             className={`px-4 py-2 rounded-lg text-sm font-bold whitespace-nowrap transition-all ${filterStatus === status
-                                ? 'bg-ivs-navy text-white shadow-sm'
+                                ? 'bg-ivs-blue text-white shadow-sm shadow-ivs-blue/20'
                                 : 'text-slate-500 hover:bg-slate-100'
                                 }`}
                         >
@@ -275,7 +275,7 @@ export default function AdminCareersPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setSelectedApp(null)}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -363,7 +363,7 @@ export default function AdminCareersPage() {
                                             </button>
                                             <button
                                                 onClick={() => updateStatus(selectedApp.id, 'SHORTLISTED')}
-                                                className="flex-1 py-2.5 bg-ivs-navy text-white rounded-lg font-bold hover:bg-ivs-navy/90 shadow-sm transition-all flex items-center justify-center gap-2"
+                                                className="flex-1 py-2.5 bg-ivs-blue text-white rounded-lg font-bold hover:bg-ivs-accent shadow-sm shadow-ivs-blue/20 transition-all flex items-center justify-center gap-2"
                                             >
                                                 <CheckCircle2 className="w-4 h-4" />
                                                 Shortlist Candidate

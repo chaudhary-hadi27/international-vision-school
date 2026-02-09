@@ -2,6 +2,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     ArrowRight,
@@ -10,7 +11,6 @@ import {
     Award,
     Send,
     CheckCircle2,
-    GraduationCap,
     Briefcase,
     Globe,
     Sparkles,
@@ -63,32 +63,43 @@ export default function CareersPage() {
     return (
         <main className="min-h-screen">
             {/* Hero Section */}
-            <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 bg-ivs-navy overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-10 scale-105 transition-transform duration-[20s] hover:scale-100"></div>
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-ivs-navy/50 to-ivs-navy"></div>
+            <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 bg-white overflow-hidden">
+                {/* Background Image Container with increased visibility */}
+                <div className="absolute inset-0 z-0">
+                    <Image
+                        src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2070&auto=format&fit=crop"
+                        fill
+                        className="object-cover opacity-[0.12] scale-105 transition-transform duration-[20s] hover:scale-100"
+                        alt="Background Educators"
+                        priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/20 via-white/40 to-white"></div>
+                </div>
 
                 <div className="max-w-7xl mx-auto px-4 relative z-10 text-center">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="inline-flex items-center gap-2 px-6 py-2 bg-white/5 backdrop-blur-md border border-white/10 text-ivs-gold rounded-full mb-8 font-bold text-xs uppercase tracking-[0.3em]"
+                        className="inline-flex items-center gap-3 px-6 py-2.5 bg-white border border-ivs-blue/10 text-ivs-blue rounded-full mb-10 font-black text-[10px] uppercase tracking-[0.3em] shadow-sm"
                     >
-                        <Sparkles className="w-4 h-4" />
+                        <div className="relative w-5 h-5 overflow-hidden">
+                            <Image src="/logo/ivs.png" fill className="object-contain" alt="Logo" />
+                        </div>
                         Career Opportunities
                     </motion.div>
                     <motion.h1
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-7xl lg:text-8xl font-heading font-extrabold text-white mb-8 tracking-tight"
+                        className="text-5xl md:text-7xl lg:text-8xl font-heading font-extrabold text-ivs-navy mb-8 tracking-tight"
                     >
-                        Shape the <span className="text-ivs-gold italic">Future</span>
+                        Shape the <span className="text-ivs-blue italic">Future</span>
                     </motion.h1>
                     <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
-                        className="text-xl md:text-2xl text-blue-100/70 max-w-3xl mx-auto font-medium leading-relaxed"
+                        className="text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto font-medium leading-relaxed"
                     >
                         Join a community of prestigious educators at IVS, where we nurture brilliant minds and build tomorrow's leaders.
                     </motion.p>
@@ -101,8 +112,8 @@ export default function CareersPage() {
                     transition={{ delay: 1 }}
                     className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
                 >
-                    <span className="text-[10px] text-white/30 font-bold uppercase tracking-[0.4em]">Scroll</span>
-                    <div className="w-px h-12 bg-gradient-to-b from-ivs-gold to-transparent" />
+                    <span className="text-[10px] text-slate-300 font-bold uppercase tracking-[0.4em]">Scroll</span>
+                    <div className="w-px h-12 bg-gradient-to-b from-ivs-blue to-transparent" />
                 </motion.div>
             </section>
 
@@ -141,9 +152,9 @@ export default function CareersPage() {
                                 initial={{ opacity: 0, y: 30 }}
                                 whileInView={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="premium-card bg-slate-50 p-10 rounded-[3rem] group hover:bg-ivs-navy hover:scale-105 transition-all duration-500 hover:shadow-2xl"
+                                className="premium-card bg-white border border-slate-100 p-10 rounded-[3rem] group hover:border-ivs-blue hover:shadow-2xl transition-all duration-500"
                             >
-                                <div className={`w-16 h-16 ${item.color} rounded-2xl flex items-center justify-center mb-8 group-hover:bg-white/10 group-hover:text-white transition-colors`}>
+                                <div className={`w-16 h-16 bg-white border border-slate-100 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-ivs-blue group-hover:text-white transition-colors shadow-sm`}>
                                     <item.icon className="w-8 h-8" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-ivs-navy mb-4 group-hover:text-white transition-colors">{item.title}</h3>
@@ -155,7 +166,7 @@ export default function CareersPage() {
             </section>
 
             {/* Application Form */}
-            <section className="py-32 bg-slate-50 relative">
+            <section className="py-32 bg-white border-t border-slate-100 relative">
                 <div className="absolute inset-0 bg-white/40 blur-3xl rounded-full translate-x-1/2" />
 
                 <div className="max-w-4xl mx-auto px-4 relative z-10">
@@ -209,7 +220,7 @@ export default function CareersPage() {
                                                 required
                                                 value={formData.fullName}
                                                 onChange={handleChange}
-                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
+                                                className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
                                                 placeholder="e.g. Dr. Salman Ahmed"
                                             />
                                         </div>
@@ -221,7 +232,7 @@ export default function CareersPage() {
                                                 required
                                                 value={formData.email}
                                                 onChange={handleChange}
-                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
+                                                className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
                                                 placeholder="email@example.com"
                                             />
                                         </div>
@@ -235,7 +246,7 @@ export default function CareersPage() {
                                                 required
                                                 value={formData.phone}
                                                 onChange={handleChange}
-                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
+                                                className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
                                                 placeholder="+92 3XX XXXXXXX"
                                             />
                                         </div>
@@ -246,7 +257,7 @@ export default function CareersPage() {
                                                 required
                                                 value={formData.subject}
                                                 onChange={handleChange}
-                                                className="w-full px-6 py-4 bg-slate-50 border-2 border-transparent rounded-2xl focus:bg-white focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
+                                                className="w-full px-6 py-4 bg-white border-2 border-slate-100 rounded-2xl focus:border-ivs-blue outline-none font-bold text-ivs-navy transition-all placeholder:text-slate-300"
                                                 placeholder="e.g. Theoretical Physics, Literature"
                                             />
                                         </div>
@@ -270,7 +281,7 @@ export default function CareersPage() {
                                                     <option value="Other">Specialized Diploma</option>
                                                 </select>
                                                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                                                    <ChevronDown scroll={false} className="w-4 h-4" />
+                                                    <ChevronDown className="w-4 h-4" />
                                                 </div>
                                             </div>
                                         </div>
@@ -291,7 +302,7 @@ export default function CareersPage() {
                                                     <option value="5+">Distinguished (5+ Yrs)</option>
                                                 </select>
                                                 <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
-                                                    <ChevronDown scroll={false} className="w-4 h-4" />
+                                                    <ChevronDown className="w-4 h-4" />
                                                 </div>
                                             </div>
                                         </div>
@@ -304,7 +315,7 @@ export default function CareersPage() {
                                             rows={5}
                                             value={formData.coverLetter}
                                             onChange={handleChange}
-                                            className="w-full px-6 py-5 bg-slate-50 border-2 border-transparent rounded-[2rem] focus:bg-white focus:border-ivs-blue outline-none font-medium text-slate-700 transition-all resize-none leading-relaxed placeholder:text-slate-300"
+                                            className="w-full px-6 py-5 bg-white border-2 border-slate-100 rounded-[2rem] focus:border-ivs-blue outline-none font-medium text-slate-700 transition-all resize-none leading-relaxed placeholder:text-slate-300"
                                             placeholder="Introduce yourself and your vision for teaching..."
                                         />
                                     </div>
@@ -312,7 +323,7 @@ export default function CareersPage() {
                                     <button
                                         type="submit"
                                         disabled={submitting}
-                                        className="w-full py-6 bg-ivs-navy hover:bg-ivs-blue text-white font-bold rounded-[2rem] transition-all shadow-xl shadow-ivs-navy/10 flex items-center justify-center gap-3 disabled:opacity-70 group"
+                                        className="w-full py-6 bg-ivs-blue hover:bg-ivs-accent text-white font-bold rounded-[2rem] transition-all shadow-xl shadow-ivs-blue/10 flex items-center justify-center gap-3 disabled:opacity-70 group"
                                     >
                                         {submitting ? (
                                             <div className="flex items-center gap-3">
@@ -322,7 +333,7 @@ export default function CareersPage() {
                                         ) : (
                                             <>
                                                 <span>Submit Official Application</span>
-                                                <Send className="w-5 h-5 text-ivs-gold group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                                                <Send className="w-5 h-5 text-white/70 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                                             </>
                                         )}
                                     </button>

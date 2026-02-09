@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Calendar, MapPin, ArrowRight, Clock, Bell } from 'lucide-react';
+import { Calendar, MapPin, ArrowRight, Clock, Bell, Sparkles } from 'lucide-react';
 import NextImage from 'next/image';
 import Link from 'next/link';
 
@@ -43,30 +43,30 @@ export default function EventsPage() {
         <main className="min-h-screen pt-32 pb-24 bg-white">
             <div className="container-custom">
                 {/* Header section with decorative glass element */}
-                <div className="relative mb-24 rounded-[3rem] overflow-hidden bg-ivs-navy px-8 py-20 lg:p-24">
-                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ivs-blue/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                <div className="relative mb-24 rounded-[3rem] overflow-hidden bg-white px-8 py-20 lg:p-24 border border-slate-100 shadow-premium">
+                    <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-ivs-blue/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
                     <div className="relative z-10 max-w-3xl">
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 text-white rounded-full mb-8 font-bold text-xs uppercase tracking-widest border border-white/10"
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-ivs-blue/10 text-ivs-blue rounded-full mb-8 font-bold text-xs uppercase tracking-widest border border-ivs-blue/10"
                         >
-                            <Calendar className="w-4 h-4 text-ivs-gold" />
+                            <Calendar className="w-4 h-4 text-ivs-blue" />
                             Events Calendar
                         </motion.div>
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-4xl md:text-5xl lg:text-7xl font-bold text-white mb-8 leading-[1.1]"
+                            className="text-4xl md:text-5xl lg:text-7xl font-bold text-ivs-navy mb-8 leading-[1.1]"
                         >
-                            Where Moments Become <span className="text-gradient from-ivs-gold via-yellow-400 to-ivs-gold">Memories</span>
+                            Where Moments Become <span className="text-ivs-blue">Memories</span>
                         </motion.h1>
                         <motion.p
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-slate-400 text-lg md:text-xl leading-relaxed"
+                            className="text-slate-500 text-lg md:text-xl leading-relaxed font-medium"
                         >
                             Join us in celebrating academic achievements, athletic milestones, and community gatherings that define the IVS spirit.
                         </motion.p>
@@ -149,17 +149,17 @@ export default function EventsPage() {
                     initial={{ opacity: 0, scale: 0.95 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
-                    className="glass-surface-dark rounded-[4rem] p-12 lg:p-24 text-center relative overflow-hidden shadow-2xl"
+                    className="bg-ivs-blue rounded-[4rem] p-12 lg:p-24 text-center relative overflow-hidden shadow-2xl"
                 >
                     <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1511551203524-9a24350a5e83?q=80&w=2070')] bg-cover bg-center opacity-10 animate-pulse duration-[10s]" />
-                    <div className="absolute inset-0 bg-gradient-to-br from-ivs-navy via-ivs-blue/80 to-ivs-navy opacity-95" />
+                    <div className="absolute inset-0 bg-gradient-to-br from-ivs-blue via-ivs-accent/40 to-ivs-blue opacity-95" />
 
                     <div className="relative z-10 max-w-3xl mx-auto">
-                        <div className="w-20 h-20 bg-ivs-gold/20 rounded-3xl flex items-center justify-center mx-auto mb-10 border border-ivs-gold/30">
-                            <Sparkles className="w-10 h-10 text-ivs-gold" />
+                        <div className="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center mx-auto mb-10 border border-white/20">
+                            <Sparkles className="w-10 h-10 text-white" />
                         </div>
                         <h2 className="text-4xl md:text-6xl font-bold text-white mb-8 font-heading tracking-tight">Stay in the <span className="text-ivs-gold italic">Vision</span></h2>
-                        <p className="text-blue-100/70 text-lg md:text-xl mb-12 font-medium leading-relaxed">Join our inner circle to receive exclusive updates on campus developments, student accolades, and prestigious events.</p>
+                        <p className="text-blue-50/90 text-lg md:text-xl mb-12 font-medium leading-relaxed">Join our inner circle to receive exclusive updates on campus developments, student accolades, and prestigious events.</p>
 
                         <form className="flex flex-col sm:flex-row gap-4 p-2 bg-white/5 backdrop-blur-md rounded-[2rem] border border-white/10 max-w-xl mx-auto">
                             <input
@@ -168,7 +168,7 @@ export default function EventsPage() {
                                 className="flex-1 px-8 py-4 bg-transparent text-white placeholder:text-blue-200/30 focus:outline-none font-medium"
                                 required
                             />
-                            <button className="btn-premium !bg-ivs-gold !text-ivs-navy hover:!bg-white px-10 py-4 shadow-xl shadow-ivs-gold/20">
+                            <button className="btn-premium !bg-white !text-ivs-blue hover:!bg-ivs-gold hover:!text-ivs-navy px-10 py-4 shadow-xl hover:shadow-white/20">
                                 Subscribe
                             </button>
                         </form>

@@ -144,7 +144,7 @@ export default function AdminStudentsPage() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={fetchStudents}
-                        className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-navy transition-all shadow-sm"
+                        className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-blue transition-all shadow-sm"
                     >
                         <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
@@ -155,8 +155,8 @@ export default function AdminStudentsPage() {
                         <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
                         Export Data
                     </button>
-                    <Link href="/admin/students/new" className="bg-ivs-navy text-white px-6 py-3 rounded-2xl font-bold hover:bg-ivs-blue transition-all shadow-lg shadow-ivs-navy/20 flex items-center gap-2 whitespace-nowrap">
-                        <Plus className="w-5 h-5 text-ivs-gold" />
+                    <Link href="/admin/students/new" className="bg-ivs-blue text-white px-6 py-3 rounded-2xl font-bold hover:bg-ivs-accent transition-all shadow-lg shadow-ivs-blue/20 flex items-center gap-2 whitespace-nowrap">
+                        <Plus className="w-5 h-5 text-white" />
                         New Student
                     </Link>
                 </div>
@@ -249,7 +249,7 @@ export default function AdminStudentsPage() {
                     <div className="py-32 flex flex-col items-center justify-center">
                         <div className="relative w-12 h-12">
                             <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                            <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                            <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Refreshing Student Bank</p>
                     </div>
@@ -288,7 +288,7 @@ export default function AdminStudentsPage() {
                                     >
                                         <td className="px-8 py-6">
                                             <div className="flex items-center gap-4">
-                                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-ivs-blue to-ivs-navy text-white flex items-center justify-center font-bold text-sm shadow-md shadow-ivs-navy/10 group-hover:scale-110 transition-transform">
+                                                <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-ivs-blue to-blue-700 text-white flex items-center justify-center font-bold text-sm shadow-md shadow-ivs-blue/10 group-hover:scale-110 transition-transform">
                                                     {student.name.charAt(0)}
                                                 </div>
                                                 <div>

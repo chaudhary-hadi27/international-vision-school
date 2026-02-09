@@ -150,7 +150,7 @@ export default function AdminDashboard() {
             <div className="flex flex-col items-center justify-center h-[60vh]">
                 <div className="relative w-16 h-16">
                     <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                    <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                 </div>
                 <p className="mt-6 text-slate-500 font-bold uppercase tracking-widest text-xs">Loading Dashboard Data</p>
             </div>
@@ -374,20 +374,20 @@ export default function AdminDashboard() {
                             Quick Actions
                         </h2>
                         <div className="grid grid-cols-2 gap-3">
-                            <Link href="/admin/students" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
-                                <Users className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                            <Link href="/admin/students" className="p-4 bg-white border border-slate-100 hover:bg-ivs-blue hover:text-white rounded-2xl transition-all duration-300 group text-center hover:border-ivs-blue hover:shadow-lg hover:shadow-ivs-blue/20">
+                                <Users className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-white transition-colors" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Students</span>
                             </Link>
-                            <Link href="/admin/attendance" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
-                                <Calendar className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                            <Link href="/admin/attendance" className="p-4 bg-white border border-slate-100 hover:bg-ivs-blue hover:text-white rounded-2xl transition-all duration-300 group text-center hover:border-ivs-blue hover:shadow-lg hover:shadow-ivs-blue/20">
+                                <Calendar className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-white transition-colors" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Attendance</span>
                             </Link>
-                            <Link href="/admin/reports" className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
-                                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                            <Link href="/admin/reports" className="p-4 bg-white border border-slate-100 hover:bg-ivs-blue hover:text-white rounded-2xl transition-all duration-300 group text-center hover:border-ivs-blue hover:shadow-lg hover:shadow-ivs-blue/20">
+                                <TrendingUp className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-white transition-colors" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Analytics</span>
                             </Link>
-                            <button className="p-4 bg-slate-50 hover:bg-ivs-navy hover:text-white rounded-2xl transition-all duration-300 group text-center border border-transparent hover:border-ivs-navy hover:shadow-lg hover:shadow-ivs-navy/20">
-                                <Search className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-ivs-gold transition-colors" />
+                            <button className="p-4 bg-white border border-slate-100 hover:bg-ivs-blue hover:text-white rounded-2xl transition-all duration-300 group text-center hover:border-ivs-blue hover:shadow-lg hover:shadow-ivs-blue/20">
+                                <Search className="w-6 h-6 mx-auto mb-2 text-ivs-navy group-hover:text-white transition-colors" />
                                 <span className="text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">Search</span>
                             </button>
                         </div>

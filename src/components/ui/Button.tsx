@@ -21,7 +21,7 @@ export default function Button({
 
     const variants = {
         primary: 'btn-premium', // Uses the class from globals.css
-        secondary: 'bg-ivs-surface text-ivs-navy hover:bg-slate-200 border border-slate-200 shadow-sm',
+        secondary: 'bg-white text-ivs-blue border-2 border-ivs-blue hover:bg-ivs-blue-light/50 shadow-sm',
         outline: 'btn-outline-premium',
     }
 

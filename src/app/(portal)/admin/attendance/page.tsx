@@ -199,7 +199,7 @@ export default function AttendancePage() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={exportAttendance}
-                        className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-navy transition-all shadow-sm group"
+                        className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-blue transition-all shadow-sm group"
                         title="Export CSV"
                     >
                         <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
@@ -377,8 +377,8 @@ export default function AttendancePage() {
                                                             key={action.id}
                                                             onClick={() => markAttendance(student.id, action.id)}
                                                             className={`w-8 h-8 rounded-lg flex items-center justify-center transition-all ${attendance[student.id] === action.id
-                                                                    ? `${action.color} text-white shadow-md scale-105`
-                                                                    : `bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600`
+                                                                ? `${action.color} text-white shadow-md scale-105`
+                                                                : `bg-slate-50 text-slate-400 hover:bg-slate-100 hover:text-slate-600`
                                                                 }`}
                                                             title={action.title}
                                                         >

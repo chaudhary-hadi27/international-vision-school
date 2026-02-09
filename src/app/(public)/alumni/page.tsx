@@ -26,26 +26,26 @@ export default function AlumniPage() {
     return (
         <main className="min-h-screen pt-20">
             {/* Hero Section */}
-            <section className="bg-ivs-navy text-white py-20 px-4 text-center">
+            <section className="bg-white text-ivs-navy py-20 px-4 text-center border-b border-slate-100">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     className="max-w-4xl mx-auto"
                 >
-                    <span className="inline-block px-4 py-1 rounded-full bg-white/10 border border-white/20 text-sm font-semibold mb-6">
+                    <span className="inline-block px-4 py-1 rounded-full bg-ivs-blue/10 border border-ivs-blue/20 text-sm font-semibold mb-6 text-ivs-blue">
                         Hall of Fame
                     </span>
                     <h1 className="text-4xl md:text-6xl font-heading font-bold mb-6">
                         Our Pride, Our Legacy
                     </h1>
-                    <p className="text-xl text-blue-100 max-w-2xl mx-auto">
+                    <p className="text-xl text-slate-600 max-w-2xl mx-auto font-medium">
                         Discover the inspiring journeys of IVS alumni who are making their mark on the world.
                     </p>
                 </motion.div>
             </section>
 
             {/* Stories Grid */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white">
                 <div className="max-w-7xl mx-auto">
                     {loading ? (
                         <div className="text-center py-20">Loading stories...</div>
@@ -61,11 +61,11 @@ export default function AlumniPage() {
                                     className="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-shadow p-6 md:p-8 flex flex-col h-full"
                                 >
                                     <div className="flex items-center gap-4 mb-6">
-                                        <div className="w-16 h-16 rounded-full bg-gray-200 overflow-hidden">
+                                        <div className="w-16 h-16 rounded-full bg-ivs-blue-light/20 overflow-hidden">
                                             {story.photoUrl ? (
                                                 <img src={story.photoUrl} alt={story.studentName} className="w-full h-full object-cover" />
                                             ) : (
-                                                <div className="w-full h-full flex items-center justify-center bg-ivs-navy text-white text-xl font-bold">
+                                                <div className="w-full h-full flex items-center justify-center bg-ivs-blue text-white text-xl font-bold">
                                                     {story.studentName.charAt(0)}
                                                 </div>
                                             )}
@@ -79,7 +79,7 @@ export default function AlumniPage() {
                                     <div className="mb-6 flex-grow">
                                         <div className="flex gap-2 mb-4">
                                             {story.batch && (
-                                                <span className="px-3 py-1 bg-gray-100 rounded-full text-xs font-bold text-gray-600">
+                                                <span className="px-3 py-1 bg-white border border-ivs-blue-light/20 rounded-full text-xs font-bold text-gray-600">
                                                     Batch {story.batch}
                                                 </span>
                                             )}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, type FormEvent } from 'react'
+import Image from 'next/image'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { GraduationCap, Loader2, Eye, EyeOff, AlertCircle } from 'lucide-react'
@@ -83,13 +84,19 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-white flex items-center justify-center p-4">
             <div className="max-w-md w-full">
                 {/* Logo */}
                 <div className="text-center mb-8">
                     <Link href="/">
-                        <div className="w-20 h-20 bg-gradient-to-br from-blue-900 to-blue-700 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl cursor-pointer hover:scale-105 transition">
-                            <GraduationCap className="w-10 h-10 text-white" />
+                        <div className="relative w-24 h-24 bg-white rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-xl cursor-pointer hover:scale-105 transition-all duration-300 border border-slate-100 overflow-hidden p-2">
+                            <Image
+                                src="/logo/ivs.png"
+                                fill
+                                className="object-contain p-2"
+                                alt="IVS Logo"
+                                priority
+                            />
                         </div>
                     </Link>
                     <h1 className="text-3xl font-bold text-gray-900">Welcome to IVS</h1>
@@ -97,28 +104,26 @@ export default function LoginPage() {
                 </div>
 
                 {/* Login Form */}
-                <div className="bg-white rounded-2xl shadow-2xl p-8">
+                <div className="bg-white rounded-2xl shadow-xl border border-ivs-blue-light/20 p-8">
                     {/* Role Selector */}
                     <div className="grid grid-cols-2 gap-3 mb-6">
                         <button
                             type="button"
                             onClick={() => setRole('PARENT')}
-                            className={`py-3 rounded-lg font-semibold transition ${
-                                role === 'PARENT'
-                                    ? 'bg-blue-900 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
+                            className={`py-3 rounded-lg font-semibold transition border-2 ${role === 'PARENT'
+                                ? 'bg-ivs-blue text-white border-ivs-blue shadow-lg shadow-ivs-blue/20'
+                                : 'bg-white text-gray-700 border-ivs-blue-light/20 hover:border-ivs-blue'
+                                }`}
                         >
                             Parent
                         </button>
                         <button
                             type="button"
                             onClick={() => setRole('ADMIN')}
-                            className={`py-3 rounded-lg font-semibold transition ${
-                                role === 'ADMIN'
-                                    ? 'bg-blue-900 text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
+                            className={`py-3 rounded-lg font-semibold transition border-2 ${role === 'ADMIN'
+                                ? 'bg-ivs-blue text-white border-ivs-blue shadow-lg shadow-ivs-blue/20'
+                                : 'bg-white text-gray-700 border-ivs-blue-light/20 hover:border-ivs-blue'
+                                }`}
                         >
                             Admin
                         </button>
@@ -145,7 +150,7 @@ export default function LoginPage() {
                                 required
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
+                                className="w-full px-4 py-3 border-2 border-ivs-blue-light/20 rounded-lg focus:border-ivs-blue focus:outline-none transition bg-white"
                                 placeholder="your.email@example.com"
                                 disabled={loading}
                                 autoComplete="email"
@@ -165,7 +170,7 @@ export default function LoginPage() {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition pr-12"
+                                    className="w-full px-4 py-3 border-2 border-ivs-blue-light/20 rounded-lg focus:border-ivs-blue focus:outline-none transition pr-12 bg-white"
                                     placeholder="••••••••"
                                     disabled={loading}
                                     autoComplete="current-password"
@@ -189,11 +194,11 @@ export default function LoginPage() {
                                     type="checkbox"
                                     checked={rememberMe}
                                     onChange={(e) => setRememberMe(e.target.checked)}
-                                    className="w-4 h-4 text-blue-900 rounded border-gray-300 focus:ring-blue-900"
+                                    className="w-4 h-4 text-ivs-blue rounded border-gray-300 focus:ring-ivs-blue"
                                 />
                                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
                             </label>
-                            <Link href="/forgot-password" className="text-sm text-blue-900 hover:underline font-semibold">
+                            <Link href="/forgot-password" className="text-sm text-ivs-blue hover:underline font-semibold">
                                 Forgot Password?
                             </Link>
                         </div>
@@ -202,7 +207,7 @@ export default function LoginPage() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-blue-900 text-white rounded-lg font-bold text-lg hover:bg-blue-800 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                            className="w-full py-4 bg-ivs-blue text-white rounded-lg font-bold text-lg hover:bg-ivs-accent transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 shadow-lg shadow-ivs-blue/20"
                         >
                             {loading ? (
                                 <>
@@ -218,7 +223,7 @@ export default function LoginPage() {
                     {/* Admission Link */}
                     <div className="mt-6 text-center text-sm text-gray-600">
                         Don't have an account?{' '}
-                        <Link href="/admission-portal" className="text-blue-900 font-semibold hover:underline">
+                        <Link href="/admission-portal" className="text-ivs-blue font-semibold hover:underline">
                             Apply for Admission
                         </Link>
                     </div>

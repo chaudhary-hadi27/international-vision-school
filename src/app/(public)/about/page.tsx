@@ -6,7 +6,7 @@ export default function AboutPage() {
         <main className="pt-20">
 
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-slate-50 to-blue-50 py-20 px-4">
+            <section className="bg-white py-24 px-4 border-b border-slate-100">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-5xl font-bold text-gray-900 mb-6">About IVS</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -46,7 +46,7 @@ export default function AboutPage() {
                     <div className="grid md:grid-cols-2 gap-12">
 
                         {/* Vision */}
-                        <div className="bg-blue-50 rounded-3xl p-10">
+                        <div className="bg-white rounded-3xl p-10 border border-slate-100 shadow-sm border-l-4 border-l-ivs-blue">
                             <div className="w-16 h-16 bg-blue-900 rounded-2xl flex items-center justify-center mb-6">
                                 <ChartNoAxesCombined className="w-8 h-8 text-white" />
                             </div>
@@ -58,7 +58,7 @@ export default function AboutPage() {
                         </div>
 
                         {/* Mission */}
-                        <div className="bg-green-50 rounded-3xl p-10">
+                        <div className="bg-white rounded-3xl p-10 border border-slate-100 shadow-sm border-l-4 border-l-ivs-green">
                             <div className="w-16 h-16 bg-green-700 rounded-2xl flex items-center justify-center mb-6">
                                 <ChartColumn className="w-8 h-8 text-white" />
                             </div>
@@ -74,7 +74,7 @@ export default function AboutPage() {
             </section>
 
             {/* Principal's Message */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-slate-100">
                 <div className="max-w-5xl mx-auto">
                     <div className="bg-white rounded-3xl shadow-xl overflow-hidden">
                         <div className="grid md:grid-cols-3">
@@ -126,7 +126,7 @@ export default function AboutPage() {
                     <div className="grid md:grid-cols-4 gap-8">
 
                         <div className="text-center">
-                            <div className="w-20 h-20 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <div className="w-20 h-20 bg-ivs-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <Award className="w-10 h-10 text-blue-900" />
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">Excellence</h3>
@@ -136,7 +136,7 @@ export default function AboutPage() {
                         </div>
 
                         <div className="text-center">
-                            <div className="w-20 h-20 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <div className="w-20 h-20 bg-ivs-green/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <Heart className="w-10 h-10 text-green-700" />
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">Care</h3>
@@ -146,7 +146,7 @@ export default function AboutPage() {
                         </div>
 
                         <div className="text-center">
-                            <div className="w-20 h-20 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <div className="w-20 h-20 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <Lightbulb className="w-10 h-10 text-purple-700" />
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">Innovation</h3>
@@ -156,7 +156,7 @@ export default function AboutPage() {
                         </div>
 
                         <div className="text-center">
-                            <div className="w-20 h-20 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                            <div className="w-20 h-20 bg-ivs-gold/20 rounded-2xl flex items-center justify-center mx-auto mb-6">
                                 <Shield className="w-10 h-10 text-amber-700" />
                             </div>
                             <h3 className="text-xl font-bold text-gray-900 mb-3">Integrity</h3>

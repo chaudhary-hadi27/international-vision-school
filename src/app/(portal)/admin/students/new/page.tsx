@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { motion } from 'framer-motion'
 import { Upload, ChevronRight, Save, X } from 'lucide-react'
 import Link from 'next/link'
-import { uploadImage } from '@/lib/cloudinary'
+import { uploadImageAction } from '@/lib/actions/cloudinary-actions'
 
 export default function NewStudentPage() {
     const router = useRouter()
@@ -32,7 +32,7 @@ export default function NewStudentPage() {
         reader.readAsDataURL(file)
         reader.onloadend = async () => {
             const base64data = reader.result as string
-            const result = await uploadImage(base64data, 'ivs-students')
+            const result = await uploadImageAction(base64data, 'ivs-students')
             if (result.success && result.url) {
                 setFormData(prev => ({ ...prev, photoUrl: result.url! }))
             } else {

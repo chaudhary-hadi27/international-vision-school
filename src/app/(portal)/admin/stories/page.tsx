@@ -105,7 +105,7 @@ export default function AdminStoriesPage() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={fetchStories}
-                        className="w-10 h-10 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-ivs-navy hover:bg-slate-50 transition-all flex items-center justify-center"
+                        className="w-10 h-10 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-ivs-blue hover:bg-slate-50 transition-all flex items-center justify-center"
                     >
                         <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
@@ -147,7 +147,7 @@ export default function AdminStoriesPage() {
                     <div className="py-24 flex flex-col items-center justify-center bg-white rounded-xl border border-slate-200">
                         <div className="relative w-10 h-10">
                             <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                            <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                            <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Polishing Hall of Fame...</p>
                     </div>
@@ -225,7 +225,7 @@ export default function AdminStoriesPage() {
                                         <span className="text-sm font-bold text-ivs-navy">Class of {story.batch || 'TBD'}</span>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-ivs-navy hover:bg-slate-50 transition-all">
+                                        <button className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-ivs-blue hover:bg-slate-50 transition-all">
                                             <Edit className="w-4 h-4" />
                                         </button>
                                         <button className="p-2 bg-white border border-slate-200 rounded-lg text-slate-400 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 transition-all">
@@ -248,7 +248,7 @@ export default function AdminStoriesPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setIsFormOpen(false)}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -268,7 +268,7 @@ export default function AdminStoriesPage() {
                                 </div>
                                 <button
                                     onClick={() => setIsFormOpen(false)}
-                                    className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 hover:text-ivs-navy transition-all hover:bg-slate-100"
+                                    className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 hover:text-ivs-blue transition-all hover:bg-slate-100"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -389,7 +389,7 @@ export default function AdminStoriesPage() {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-[2] py-2.5 bg-ivs-navy text-white rounded-lg font-bold hover:bg-ivs-blue shadow-sm transition-all flex items-center justify-center gap-2"
+                                        className="flex-[2] py-2.5 bg-ivs-blue text-white rounded-lg font-bold hover:bg-ivs-accent shadow-sm shadow-ivs-blue/20 transition-all flex items-center justify-center gap-2"
                                     >
                                         <Sparkles className="w-4 h-4 text-ivs-gold" />
                                         Commit to History

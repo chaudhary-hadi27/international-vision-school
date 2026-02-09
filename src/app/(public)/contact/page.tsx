@@ -40,7 +40,7 @@ export default function ContactPage() {
         <main className="pt-20">
 
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-slate-50 to-blue-50 py-20 px-4">
+            <section className="bg-white py-24 px-4 border-b border-slate-100">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-5xl font-bold text-ivs-navy mb-6">Contact Us</h1>
                     <p className="text-xl text-gray-700 max-w-3xl mx-auto">
@@ -78,7 +78,7 @@ export default function ContactPage() {
                         </div>
 
                         <div className="premium-card rounded-3xl p-8 text-center group">
-                            <div className="w-16 h-16 bg-ivs-navy/5 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-ivs-navy group-hover:text-white">
+                            <div className="w-16 h-16 bg-ivs-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-colors group-hover:bg-ivs-blue group-hover:text-white">
                                 <MapPin className="w-8 h-8" />
                             </div>
                             <h3 className="text-xl font-bold text-ivs-navy mb-2">Location</h3>
@@ -104,7 +104,7 @@ export default function ContactPage() {
             </section>
 
             {/* Contact Form & Info */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-slate-100">
                 <div className="max-w-7xl mx-auto">
                     <div className="grid md:grid-cols-2 gap-12">
 
@@ -127,7 +127,7 @@ export default function ContactPage() {
                                         name="name"
                                         value={formData.name}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-ivs-blue focus:outline-none transition"
                                         placeholder="Enter your full name"
                                     />
                                 </div>
@@ -139,7 +139,7 @@ export default function ContactPage() {
                                         name="email"
                                         value={formData.email}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-ivs-blue focus:outline-none transition"
                                         placeholder="your.email@example.com"
                                     />
                                 </div>
@@ -151,7 +151,7 @@ export default function ContactPage() {
                                         name="phone"
                                         value={formData.phone}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-ivs-blue focus:outline-none transition"
                                         placeholder="+92 3XX XXXXXXX"
                                     />
                                 </div>
@@ -162,7 +162,7 @@ export default function ContactPage() {
                                         name="subject"
                                         value={formData.subject}
                                         onChange={handleChange}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition"
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-ivs-blue focus:outline-none transition"
                                     >
                                         <option value="">Select a subject</option>
                                         <option value="admission">Admission Inquiry</option>
@@ -180,14 +180,14 @@ export default function ContactPage() {
                                         value={formData.message}
                                         onChange={handleChange}
                                         rows={5}
-                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-blue-900 focus:outline-none transition resize-none"
+                                        className="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-ivs-blue focus:outline-none transition resize-none"
                                         placeholder="Tell us how we can help you..."
                                     ></textarea>
                                 </div>
 
                                 <button
                                     onClick={handleSubmit}
-                                    className="btn-premium w-full !bg-ivs-blue hover:!bg-ivs-navy hover:shadow-ivs-blue/20"
+                                    className="btn-premium w-full !bg-ivs-blue hover:!bg-ivs-accent hover:shadow-ivs-blue/20"
                                 >
                                     <Send className="w-5 h-5" />
                                     Send Message
@@ -199,7 +199,7 @@ export default function ContactPage() {
                         <div className="space-y-8">
 
                             {/* Quick Contact */}
-                            <div className="bg-gradient-to-br from-blue-900 to-blue-700 rounded-3xl p-10 text-white">
+                            <div className="bg-gradient-to-br from-ivs-blue to-blue-700 rounded-3xl p-10 text-white shadow-premium">
                                 <h2 className="text-3xl font-bold mb-6">Quick Contact</h2>
                                 <div className="space-y-6">
 
@@ -291,7 +291,7 @@ export default function ContactPage() {
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">Find Us on the Map</h2>
                     <p className="text-center text-gray-600 mb-12">Located in the heart of Lahore, easily accessible from all areas</p>
 
-                    <div className="bg-gray-200 rounded-3xl overflow-hidden shadow-xl h-96 flex items-center justify-center">
+                    <div className="bg-ivs-blue-light/10 rounded-3xl overflow-hidden shadow-xl h-96 flex items-center justify-center border border-ivs-blue-light/20">
                         <div className="text-center">
                             <MapPin className="w-16 h-16 text-gray-400 mx-auto mb-4" />
                             <p className="text-gray-600">Map integration placeholder</p>
@@ -302,7 +302,7 @@ export default function ContactPage() {
             </section>
 
             {/* FAQ Section */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-slate-100">
                 <div className="max-w-4xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-4">Frequently Asked Questions</h2>
                     <p className="text-center text-gray-600 mb-12">Quick answers to common questions</p>
@@ -310,7 +310,7 @@ export default function ContactPage() {
                     <div className="space-y-4">
 
                         <details className="bg-white rounded-xl shadow-md overflow-hidden">
-                            <summary className="px-8 py-6 font-semibold text-gray-900 cursor-pointer hover:bg-gray-50 transition">
+                            <summary className="px-8 py-6 font-semibold text-gray-900 cursor-pointer hover:bg-ivs-blue-light/20 transition">
                                 What are the admission requirements?
                             </summary>
                             <div className="px-8 pb-6 text-gray-600">
@@ -354,7 +354,7 @@ export default function ContactPage() {
             </section>
 
             {/* Call to Action */}
-            <section className="py-24 sm:py-32 lg:py-40 relative overflow-hidden bg-slate-50">
+            <section className="py-24 sm:py-32 lg:py-40 relative overflow-hidden bg-white border-t border-slate-100">
                 <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-ivs-blue/20 to-transparent" />
                 <div className="container-custom relative z-10 text-center">
                     <h2 className="text-4xl lg:text-7xl font-bold text-ivs-navy mb-8 font-heading tracking-tight">Still Have <span className="text-ivs-blue">Questions?</span></h2>

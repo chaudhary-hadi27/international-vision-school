@@ -89,8 +89,8 @@ export default function GalleryPage() {
                             key={cat}
                             onClick={() => setSelectedCategory(cat)}
                             className={`px-10 py-4 rounded-full text-sm font-bold transition-all duration-300 active:scale-95 ${selectedCategory === cat
-                                ? 'bg-ivs-navy text-white shadow-2xl shadow-ivs-navy/20 scale-105'
-                                : 'bg-white text-slate-400 hover:text-ivs-navy border border-slate-100 hover:border-ivs-blue shadow-sm'
+                                ? 'bg-ivs-blue text-white shadow-2xl shadow-ivs-blue/20 scale-105'
+                                : 'bg-white text-slate-400 hover:text-ivs-blue border border-slate-100 hover:border-ivs-blue shadow-sm'
                                 }`}
                         >
                             {cat}
@@ -110,7 +110,7 @@ export default function GalleryPage() {
                         >
                             <div className="relative w-16 h-16">
                                 <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                                <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                                <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                             </div>
                             <p className="mt-6 text-slate-400 font-bold uppercase tracking-[0.3em] text-[10px]">Processing Visual Archive...</p>
                         </motion.div>
@@ -119,7 +119,7 @@ export default function GalleryPage() {
                             key="empty"
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="text-center py-32 bg-slate-50 rounded-[3rem] border border-slate-100"
+                            className="text-center py-32 bg-white rounded-[3rem] border border-slate-200 shadow-sm"
                         >
                             <div className="w-24 h-24 bg-white rounded-[2rem] flex items-center justify-center mx-auto mb-6 shadow-sm">
                                 <ImageIcon className="w-10 h-10 text-slate-200" />
@@ -151,7 +151,7 @@ export default function GalleryPage() {
                                             fill
                                             className="object-cover transition-transform duration-1000 group-hover:scale-110"
                                         />
-                                        <div className="absolute inset-0 bg-gradient-to-t from-ivs-navy/90 via-ivs-navy/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
+                                        <div className="absolute inset-0 bg-gradient-to-t from-ivs-blue/90 via-ivs-blue/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-10">
                                             <motion.div
                                                 initial={{ y: 20, opacity: 0 }}
                                                 whileInView={{ y: 0, opacity: 1 }}
@@ -181,7 +181,7 @@ export default function GalleryPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-ivs-navy/98 backdrop-blur-2xl"
+                        className="fixed inset-0 z-[200] flex items-center justify-center p-4 md:p-12 bg-slate-900/95 backdrop-blur-2xl"
                         onClick={() => setSelectedImage(null)}
                     >
                         <motion.button
@@ -197,7 +197,7 @@ export default function GalleryPage() {
                             initial={{ scale: 0.9, opacity: 0, y: 30 }}
                             animate={{ scale: 1, opacity: 1, y: 0 }}
                             exit={{ scale: 0.9, opacity: 0, y: 30 }}
-                            className="relative w-full max-w-6xl aspect-[16/10] md:aspect-video overflow-hidden rounded-[3rem] md:rounded-[4rem] shadow-premium-xl bg-black border border-white/10"
+                            className="relative w-full max-w-6xl aspect-[16/10] md:aspect-video overflow-hidden rounded-[3rem] md:rounded-[4rem] shadow-premium-xl bg-slate-900 border border-white/10"
                             onClick={(e) => e.stopPropagation()}
                         >
                             <NextImage
@@ -206,7 +206,7 @@ export default function GalleryPage() {
                                 fill
                                 className="object-contain"
                             />
-                            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 bg-gradient-to-t from-black/90 via-black/40 to-transparent">
+                            <div className="absolute bottom-0 left-0 right-0 p-8 md:p-16 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent">
                                 <motion.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}

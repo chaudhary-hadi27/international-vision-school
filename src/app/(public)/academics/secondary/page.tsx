@@ -5,7 +5,7 @@ export default function SecondaryPage() {
     return (
         <main className="pt-20">
 
-            <div className="bg-gray-50 py-4 px-4">
+            <div className="bg-white py-4 px-4 border-b border-ivs-blue-light/20">
                 <div className="max-w-7xl mx-auto">
                     <Link href="/academics" className="inline-flex items-center gap-2 text-blue-900 hover:text-blue-700 font-semibold">
                         <ArrowLeft className="w-5 h-5" />
@@ -15,7 +15,8 @@ export default function SecondaryPage() {
             </div>
 
             {/* Hero */}
-            <section className="bg-gradient-to-br from-blue-50 to-slate-100 py-20 px-4">
+            <section className="bg-white py-20 px-4 relative overflow-hidden">
+                <div className="absolute inset-0 bg-ivs-blue-light/5"></div>
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="w-24 h-24 bg-blue-900 rounded-3xl flex items-center justify-center mx-auto mb-6">
                         <Award className="w-12 h-12 text-white" />
@@ -87,7 +88,7 @@ export default function SecondaryPage() {
                             </ul>
                         </div>
 
-                        <div className="bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl p-8 shadow-lg">
+                        <div className="bg-gradient-to-br from-white to-ivs-blue-light/20 border border-slate-100 rounded-2xl p-8 shadow-lg">
                             <div className="w-16 h-16 bg-slate-900 rounded-xl flex items-center justify-center mb-6">
                                 <BookOpen className="w-8 h-8 text-white" />
                             </div>
@@ -121,7 +122,7 @@ export default function SecondaryPage() {
             </section>
 
             {/* Core Subjects */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-ivs-blue-light/20">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Compulsory Subjects</h2>
 

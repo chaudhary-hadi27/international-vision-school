@@ -100,7 +100,7 @@ export default function ParentAnnouncementsPage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading announcements...</p>
                 </div>
             </div>
@@ -123,11 +123,10 @@ export default function ParentAnnouncementsPage() {
                             <button
                                 key={child.id}
                                 onClick={() => setSelectedChild(child)}
-                                className={`px-6 py-3 rounded-lg font-semibold transition ${
-                                    selectedChild?.id === child.id
-                                        ? 'bg-ivs-navy text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                                className={`px-6 py-3 rounded-lg font-semibold transition ${selectedChild?.id === child.id
+                                        ? 'bg-ivs-blue text-white shadow-md shadow-ivs-blue/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-ivs-blue'
+                                    }`}
                             >
                                 {child.name} ({child.grade})
                             </button>
@@ -147,11 +146,10 @@ export default function ParentAnnouncementsPage() {
                         <button
                             key={type}
                             onClick={() => setTypeFilter(type)}
-                            className={`px-4 py-2 rounded-lg font-semibold transition ${
-                                typeFilter === type
-                                    ? 'bg-ivs-navy text-white'
-                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                            }`}
+                            className={`px-4 py-2 rounded-lg font-semibold transition ${typeFilter === type
+                                    ? 'bg-ivs-blue text-white shadow-md shadow-ivs-blue/20'
+                                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-ivs-blue'
+                                }`}
                         >
                             {type === 'all' ? 'All' : type}
                         </button>
@@ -163,7 +161,7 @@ export default function ParentAnnouncementsPage() {
             <div className="grid md:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-6 shadow-md">
                     <div className="flex items-center gap-3 mb-2">
-                        <Bell className="w-5 h-5 text-ivs-navy" />
+                        <Bell className="w-5 h-5 text-ivs-blue" />
                         <span className="text-gray-600 text-sm">Total</span>
                     </div>
                     <p className="text-3xl font-bold text-gray-900">{announcements.length}</p>
@@ -215,11 +213,11 @@ export default function ParentAnnouncementsPage() {
                                     <div className="flex items-center gap-3 mb-2">
                                         <h3 className="text-2xl font-bold text-gray-900">{announcement.title}</h3>
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getTypeColor(announcement.type)}`}>
-                  {announcement.type}
-                </span>
+                                            {announcement.type}
+                                        </span>
                                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getPriorityColor(announcement.priority)}`}>
-                  {announcement.priority}
-                </span>
+                                            {announcement.priority}
+                                        </span>
                                     </div>
                                     <p className="text-gray-700 text-lg leading-relaxed mb-4">{announcement.content}</p>
                                     <div className="flex flex-wrap gap-4 text-sm text-gray-600">

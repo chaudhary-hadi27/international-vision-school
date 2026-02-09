@@ -6,7 +6,7 @@ export default function AcademicsPage() {
         <main className="pt-20">
 
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-slate-50 to-blue-50 py-20 px-4">
+            <section className="bg-white py-24 px-4 border-b border-ivs-blue-light/20">
                 <div className="max-w-7xl mx-auto text-center">
                     <h1 className="text-5xl font-bold text-gray-900 mb-6">Our Academic Programs</h1>
                     <p className="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -110,14 +110,14 @@ export default function AcademicsPage() {
             </section>
 
             {/* Curriculum Features */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-ivs-blue-light/20">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">Our Curriculum Features</h2>
 
                     <div className="grid md:grid-cols-3 gap-8">
 
                         <div className="bg-white rounded-2xl p-8 shadow-lg">
-                            <div className="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-16 h-16 bg-ivs-blue/10 rounded-xl flex items-center justify-center mb-6">
                                 <Globe className="w-8 h-8 text-blue-900" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">Cambridge System</h3>
@@ -142,7 +142,7 @@ export default function AcademicsPage() {
                         </div>
 
                         <div className="bg-white rounded-2xl p-8 shadow-lg">
-                            <div className="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-16 h-16 bg-ivs-green/10 rounded-xl flex items-center justify-center mb-6">
                                 <BookOpen className="w-8 h-8 text-green-700" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">Local Board</h3>
@@ -167,7 +167,7 @@ export default function AcademicsPage() {
                         </div>
 
                         <div className="bg-white rounded-2xl p-8 shadow-lg">
-                            <div className="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
+                            <div className="w-16 h-16 bg-violet-100 rounded-xl flex items-center justify-center mb-6">
                                 <Award className="w-8 h-8 text-purple-700" />
                             </div>
                             <h3 className="text-2xl font-bold text-gray-900 mb-4">Islamic Studies</h3>
@@ -202,49 +202,49 @@ export default function AcademicsPage() {
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
 
-                        <div className="bg-blue-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">📚</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">English</h3>
                             <p className="text-sm text-gray-600">Reading, Writing, Grammar, Literature</p>
                         </div>
 
-                        <div className="bg-green-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">🔢</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Mathematics</h3>
                             <p className="text-sm text-gray-600">Number Skills, Problem Solving, Logic</p>
                         </div>
 
-                        <div className="bg-purple-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">🔬</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Science</h3>
                             <p className="text-sm text-gray-600">Physics, Chemistry, Biology, Experiments</p>
                         </div>
 
-                        <div className="bg-amber-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">📖</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Urdu</h3>
                             <p className="text-sm text-gray-600">Reading, Writing, Literature, Poetry</p>
                         </div>
 
-                        <div className="bg-pink-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">🕌</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Islamiyat</h3>
                             <p className="text-sm text-gray-600">Quran, Hadith, Islamic History</p>
                         </div>
 
-                        <div className="bg-indigo-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">🌍</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Social Studies</h3>
                             <p className="text-sm text-gray-600">History, Geography, Pakistan Studies</p>
                         </div>
 
-                        <div className="bg-cyan-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">💻</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Computer</h3>
                             <p className="text-sm text-gray-600">ICT, Coding, Digital Literacy</p>
                         </div>
 
-                        <div className="bg-orange-50 rounded-2xl p-6 text-center">
+                        <div className="bg-white rounded-2xl p-6 text-center border border-ivs-blue-light/20 shadow-sm">
                             <div className="text-3xl mb-3">🎨</div>
                             <h3 className="text-xl font-bold text-gray-900 mb-2">Arts & Crafts</h3>
                             <p className="text-sm text-gray-600">Drawing, Painting, Creative Activities</p>
@@ -284,7 +284,7 @@ export default function AcademicsPage() {
             </section>
 
             {/* School Timings */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-ivs-blue-light/20">
                 <div className="max-w-5xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">School Timings</h2>
 
@@ -292,7 +292,7 @@ export default function AcademicsPage() {
 
                         <div className="bg-white rounded-2xl p-8 shadow-lg">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
+                                <div className="w-12 h-12 bg-ivs-blue/10 rounded-xl flex items-center justify-center">
                                     <Clock className="w-6 h-6 text-blue-900" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-gray-900">Playgroup to KG</h3>
@@ -311,7 +311,7 @@ export default function AcademicsPage() {
 
                         <div className="bg-white rounded-2xl p-8 shadow-lg">
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
+                                <div className="w-12 h-12 bg-ivs-green/10 rounded-xl flex items-center justify-center">
                                     <Clock className="w-6 h-6 text-green-700" />
                                 </div>
                                 <h3 className="text-2xl font-bold text-gray-900">Grade 1 to 10</h3>
@@ -333,7 +333,7 @@ export default function AcademicsPage() {
 
                     </div>
 
-                    <div className="mt-8 bg-blue-50 rounded-2xl p-6 text-center">
+                    <div className="mt-8 bg-ivs-blue/10 rounded-2xl p-6 text-center">
                         <Calendar className="w-12 h-12 text-blue-900 mx-auto mb-4" />
                         <p className="text-gray-700">
                             <span className="font-semibold">Academic Year:</span> March to February

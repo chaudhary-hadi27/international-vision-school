@@ -6,7 +6,7 @@ export default function PlaygroupPage() {
         <main className="pt-20">
 
             {/* Back Button */}
-            <div className="bg-gray-50 py-4 px-4">
+            <div className="bg-white py-4 px-4 border-b border-pink-100">
                 <div className="max-w-7xl mx-auto">
                     <Link href="/academics" className="inline-flex items-center gap-2 text-blue-900 hover:text-blue-700 font-semibold">
                         <ArrowLeft className="w-5 h-5" />
@@ -47,7 +47,7 @@ export default function PlaygroupPage() {
             </section>
 
             {/* Key Features */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white">
                 <div className="max-w-7xl mx-auto">
                     <h2 className="text-4xl font-bold text-center text-gray-900 mb-16">What We Offer</h2>
 

@@ -143,28 +143,28 @@ export default function AdmissionsPage() {
                 <div className="max-w-7xl mx-auto px-4">
                     <div className="grid md:grid-cols-4 gap-8 text-center">
                         <div>
-                            <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <div className="w-16 h-16 bg-ivs-blue/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <Clock className="w-8 h-8 text-blue-900" />
                             </div>
                             <div className="text-3xl font-bold text-blue-900 mb-2">24/7</div>
                             <div className="text-gray-600">Online Applications</div>
                         </div>
                         <div>
-                            <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <div className="w-16 h-16 bg-ivs-green/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <Users className="w-8 h-8 text-green-700" />
                             </div>
                             <div className="text-3xl font-bold text-green-700 mb-2">25</div>
                             <div className="text-gray-600">Students Per Class</div>
                         </div>
                         <div>
-                            <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <div className="w-16 h-16 bg-violet-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <Shield className="w-8 h-8 text-purple-700" />
                             </div>
                             <div className="text-3xl font-bold text-purple-700 mb-2">100%</div>
                             <div className="text-gray-600">Safe Environment</div>
                         </div>
                         <div>
-                            <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                            <div className="w-16 h-16 bg-ivs-gold/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
                                 <GraduationCap className="w-8 h-8 text-amber-700" />
                             </div>
                             <div className="text-3xl font-bold text-amber-700 mb-2">98%</div>
@@ -175,7 +175,7 @@ export default function AdmissionsPage() {
             </section>
 
             {/* Admission Process */}
-            <section className="py-20 px-4 bg-gray-50">
+            <section className="py-20 px-4 bg-white border-t border-b border-slate-100">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl font-bold text-gray-900 mb-4">Simple Admission Process</h2>
@@ -195,7 +195,7 @@ export default function AdmissionsPage() {
                             return (
                                 <div key={index} className="relative">
                                     {index < admissionProcess.length - 1 && (
-                                        <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-gray-300" />
+                                        <div className="hidden md:block absolute top-12 left-[60%] w-[80%] h-0.5 bg-ivs-blue-light/30" />
                                     )}
                                     <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition relative z-10">
                                         <div className={`w-16 h-16 ${colors[item.color as keyof typeof colors]} rounded-2xl flex items-center justify-center mb-6`}>
@@ -224,7 +224,7 @@ export default function AdmissionsPage() {
                         {requirements.map((req, index) => {
                             const Icon = req.icon
                             return (
-                                <div key={index} className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 shadow-lg border border-gray-100">
+                                <div key={index} className="bg-white rounded-2xl p-8 shadow-lg border border-slate-100">
                                     <div className="w-16 h-16 bg-blue-900 rounded-2xl flex items-center justify-center mb-6">
                                         <Icon className="w-8 h-8 text-white" />
                                     </div>
@@ -245,7 +245,7 @@ export default function AdmissionsPage() {
             </section>
 
             {/* Fee Structure */}
-            <section id="fee-section" className="py-20 px-4 bg-gray-50">
+            <section id="fee-section" className="py-20 px-4 bg-white border-t border-b border-slate-100">
                 <div className="max-w-5xl mx-auto">
                     <div className="text-center mb-12">
                         <h2 className="text-4xl font-bold text-gray-900 mb-4">Fee Structure 2025-26</h2>
@@ -273,12 +273,12 @@ export default function AdmissionsPage() {
                         </div>
 
                         {selectedGrade && (
-                            <div className="bg-blue-50 rounded-2xl p-6 border-2 border-blue-200">
+                            <div className="bg-ivs-blue-light/5 rounded-2xl p-6 border-2 border-ivs-blue-light/20">
                                 <div className="flex items-center justify-between mb-4">
                                     <span className="text-gray-700 font-semibold">Monthly Tuition Fee</span>
                                     <span className="text-3xl font-bold text-blue-900">
-                    Rs. {grades.find(g => g.value === selectedGrade)?.fee}
-                  </span>
+                                        Rs. {grades.find(g => g.value === selectedGrade)?.fee}
+                                    </span>
                                 </div>
                                 <div className="space-y-2 text-sm text-gray-600 border-t border-blue-200 pt-4">
                                     <div className="flex justify-between">
@@ -341,7 +341,7 @@ export default function AdmissionsPage() {
             </section>
 
             {/* CTA Section */}
-            <section className="py-20 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
+            <section className="py-20 px-4 bg-white border-t border-slate-100">
                 <div className="max-w-4xl mx-auto text-center">
                     <h2 className="text-4xl font-bold text-gray-900 mb-6">Ready to Get Started?</h2>
                     <p className="text-xl text-gray-600 mb-8">

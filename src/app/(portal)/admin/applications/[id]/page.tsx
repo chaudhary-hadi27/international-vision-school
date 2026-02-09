@@ -25,7 +25,8 @@ import {
     Briefcase,
     Globe,
     Users,
-    RefreshCcw
+    RefreshCcw,
+    School
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 
@@ -93,7 +94,7 @@ export default function ApplicationDetailPage() {
             <div className="flex flex-col items-center justify-center h-[60vh]">
                 <div className="relative w-16 h-16">
                     <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                    <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                    <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                 </div>
                 <p className="mt-6 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Retrieving Application details</p>
             </div>
@@ -130,7 +131,7 @@ export default function ApplicationDetailPage() {
                 <div className="flex items-center gap-6">
                     <button
                         onClick={() => router.back()}
-                        className="w-10 h-10 bg-white rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-ivs-navy hover:bg-slate-50 transition-all"
+                        className="w-10 h-10 bg-white rounded-lg border border-slate-200 flex items-center justify-center text-slate-500 hover:text-ivs-blue hover:bg-slate-50 transition-all"
                     >
                         <ArrowLeft className="w-5 h-5" />
                     </button>
@@ -200,7 +201,7 @@ export default function ApplicationDetailPage() {
                     {/* Student Info */}
                     <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
                         <div className="flex items-center gap-4 mb-6 pb-4 border-b border-slate-100">
-                            <div className="w-10 h-10 bg-ivs-navy rounded-lg flex items-center justify-center text-white">
+                            <div className="w-10 h-10 bg-ivs-blue/10 text-ivs-blue rounded-lg flex items-center justify-center">
                                 <User className="w-5 h-5" />
                             </div>
                             <div>
@@ -215,8 +216,10 @@ export default function ApplicationDetailPage() {
                                 { label: "Grade Applied", value: application.grade, icon: Shield },
                                 { label: "Date of Birth", value: new Date(application.dateOfBirth).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }), icon: Calendar },
                                 { label: "Gender", value: application.gender, icon: UserCircle, capitalize: true },
+                                { label: "Previous School", value: application.previousSchool, icon: School },
                                 { label: "WhatsApp", value: application.whatsappNumber, icon: Phone },
                                 { label: "Contact Email", value: application.email, icon: Mail },
+                                { label: "Emergency Contact", value: application.emergencyContact ? `${application.emergencyContact} (${application.emergencyRelation || 'No relation'})` : null, icon: Phone },
                             ].map((item, idx) => (
                                 <div key={idx} className="group">
                                     <div className="flex items-center gap-2 text-slate-500 mb-1">
@@ -228,6 +231,15 @@ export default function ApplicationDetailPage() {
                                     </p>
                                 </div>
                             ))}
+                            <div className="group">
+                                <div className="flex items-center gap-2 text-slate-500 mb-1">
+                                    <MapPin className="w-3.5 h-3.5" />
+                                    <label className="text-[10px] font-bold uppercase tracking-wider">City</label>
+                                </div>
+                                <p className="text-base font-semibold text-ivs-navy leading-relaxed">
+                                    {application.city || "Not provided"}
+                                </p>
+                            </div>
                             <div className="md:col-span-2 group">
                                 <div className="flex items-center gap-2 text-slate-500 mb-1">
                                     <MapPin className="w-3.5 h-3.5" />
@@ -259,15 +271,23 @@ export default function ApplicationDetailPage() {
                                     <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500">
                                         <User className="w-4 h-4" />
                                     </div>
-                                    <h4 className="font-bold text-ivs-navy uppercase tracking-tight text-xs">Father</h4>
+                                    <h4 className="font-bold text-ivs-blue uppercase tracking-tight text-xs">Father</h4>
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Name</label>
                                     <p className="font-semibold text-ivs-navy text-sm">{application.fatherName}</p>
                                 </div>
                                 <div>
+                                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">CNIC</label>
+                                    <p className="font-semibold text-ivs-navy text-sm">{application.fatherCNIC || "---"}</p>
+                                </div>
+                                <div>
                                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Phone</label>
                                     <p className="font-semibold text-ivs-navy text-sm">{application.fatherPhone}</p>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Occupation</label>
+                                    <p className="font-semibold text-ivs-navy text-sm">{application.fatherOccupation || "---"}</p>
                                 </div>
                             </div>
 
@@ -277,15 +297,23 @@ export default function ApplicationDetailPage() {
                                     <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-slate-500">
                                         <User className="w-4 h-4" />
                                     </div>
-                                    <h4 className="font-bold text-ivs-navy uppercase tracking-tight text-xs">Mother</h4>
+                                    <h4 className="font-bold text-ivs-blue uppercase tracking-tight text-xs">Mother</h4>
                                 </div>
                                 <div>
                                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Name</label>
                                     <p className="font-semibold text-ivs-navy text-sm">{application.motherName || "Not provided"}</p>
                                 </div>
                                 <div>
+                                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">CNIC</label>
+                                    <p className="font-semibold text-ivs-navy text-sm">{application.motherCNIC || "---"}</p>
+                                </div>
+                                <div>
                                     <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Phone</label>
-                                    <p className="font-semibold text-ivs-navy text-sm">{application.motherPhone || "Not provided"}</p>
+                                    <p className="font-semibold text-ivs-navy text-sm">{application.motherPhone || "---"}</p>
+                                </div>
+                                <div>
+                                    <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest block mb-1">Occupation</label>
+                                    <p className="font-semibold text-ivs-navy text-sm">{application.motherOccupation || "---"}</p>
                                 </div>
                             </div>
                         </div>

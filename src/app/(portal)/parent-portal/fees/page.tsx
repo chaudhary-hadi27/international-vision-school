@@ -102,7 +102,7 @@ export default function ParentFeesPage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading fee records...</p>
                 </div>
             </div>
@@ -132,11 +132,10 @@ export default function ParentFeesPage() {
                             <button
                                 key={child.id}
                                 onClick={() => setSelectedChild(child)}
-                                className={`px-6 py-3 rounded-lg font-semibold transition ${
-                                    selectedChild?.id === child.id
-                                        ? 'bg-ivs-navy text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                                className={`px-6 py-3 rounded-lg font-semibold transition ${selectedChild?.id === child.id
+                                        ? 'bg-ivs-blue text-white shadow-md shadow-ivs-blue/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-ivs-blue'
+                                    }`}
                             >
                                 {child.name} ({child.grade})
                             </button>
@@ -150,7 +149,7 @@ export default function ParentFeesPage() {
                 <div className="grid md:grid-cols-4 gap-6">
                     <div className="bg-white rounded-xl p-6 shadow-md">
                         <div className="flex items-center gap-3 mb-2">
-                            <DollarSign className="w-5 h-5 text-ivs-navy" />
+                            <DollarSign className="w-5 h-5 text-ivs-blue" />
                             <span className="text-gray-600 text-sm">Total Amount</span>
                         </div>
                         <p className="text-3xl font-bold text-gray-900">Rs. {summary.totalAmount.toLocaleString()}</p>
@@ -197,61 +196,61 @@ export default function ParentFeesPage() {
                     <div className="overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b-2 border-gray-200">
-                            <tr>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Month</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Amount</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Paid</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Balance</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Due Date</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Status</th>
-                                <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Details</th>
-                            </tr>
+                                <tr>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Month</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Amount</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Paid</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Balance</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Due Date</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Status</th>
+                                    <th className="px-6 py-4 text-left text-sm font-bold text-gray-900">Details</th>
+                                </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-200">
-                            {fees.map(fee => (
-                                <tr key={fee.id} className="hover:bg-gray-50 transition">
-                                    <td className="px-6 py-4">
-                                        <span className="font-semibold text-gray-900">{fee.month}</span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="font-semibold text-gray-900">Rs. {fee.amount.toLocaleString()}</span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-green-600 font-semibold">Rs. {fee.paidAmount.toLocaleString()}</span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className="text-red-600 font-semibold">
-                        Rs. {(fee.amount - fee.paidAmount).toLocaleString()}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <div className="flex items-center gap-2 text-gray-700">
-                                            <Calendar className="w-4 h-4" />
-                                            <span>{new Date(fee.dueDate).toLocaleDateString()}</span>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-1 w-fit ${getStatusColor(fee.status)}`}>
-                        {getStatusIcon(fee.status)}
-                          {fee.status.replace('_', ' ')}
-                      </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        {fee.paidDate && (
-                                            <div className="text-sm">
-                                                <p className="text-gray-600">
-                                                    Paid: {new Date(fee.paidDate).toLocaleDateString()}
-                                                </p>
-                                                {fee.voucherNumber && (
-                                                    <p className="text-gray-600">
-                                                        Voucher: {fee.voucherNumber}
-                                                    </p>
-                                                )}
+                                {fees.map(fee => (
+                                    <tr key={fee.id} className="hover:bg-gray-50 transition">
+                                        <td className="px-6 py-4">
+                                            <span className="font-semibold text-gray-900">{fee.month}</span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="font-semibold text-gray-900">Rs. {fee.amount.toLocaleString()}</span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-green-600 font-semibold">Rs. {fee.paidAmount.toLocaleString()}</span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className="text-red-600 font-semibold">
+                                                Rs. {(fee.amount - fee.paidAmount).toLocaleString()}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <div className="flex items-center gap-2 text-gray-700">
+                                                <Calendar className="w-4 h-4" />
+                                                <span>{new Date(fee.dueDate).toLocaleDateString()}</span>
                                             </div>
-                                        )}
-                                    </td>
-                                </tr>
-                            ))}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            <span className={`px-3 py-1 rounded-full text-sm font-semibold border flex items-center gap-1 w-fit ${getStatusColor(fee.status)}`}>
+                                                {getStatusIcon(fee.status)}
+                                                {fee.status.replace('_', ' ')}
+                                            </span>
+                                        </td>
+                                        <td className="px-6 py-4">
+                                            {fee.paidDate && (
+                                                <div className="text-sm">
+                                                    <p className="text-gray-600">
+                                                        Paid: {new Date(fee.paidDate).toLocaleDateString()}
+                                                    </p>
+                                                    {fee.voucherNumber && (
+                                                        <p className="text-gray-600">
+                                                            Voucher: {fee.voucherNumber}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
                             </tbody>
                         </table>
                     </div>
@@ -260,7 +259,7 @@ export default function ParentFeesPage() {
 
             {/* Payment Instructions */}
             <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-6">
-                <h3 className="font-bold text-ivs-navy mb-3 flex items-center gap-2">
+                <h3 className="font-bold text-ivs-blue mb-3 flex items-center gap-2">
                     <AlertCircle className="w-5 h-5" />
                     Payment Instructions
                 </h3>

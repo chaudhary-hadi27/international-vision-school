@@ -111,7 +111,7 @@ export default function ParentAttendancePage() {
         return (
             <div className="flex items-center justify-center h-96">
                 <div className="text-center">
-                    <div className="w-12 h-12 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+                    <div className="w-12 h-12 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin mx-auto mb-4" />
                     <p className="text-gray-600">Loading attendance...</p>
                 </div>
             </div>
@@ -135,11 +135,10 @@ export default function ParentAttendancePage() {
                             <button
                                 key={child.id}
                                 onClick={() => setSelectedChild(child)}
-                                className={`px-6 py-3 rounded-lg font-semibold transition ${
-                                    selectedChild?.id === child.id
-                                        ? 'bg-ivs-navy text-white'
-                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                                }`}
+                                className={`px-6 py-3 rounded-lg font-semibold transition ${selectedChild?.id === child.id
+                                        ? 'bg-ivs-blue text-white shadow-md shadow-ivs-blue/20'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:text-ivs-blue'
+                                    }`}
                             >
                                 {child.name} ({child.grade})
                             </button>
@@ -211,15 +210,15 @@ export default function ParentAttendancePage() {
                                 <div key={record.id} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
                                     <div className="flex items-center gap-4">
                                         <div className="w-16 h-16 bg-white rounded-lg flex flex-col items-center justify-center shadow-sm">
-                      <span className="text-xs text-gray-600">
-                        {new Date(record.date).toLocaleDateString('en-US', { month: 'short' })}
-                      </span>
-                                            <span className="text-2xl font-bold text-gray-900">
-                        {new Date(record.date).getDate()}
-                      </span>
                                             <span className="text-xs text-gray-600">
-                        {new Date(record.date).toLocaleDateString('en-US', { year: 'numeric' })}
-                      </span>
+                                                {new Date(record.date).toLocaleDateString('en-US', { month: 'short' })}
+                                            </span>
+                                            <span className="text-2xl font-bold text-gray-900">
+                                                {new Date(record.date).getDate()}
+                                            </span>
+                                            <span className="text-xs text-gray-600">
+                                                {new Date(record.date).toLocaleDateString('en-US', { year: 'numeric' })}
+                                            </span>
                                         </div>
 
                                         <div>

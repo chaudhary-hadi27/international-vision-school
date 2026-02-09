@@ -1,8 +1,7 @@
-// src/app/api/parent/children/route.ts
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/prisma'
+import { SupabaseService } from '@/lib/services/supabase-service'
 
 export async function GET(request: NextRequest) {
     try {
@@ -11,29 +10,25 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 })
         }
 
-        const parent = await prisma.parent.findUnique({
-            where: { userId: session.user.id },
-            include: {
-                children: {
-                    where: { status: 'ACTIVE' },
-                    select: {
-                        id: true,
-                        name: true,
-                        rollNumber: true,
-                        grade: true,
-                        section: true,
-                        photoUrl: true,
-                    },
-                    orderBy: { grade: 'asc' },
-                },
-            },
-        })
+        const { data, error } = await SupabaseService.getChildrenByParent(session.user.id)
 
-        if (!parent) {
-            return NextResponse.json({ success: false, message: 'Parent not found' }, { status: 404 })
+        if (error) {
+            console.error('Supabase get children error:', error)
+            return NextResponse.json({ success: false, message: 'Error fetching children' }, { status: 500 })
         }
 
-        return NextResponse.json({ success: true, data: parent.children })
+        // Transform data to match frontend expectations
+        const transformedData = data?.map((item: any) => ({
+            id: item.student.id,
+            name: `${item.student.first_name} ${item.student.last_name}`,
+            rollNumber: item.student.student_id,
+            grade: item.student.class?.grade_level ? `Class ${item.student.class.grade_level}` : 'N/A',
+            section: item.student.class?.section || 'N/A',
+            photoUrl: item.student.photo_url,
+            relationship: item.relationship
+        }))
+
+        return NextResponse.json({ success: true, data: transformedData })
     } catch (error) {
         console.error('Get children error:', error)
         return NextResponse.json({ success: false, message: 'Internal server error' }, { status: 500 })

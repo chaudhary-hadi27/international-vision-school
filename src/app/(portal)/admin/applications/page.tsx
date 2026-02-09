@@ -179,7 +179,7 @@ export default function AdminApplicationsPage() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={fetchApplications}
-                        className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-navy transition-all shadow-sm"
+                        className="p-3 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:bg-slate-50 hover:text-ivs-blue transition-all shadow-sm"
                         title="Refresh Data"
                     >
                         <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
@@ -204,11 +204,11 @@ export default function AdminApplicationsPage() {
                         transition={{ delay: idx * 0.05 }}
                         onClick={() => setStatusFilter(status)}
                         className={`p-5 rounded-xl border transition-all duration-300 relative overflow-hidden group text-left ${statusFilter === status
-                            ? 'bg-ivs-navy border-ivs-navy text-white shadow-lg'
+                            ? 'bg-ivs-blue border-ivs-blue text-white shadow-lg shadow-ivs-blue/20'
                             : 'bg-white border-slate-200 text-slate-600 hover:border-ivs-blue/30 hover:shadow-md'
                             }`}
                     >
-                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${statusFilter === status ? 'text-ivs-gold' : 'text-slate-400'}`}>
+                        <p className={`text-[10px] font-bold uppercase tracking-widest mb-1 ${statusFilter === status ? 'text-white/80' : 'text-slate-400'}`}>
                             {status === 'all' ? 'Total' : status.replace('_', ' ')}
                         </p>
                         <p className="text-3xl font-bold tabular-nums tracking-tight">{count}</p>

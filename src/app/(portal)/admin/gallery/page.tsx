@@ -130,7 +130,7 @@ export default function AdminGalleryPage() {
                 <div className="flex items-center gap-3">
                     <button
                         onClick={fetchGallery}
-                        className="w-10 h-10 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-ivs-navy hover:bg-slate-50 transition-all flex items-center justify-center p-0"
+                        className="w-10 h-10 bg-white border border-slate-200 rounded-lg text-slate-500 hover:text-ivs-blue hover:bg-slate-50 transition-all flex items-center justify-center p-0"
                     >
                         <RefreshCcw className={`w-5 h-5 ${loading ? 'animate-spin' : ''}`} />
                     </button>
@@ -152,8 +152,8 @@ export default function AdminGalleryPage() {
                         onClick={() => setSelectedCategory(cat)}
                         className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all
                             ${selectedCategory === cat
-                                ? 'bg-ivs-navy text-white shadow-sm'
-                                : 'text-slate-500 hover:text-ivs-navy hover:bg-slate-100'
+                                ? 'bg-ivs-blue text-white shadow-sm shadow-ivs-blue/20'
+                                : 'text-slate-500 hover:text-ivs-blue hover:bg-slate-100'
                             }`}
                     >
                         {cat}
@@ -167,7 +167,7 @@ export default function AdminGalleryPage() {
                     <div className="py-24 flex flex-col items-center justify-center bg-white rounded-xl border border-slate-200">
                         <div className="relative w-10 h-10">
                             <div className="absolute inset-0 border-4 border-ivs-blue/20 rounded-full"></div>
-                            <div className="absolute inset-0 border-4 border-ivs-navy border-t-transparent rounded-full animate-spin"></div>
+                            <div className="absolute inset-0 border-4 border-ivs-blue border-t-transparent rounded-full animate-spin"></div>
                         </div>
                         <p className="mt-4 text-slate-400 font-bold uppercase tracking-widest text-[10px]">Developing Darkroom Assets...</p>
                     </div>
@@ -204,7 +204,7 @@ export default function AdminGalleryPage() {
                                         <h3 className="text-white font-bold leading-tight text-sm">{image.title || 'Untitled Asset'}</h3>
                                     </div>
                                     <div className="flex items-center gap-2 mt-3">
-                                        <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white hover:text-ivs-navy transition-all">
+                                        <button className="p-2 bg-white/20 backdrop-blur-sm rounded-lg text-white hover:bg-white hover:text-ivs-blue transition-all">
                                             <Edit className="w-4 h-4" />
                                         </button>
                                         <button
@@ -235,7 +235,7 @@ export default function AdminGalleryPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowModal(false)}
-                            className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -245,7 +245,7 @@ export default function AdminGalleryPage() {
                         >
                             <div className="flex items-center justify-between mb-8">
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 bg-ivs-navy rounded-lg flex items-center justify-center text-white">
+                                    <div className="w-12 h-12 bg-ivs-blue rounded-lg flex items-center justify-center text-white">
                                         <UploadCloud className="w-6 h-6" />
                                     </div>
                                     <div>
@@ -255,7 +255,7 @@ export default function AdminGalleryPage() {
                                 </div>
                                 <button
                                     onClick={() => setShowModal(false)}
-                                    className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 hover:text-ivs-navy transition-all hover:bg-slate-100"
+                                    className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center text-slate-400 hover:text-ivs-blue transition-all hover:bg-slate-100"
                                 >
                                     <X className="w-5 h-5" />
                                 </button>
@@ -330,7 +330,7 @@ export default function AdminGalleryPage() {
                                     </button>
                                     <button
                                         type="submit"
-                                        className="flex-[1.5] py-2.5 bg-ivs-navy text-white rounded-lg font-bold hover:bg-ivs-navy/90 shadow-sm transition-all flex items-center justify-center gap-2"
+                                        className="flex-[1.5] py-2.5 bg-ivs-blue text-white rounded-lg font-bold hover:bg-ivs-accent shadow-sm shadow-ivs-blue/20 transition-all flex items-center justify-center gap-2"
                                     >
                                         <CheckCircle2 className="w-4 h-4 text-white" />
                                         Record Registry

@@ -7,7 +7,7 @@ import NextImage from 'next/image';
 
 export default function Hero() {
     return (
-        <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden bg-ivs-navy">
+        <section className="relative h-screen min-h-[700px] flex items-center overflow-hidden bg-white">
             {/* Background Image with Slow Zoom */}
             <div className="absolute inset-0 z-0">
                 <motion.div
@@ -24,9 +24,9 @@ export default function Hero() {
                         priority
                     />
                 </motion.div>
-                {/* Refined Gradient Overlays */}
-                <div className="absolute inset-0 bg-gradient-to-r from-ivs-navy via-ivs-navy/60 to-transparent"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-ivs-navy via-transparent to-transparent opacity-60"></div>
+                {/* Refined Gradient Overlays - Adjusted for White Theme */}
+                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/40 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent opacity-80"></div>
             </div>
 
             {/* Content Container */}
@@ -40,7 +40,7 @@ export default function Hero() {
                         className="inline-flex items-center gap-2.5 px-5 py-2 glass-surface rounded-full mb-10 border border-white/10 shadow-gold-glow animate-float"
                     >
                         <Award className="w-4 h-4 text-ivs-gold" />
-                        <span className="text-[13px] font-bold text-white tracking-[0.15em] uppercase">Excellence Since 2010</span>
+                        <span className="text-[13px] font-bold text-ivs-navy tracking-[0.15em] uppercase">Excellence Since 2010</span>
                     </motion.div>
 
                     {/* Main Heading */}
@@ -48,7 +48,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.4 }}
-                        className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-white mb-8 leading-[1.1] tracking-tight"
+                        className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold text-ivs-navy mb-8 leading-[1.1] tracking-tight"
                     >
                         Nurturing Minds,<br />
                         <span className="text-gradient from-ivs-gold via-yellow-400 to-ivs-gold animate-gradient-x">
@@ -61,7 +61,7 @@ export default function Hero() {
                         initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.8, delay: 0.6 }}
-                        className="text-lg sm:text-xl lg:text-2xl text-slate-300 mb-12 leading-relaxed max-w-2xl font-light italic"
+                        className="text-lg sm:text-xl lg:text-2xl text-slate-600 mb-12 leading-relaxed max-w-2xl font-light italic"
                     >
                         IVS blends academic rigor with moral excellence, shaping visionary leaders for a global future.
                     </motion.p>
@@ -99,19 +99,19 @@ export default function Hero() {
                 initial={{ opacity: 0, x: 50 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 1, delay: 1 }}
-                className="hidden xl:flex absolute right-12 bottom-24 flex-col gap-12 z-10 py-8 border-l border-white/10 pl-12"
+                className="hidden xl:flex absolute right-12 bottom-24 flex-col gap-12 z-10 py-8 border-l border-ivs-navy/10 pl-12"
             >
                 <div>
-                    <div className="text-5xl font-bold text-white mb-2">15+</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Years of Legacy</div>
+                    <div className="text-5xl font-bold text-ivs-navy mb-2">15+</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-[0.2em]">Years of Legacy</div>
                 </div>
                 <div>
-                    <div className="text-5xl font-bold text-white mb-2">100%</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Success Rate</div>
+                    <div className="text-5xl font-bold text-ivs-navy mb-2">100%</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-[0.2em]">Success Rate</div>
                 </div>
                 <div>
-                    <div className="text-5xl font-bold text-white mb-2">2k+</div>
-                    <div className="text-xs text-slate-400 uppercase tracking-[0.2em]">Global Alumni</div>
+                    <div className="text-5xl font-bold text-ivs-navy mb-2">2k+</div>
+                    <div className="text-xs text-slate-500 uppercase tracking-[0.2em]">Global Alumni</div>
                 </div>
             </motion.div>
 

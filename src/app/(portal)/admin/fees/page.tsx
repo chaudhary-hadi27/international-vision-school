@@ -160,7 +160,7 @@ export default function FeesPage() {
                     <p className="text-slate-500 font-medium">Streamline your financial records and student billing.</p>
                 </div>
                 <div className="flex items-center gap-3">
-                    <button className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:text-ivs-navy hover:shadow-sm transition-all group">
+                    <button className="p-4 bg-white border border-slate-200 rounded-2xl text-slate-500 hover:text-ivs-blue hover:shadow-sm transition-all group">
                         <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" />
                     </button>
                     <button className="btn-premium py-4 px-8 flex items-center gap-3 group">
@@ -308,7 +308,7 @@ export default function FeesPage() {
                                                             setPaymentAmount((fee.amount - fee.paidAmount).toString())
                                                             setShowPaymentModal(true)
                                                         }}
-                                                        className="px-4 py-2 bg-ivs-navy text-white text-xs font-bold rounded-lg hover:bg-ivs-blue transition-colors"
+                                                        className="px-4 py-2 bg-ivs-blue text-white text-xs font-bold rounded-lg hover:bg-ivs-accent transition-colors"
                                                     >
                                                         Pay
                                                     </button>
@@ -332,7 +332,7 @@ export default function FeesPage() {
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             onClick={() => setShowPaymentModal(false)}
-                            className="absolute inset-0 bg-ivs-navy/60 backdrop-blur-md"
+                            className="absolute inset-0 bg-slate-900/60 backdrop-blur-md"
                         />
                         <motion.div
                             initial={{ opacity: 0, scale: 0.9, y: 20 }}
